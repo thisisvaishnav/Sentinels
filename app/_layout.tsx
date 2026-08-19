@@ -32,9 +32,13 @@ export default function RootLayout() {
   useEffect(() => {
     if (hasOnboarded === null) return;
 
-    const inOnboarding = segments[0] === 'onboarding';
+    // Allow both the onboarding screen and the auth group (login/register)
+    // through without redirecting. Anything else (tabs, citizen, etc.) is
+    // gated behind the onboarding check.
+    const inAuthFlow =
+      segments[0] === 'onboarding' || segments[0] === '(auth)';
 
-    if (!hasOnboarded && !inOnboarding) {
+    if (!hasOnboarded && !inAuthFlow) {
       router.replace('/onboarding');
     }
   }, [hasOnboarded, segments, router]);
@@ -47,6 +51,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(citizen)" options={{ headerShown: false }} />
         <Stack.Screen name="(enumerator)" options={{ headerShown: false }} />
