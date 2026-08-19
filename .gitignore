@@ -5,6 +5,7 @@ node_modules/
 
 # Expo
 .expo/
+.expo-shared/
 dist/
 web-build/
 expo-env.d.ts
@@ -16,25 +17,41 @@ expo-env.d.ts
 *.p8
 *.p12
 *.key
+*.pem
+*.keystore
 *.mobileprovision
 
 # Metro
 .metro-health-check*
 
-# debug
+# Environment files
+.env
+.env.*
+!.env.example
+
+# debug & logs
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+*.log
 
-# macOS
+# OS / System
 .DS_Store
-*.pem
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
 
-# local env files
-.env*.local
+# IDE & Editors
+.idea/
+.vscode/
+*.swp
+*.swo
 
-# typescript
+# typescript & build
 *.tsbuildinfo
+coverage/
 
 app-example
 

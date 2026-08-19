@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import RoleSelectionScreen, { Role } from '@/src/screens/RoleSelectionScreen';
 
-export default function HomeScreen() {
+export default function OnboardingScreen() {
   const router = useRouter();
 
   const handleRoleSelect = async (role: Role) => {
@@ -13,4 +13,3 @@ export default function HomeScreen() {
 
   return <RoleSelectionScreen onSelectRole={handleRoleSelect} />;
 }
-
