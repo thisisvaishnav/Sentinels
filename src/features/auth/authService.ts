@@ -42,6 +42,46 @@ export interface EnumeratorLoginData {
 
 export type LoginData = CitizenLoginData | AdminLoginData | EnumeratorLoginData;
 
+export interface EnumeratorProfile {
+  user_id: string;
+  enumerator_id: string;
+  [key: string]: unknown;
+}
+
+/**
+ * JWT-based enumerator login:
+ * 1. signInWithPassword  → Supabase issues a JWT (stored in SecureStore)
+ * 2. Fetch enumerator_profiles row keyed on the user_id inside that JWT
+ *
+ * Throws on network / auth errors so the caller can show the right message.
+ * Returns null profile only if the auth.users row exists but has no matching
+ * enumerator_profiles row (misconfigured account).
+ */
+export async function loginEnumerator({
+  enumeratorId,
+  securityKey,
+}: EnumeratorLoginData): Promise<{ profile: EnumeratorProfile | null }> {
+  // Step 1 — authenticate and receive JWT
+  const { data: authData, error: authError } =
+    await supabase.auth.signInWithPassword({
+      email: `${enumeratorId.trim()}@enumerator.sentinels.app`,
+      password: securityKey,
+    });
+
+  if (authError) throw authError;
+
+  // Step 2 — fetch profile row from enumerator_profiles using the JWT user_id
+  const { data: profile, error: profileError } = await supabase
+    .from('enumerator_profiles')
+    .select('*')
+    .eq('user_id', authData.user.id)
+    .maybeSingle();
+
+  if (profileError) throw profileError;
+
+  return { profile: profile as EnumeratorProfile | null };
+}
+
 export async function loginWithRole(role: Role, data: LoginData) {
   let email: string;
   let password: string;
@@ -99,42 +139,58 @@ export type RegisterData = CitizenRegisterData | AdminRegisterData;
 export type RegisterRole = 'citizen' | 'admin';
 
 export async function registerWithRole(role: RegisterRole, data: RegisterData) {
-  let email: string;
-  let password: string;
-  let metadata: Record<string, string>;
-
   if (role === 'citizen') {
     const d = data as CitizenRegisterData;
-    email = `${d.mobile.trim()}@citizen.sentinels.app`;
-    password = d.password;
-    metadata = {
-      role: 'citizen',
-      full_name: d.fullName,
-      mobile: d.mobile,
-      state: d.state,
-      district: d.district,
-      pin_code: d.pinCode,
-    };
+    const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5000';
+
+    const response = await fetch(`${apiUrl}/api/auth/citizen/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        full_name: d.fullName,
+        mobile_number: d.mobile,
+        password: d.password,
+        state: d.state,
+        pincode: d.pinCode,
+      }),
+    });
+
+    const text = await response.text();
+    let resData: any = {};
+    try {
+      resData = text ? JSON.parse(text) : {};
+    } catch {
+      throw new Error(`Server returned non-JSON response (${response.status}): ${text || 'Empty response'}`);
+    }
+
+    if (!response.ok) {
+      const errorMsg = resData.error || (resData.details ? JSON.stringify(resData.details) : `Registration failed (${response.status})`);
+      throw new Error(errorMsg);
+    }
+
+    return resData;
   } else {
     const d = data as AdminRegisterData;
-    email = d.email.trim();
-    password = d.password;
-    metadata = {
+    const email = d.email.trim();
+    const password = d.password;
+    const metadata = {
       role: 'admin',
       full_name: d.fullName,
       employee_id: d.employeeId,
       authority_level: d.authorityLevel,
     };
+
+    const { data: authData, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: metadata },
+    });
+
+    if (error) throw error;
+    return authData;
   }
-
-  const { data: authData, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: { data: metadata },
-  });
-
-  if (error) throw error;
-  return authData;
 }
 
 // ─── Sign out ────────────────────────────────────────────────────────────────
