@@ -191,21 +191,6 @@ export default function Register() {
                   </View>
                 )}
 
-                {/* District */}
-                <InputField
-                  label="DISTRICT"
-                  placeholder="Enter your district"
-                  value={district}
-                  onChangeText={setDistrict}
-                  icon={
-                    <Ionicons
-                      name="location-outline"
-                      size={22}
-                      color="#777F89"
-                    />
-                  }
-                />
-
                 {/* PIN */}
                 <InputField
                   label="PIN CODE"
