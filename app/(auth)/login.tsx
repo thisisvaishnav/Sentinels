@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { supabase } from "@/src/lib/supabase";
+import { loginEnumerator, loginWithRole } from "@/src/features/auth/authService";
 import {
   View,
   Text,
@@ -24,51 +24,94 @@ export default function Login() {
   const [firstValue, setFirstValue] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isCitizen = role === "citizen";
   const isAdmin = role === "admin";
   const isEnumerator = role === "enumerator";
   const handleLogin = async () => {
-    if (!firstValue.trim() || !password.trim()) {
-      alert("Please enter mobile number and password.");
+    const identifier = firstValue.trim();
+    const secret = password.trim();
+
+    if (!identifier || !secret) {
+      alert(
+        isEnumerator
+          ? "Please enter enumerator ID and security key."
+          : "Please enter mobile number and password.",
+      );
       return;
     }
+
+    setIsSubmitting(true);
 
     if (isCitizen) {
       try {
-        const { data: citizen, error } = await supabase
-          .from("citizen_profiles")
-          .select("*")
-          .eq("mobile_number", firstValue.trim())
-          .eq("password", password)
-          .maybeSingle();
-
-        if (error) {
-          console.error("Login error:", error);
-          alert("Something went wrong. Please try again.");
-          return;
-        }
-
-        if (!citizen) {
-          alert("Invalid mobile number or password.");
-          return;
-        }
-
-        console.log("Citizen logged in:", citizen);
-
-        // Save the citizen ID/session here
-        // Then move to citizen dashboard
+        await loginWithRole('citizen', { mobile: identifier, password: secret });
         router.replace("/(citizen)/dashboard");
-
-      } catch (error) {
-        console.error("Unexpected login error:", error);
-        alert("Unable to sign in.");
+      } catch (error: any) {
+        console.error("Citizen login error:", error);
+        const isCredentialError =
+          error?.status === 400 || error?.code === "invalid_credentials";
+        alert(
+          isCredentialError
+            ? "Invalid mobile number or password."
+            : "Unable to sign in. Please try again.",
+        );
+      } finally {
+        setIsSubmitting(false);
       }
-
       return;
     }
 
-    // Admin / Enumerator login will be implemented separately
+    if (isEnumerator) {
+      try {
+        const { profile } = await loginEnumerator({
+          enumeratorId: identifier,
+          securityKey: secret,
+        });
+
+        if (!profile) {
+          alert("Enumerator profile not found. Contact your administrator.");
+          return;
+        }
+
+        console.log("Enumerator JWT login success:", profile.enumerator_id);
+        router.replace("/(enumerator)/dashboard");
+      } catch (error: any) {
+        console.error("Enumerator login error:", error);
+        const isCredentialError =
+          error?.status === 400 || error?.code === "invalid_credentials";
+        alert(
+          isCredentialError
+            ? "Invalid enumerator ID or security key."
+            : "Unable to authenticate. Please try again.",
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
+    if (isAdmin) {
+      try {
+        await loginWithRole('admin', { employeeId: identifier, password: secret });
+        router.replace("/(admin)/dashboard");
+      } catch (error: any) {
+        console.error("Admin login error:", error);
+        const isCredentialError =
+          error?.status === 400 || error?.code === "invalid_credentials";
+        alert(
+          isCredentialError
+            ? "Invalid employee ID or password."
+            : "Unable to sign in. Please try again.",
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
+    setIsSubmitting(false);
   };
 
 
@@ -235,11 +278,12 @@ export default function Login() {
             {/* Login Button */}
             <TouchableOpacity
               activeOpacity={0.8}
-              style={styles.primaryButton}
+              style={[styles.primaryButton, isSubmitting && styles.primaryButtonDisabled]}
               onPress={handleLogin}
+              disabled={isSubmitting}
             >
               <Text style={styles.primaryButtonText}>
-                {isEnumerator ? "Authenticate" : "Sign In"}
+                {isSubmitting ? "Checking..." : isEnumerator ? "Authenticate" : "Sign In"}
               </Text>
 
               <Ionicons
@@ -487,6 +531,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 15,
     marginTop: 8,
+  },
+
+  primaryButtonDisabled: {
+    opacity: 0.65,
   },
 
   primaryButtonText: {

@@ -16,6 +16,33 @@
 
 ---
 
+## Architecture
+
+```
+React Native
+     │
+     │ JSON + JWT
+     ▼
+Backend API
+     │
+     ├── /citizen/signup
+     ├── /citizen/login
+     ├── /enumerator/login
+     ├── /admin/signup
+     ├── /admin/login
+     ├── /me
+     └── /logout
+     │
+     ▼
+Supabase PostgreSQL
+     │
+     ├── citizen_profiles
+     ├── enumerator_profiles
+     └── admin_profiles
+```
+
+---
+
 ## Project Structure
 
 ```

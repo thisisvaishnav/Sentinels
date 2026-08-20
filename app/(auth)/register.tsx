@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { registerWithRole } from "@/src/features/auth/authService";
 
 export type RegisterRole = "citizen" | "admin";
 
@@ -54,9 +55,50 @@ export default function Register() {
   const [showStates, setShowStates] = useState(false);
   const [showAuthority, setShowAuthority] = useState(false);
 
-  const handleRegister = () => {
-    // TODO: wire up Supabase auth here
-    console.log('register', role, { fullName, mobile, employeeId, email });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleRegister = async () => {
+    if (!fullName.trim()) {
+      alert('Please enter your full name.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      if (isCitizen) {
+        if (!mobile.trim() || !password.trim()) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+        await registerWithRole('citizen', {
+          fullName,
+          mobile,
+          password,
+          state,
+          district,
+          pinCode,
+        });
+        router.replace('/(citizen)/dashboard');
+      } else {
+        if (!employeeId.trim() || !email.trim() || !password.trim()) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+        await registerWithRole('admin', {
+          fullName,
+          employeeId,
+          authorityLevel,
+          email,
+          password,
+        });
+        router.replace('/(admin)/dashboard');
+      }
+    } catch (error: any) {
+      console.error('Register error:', error);
+      alert(error?.message ?? 'Registration failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -286,11 +328,14 @@ export default function Register() {
             {/* Create Account */}
             <TouchableOpacity
               activeOpacity={0.8}
-              style={styles.primaryButton}
+              style={[styles.primaryButton, isSubmitting && { opacity: 0.65 }]}
               onPress={handleRegister}
+              disabled={isSubmitting}
             >
               <Text style={styles.primaryButtonText}>
-                {isCitizen
+                {isSubmitting
+                  ? "Please wait..."
+                  : isCitizen
                   ? "CREATE ACCOUNT"
                   : "Initialize Account"}
               </Text>
