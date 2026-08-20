@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { supabase } from "@/src/lib/supabase";
 import {
   View,
   Text,
@@ -27,17 +28,54 @@ export default function Login() {
   const isCitizen = role === "citizen";
   const isAdmin = role === "admin";
   const isEnumerator = role === "enumerator";
+  const handleLogin = async () => {
+    if (!firstValue.trim() || !password.trim()) {
+      alert("Please enter mobile number and password.");
+      return;
+    }
+
+    if (isCitizen) {
+      try {
+        const { data: citizen, error } = await supabase
+          .from("citizen_profiles")
+          .select("*")
+          .eq("mobile_number", firstValue.trim())
+          .eq("password", password)
+          .maybeSingle();
+
+        if (error) {
+          console.error("Login error:", error);
+          alert("Something went wrong. Please try again.");
+          return;
+        }
+
+        if (!citizen) {
+          alert("Invalid mobile number or password.");
+          return;
+        }
+
+        console.log("Citizen logged in:", citizen);
+
+        // Save the citizen ID/session here
+        // Then move to citizen dashboard
+        router.replace("/(citizen)/dashboard");
+
+      } catch (error) {
+        console.error("Unexpected login error:", error);
+        alert("Unable to sign in.");
+      }
+
+      return;
+    }
+
+    // Admin / Enumerator login will be implemented separately
+  };
 
 
   const getSubtitle = () => {
     if (isCitizen) return "Sign in to your citizen account";
     if (isAdmin) return "Access the GIS command center";
     return "Secure Enumerator Access";
-  };
-
-  const handleLogin = () => {
-    // TODO: wire up Supabase auth here
-    console.log('login', role, firstValue, password);
   };
 
   return (
