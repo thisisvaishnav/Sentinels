@@ -241,4 +241,41 @@ router.get('/citizen/profile',
 );
 console.log("🔥 authRoutes loaded, router:", router);
 
+router.get(
+  '/citizen/household-status',
+  authenticateCitizen,
+  async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      const citizenId = req.citizen!.id;
+
+      const { data: household, error } = await supabase
+        .from('household_profiles')
+        .select('id')
+        .eq('citizen_id', citizenId)
+        .maybeSingle();
+
+      if (error) {
+        console.error('[Household Status Error]:', error);
+
+        res.status(500).json({
+          error: 'Failed to check household status',
+        });
+
+        return;
+      }
+
+      res.status(200).json({
+        completed: !!household,
+        household_id: household?.id ?? null,
+      });
+    } catch (err) {
+      console.error('[Household Status Error]:', err);
+
+      res.status(500).json({
+        error: 'Internal server error',
+      });
+    }
+  }
+);
+
 export default router;
