@@ -19,6 +19,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     async function checkOnboardingStatus() {
+      if (hasOnboarded) return;
       try {
         const value = await AsyncStorage.getItem('hasOnboarded');
         setHasOnboarded(value === 'true');
@@ -27,7 +28,7 @@ export default function RootLayout() {
       }
     }
     checkOnboardingStatus();
-  }, []);
+  }, [segments, hasOnboarded]);
 
   useEffect(() => {
     if (hasOnboarded === null) return;
