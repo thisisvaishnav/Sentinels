@@ -2,6 +2,8 @@
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
+> ⚠️ **Strict Mobile Focus**: This project is built solely as a native mobile application targeting iOS and Android. Please ensure all contributions, layout changes, styles, and integrations strictly follow native mobile design standards and mobile constraints. Do not compromise mobile layouts for web environments.
+
 ## Get started
 
 1. Install dependencies

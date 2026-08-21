@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { registerWithRole } from "@/src/features/auth/authService";
 
 export type RegisterRole = "citizen" | "admin";
@@ -78,6 +79,7 @@ export default function Register() {
           district,
           pinCode,
         });
+        await AsyncStorage.setItem('hasOnboarded', 'true');
         router.replace('/(citizen)/dashboard');
       } else {
         if (!employeeId.trim() || !email.trim() || !password.trim()) {
@@ -91,6 +93,7 @@ export default function Register() {
           email,
           password,
         });
+        await AsyncStorage.setItem('hasOnboarded', 'true');
         router.replace('/(admin)/dashboard');
       }
     } catch (error: any) {

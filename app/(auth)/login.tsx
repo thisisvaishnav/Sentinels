@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { loginEnumerator, loginWithRole } from "@/src/features/auth/authService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   View,
   Text,
@@ -47,6 +48,7 @@ export default function Login() {
     if (isCitizen) {
       try {
         await loginWithRole('citizen', { mobile: identifier, password: secret });
+        await AsyncStorage.setItem('hasOnboarded', 'true');
         router.replace("/(citizen)/dashboard");
       } catch (error: any) {
         console.error("Citizen login error:", error);
@@ -70,6 +72,7 @@ export default function Login() {
         }
 
         console.log("Enumerator JWT login success:", profile.enumerator_id);
+        await AsyncStorage.setItem('hasOnboarded', 'true');
         router.replace("/(enumerator)/dashboard");
       } catch (error: any) {
         console.error("Enumerator login error:", error);
@@ -89,6 +92,7 @@ export default function Login() {
     if (isAdmin) {
       try {
         await loginWithRole('admin', { employeeId: identifier, password: secret });
+        await AsyncStorage.setItem('hasOnboarded', 'true');
         router.replace("/(admin)/dashboard");
       } catch (error: any) {
         console.error("Admin login error:", error);

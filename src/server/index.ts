@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
+import householdRoutes from './routes/householdRoutes';
+import citizenRoutes from './routes/citizenRoutes';
 
 dotenv.config();
 
@@ -15,6 +17,8 @@ app.use(express.json());
 // Routes
 console.log("🔥 AUTH ROUTES LOADED");
 app.use('/api/auth', authRoutes);
+app.use('/api/household', householdRoutes);
+app.use('/api/citizen', citizenRoutes);
 app.get('/api/auth/test', (_req, res) => {
   res.json({ message: 'Auth router mounting works' });
 });

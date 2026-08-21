@@ -7,17 +7,17 @@ import {
   TouchableOpacity,
   StatusBar,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { signOut } from "@/src/features/auth/authService";
+import { signOut, getCitizenHouseholdStatus } from "@/src/features/auth/authService";
 import * as SecureStore from "expo-secure-store";
-
-
-
 
 export default function CitizenDashboard() {
   const router = useRouter();
+  const [checkingStatus, setCheckingStatus] = useState(true);
+
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -27,46 +27,47 @@ export default function CitizenDashboard() {
       router.replace("/onboarding");
     }
   };
+
   useEffect(() => {
-    const loadCitizenProfile = async () => {
+    const performAccessChecks = async () => {
       try {
         const token = await SecureStore.getItemAsync("citizen_token");
-
+        
+        // Guard 1: Must be logged in
         if (!token) {
-          console.log("❌ No citizen JWT found");
+          console.log("❌ No citizen JWT found. Redirecting to login...");
+          router.replace({ pathname: "/(auth)/login", params: { role: "citizen" } });
           return;
         }
 
-        const apiUrl =
-          process.env.EXPO_PUBLIC_API_URL || "http://localhost:5001";
-
-        const response = await fetch(
-          `${apiUrl}/api/auth/citizen/profile`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          console.error("❌ Profile API error:", data);
+        // Guard 2: Must have completed household profile
+        const status = await getCitizenHouseholdStatus();
+        if (!status.completed) {
+          console.log("⚠️ Household form not completed. Redirecting to form...");
+          router.replace("/(citizen)/household");
           return;
         }
 
-        console.log("✅ JWT verified successfully");
-        console.log("Citizen profile:", data.user);
+        // Both checks passed
+        setCheckingStatus(false);
+        console.log("✅ Authenticated & household profile completed.");
       } catch (error) {
-        console.error("❌ Failed to load citizen profile:", error);
+        console.error("❌ Access check failed:", error);
+        // Fallback to onboarding or login on persistent network/auth failures
+        router.replace({ pathname: "/(auth)/login", params: { role: "citizen" } });
       }
     };
 
-    loadCitizenProfile();
-  }, []);
+    performAccessChecks();
+  }, [router]);
+
+  if (checkingStatus) {
+    return (
+      <SafeAreaView style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#38BDF8" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -102,6 +103,7 @@ export default function CitizenDashboard() {
             icon="home-outline"
             label="My Household"
             color="#6366F1"
+            onPress={() => router.push("/(citizen)/household")}
           />
           <ActionCard
             icon="clipboard-outline"
@@ -128,13 +130,15 @@ function ActionCard({
   icon,
   label,
   color,
+  onPress,
 }: {
   icon: React.ComponentProps<typeof Ionicons>["name"];
   label: string;
   color: string;
+  onPress?: () => void;
 }) {
   return (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <View style={[styles.cardIcon, { backgroundColor: color + "20" }]}>
         <Ionicons name={icon} size={28} color={color} />
       </View>

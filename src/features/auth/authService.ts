@@ -237,6 +237,56 @@ export async function registerWithRole(role: RegisterRole, data: RegisterData) {
   }
 }
 
+// ─── Citizen Household Status ───────────────────────────────────────────────
+
+export interface HouseholdStatus {
+  completed: boolean;
+  household_id: string | null;
+}
+
+export async function getCitizenHouseholdStatus(): Promise<HouseholdStatus> {
+  const token = await SecureStore.getItemAsync('citizen_token');
+
+  if (!token) {
+    throw new Error('Citizen authentication token not found');
+  }
+
+  const apiUrl =
+    process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001';
+
+  const response = await fetch(
+    `${apiUrl}/api/auth/citizen/household-status`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  const text = await response.text();
+
+  let resData: any = {};
+
+  try {
+    resData = text ? JSON.parse(text) : {};
+  } catch {
+    throw new Error(
+      `Server returned non-JSON response (${response.status})`
+    );
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      resData.error ||
+        `Failed to check household status (${response.status})`
+    );
+  }
+
+  return resData;
+}
+
 // ─── Sign out ────────────────────────────────────────────────────────────────
 
 export async function signOut() {

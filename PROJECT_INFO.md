@@ -6,7 +6,7 @@
 |---|---|
 | **App Name** | Sentinels |
 | **Version** | 1.0.0 |
-| **Platform** | iOS · Android · Web |
+| **Platform** | iOS · Android (Primary Mobile Focus) |
 | **Framework** | Expo ~54.0.36 (New Architecture enabled) |
 | **Language** | TypeScript ~5.9.2 |
 | **React** | 19.1.0 |
