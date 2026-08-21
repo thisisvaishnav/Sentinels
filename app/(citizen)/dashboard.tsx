@@ -109,16 +109,19 @@ export default function CitizenDashboard() {
             icon="clipboard-outline"
             label="Service Requests"
             color="#10B981"
+            onPress={() => router.push("/(citizen)/progress")}
           />
           <ActionCard
             icon="notifications-outline"
             label="Notifications"
             color="#F59E0B"
+            onPress={() => router.push("/(citizen)/schemes")}
           />
           <ActionCard
             icon="person-circle-outline"
             label="My Profile"
             color="#EC4899"
+            onPress={() => router.push("/(citizen)/support")}
           />
         </View>
       </ScrollView>

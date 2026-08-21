@@ -1,10 +1,64 @@
-import { Stack } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
 
 export default function CitizenLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="dashboard" />
-      <Stack.Screen name="household" />
-    </Stack>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#0F172A',
+          borderTopColor: '#1E293B',
+        },
+        tabBarActiveTintColor: '#38BDF8',
+        tabBarInactiveTintColor: '#94A3B8',
+      }}
+    >
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: 'Dashboard',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="grid-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="progress"
+        options={{
+          title: 'Progress',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="stats-chart-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="support"
+        options={{
+          title: 'Support',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="help-circle-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="schemes"
+        options={{
+          title: 'Schemes',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="newspaper-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="household"
+        options={{
+          title: 'Household',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" color={color} size={size} />
+          ),
+        }}
+      />
+    </Tabs>
   );
 }
