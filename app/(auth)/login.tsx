@@ -50,13 +50,7 @@ export default function Login() {
         router.replace("/(citizen)/dashboard");
       } catch (error: any) {
         console.error("Citizen login error:", error);
-        const isCredentialError =
-          error?.status === 400 || error?.code === "invalid_credentials";
-        alert(
-          isCredentialError
-            ? "Invalid mobile number or password."
-            : "Unable to sign in. Please try again.",
-        );
+        alert(error?.message || "Unable to sign in. Please try again.");
       } finally {
         setIsSubmitting(false);
       }

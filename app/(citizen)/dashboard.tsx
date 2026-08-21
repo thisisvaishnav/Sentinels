@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,10 +11,13 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { signOut } from "@/src/features/auth/authService";
+import * as SecureStore from "expo-secure-store";
+
+
+
 
 export default function CitizenDashboard() {
   const router = useRouter();
-
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -24,6 +27,46 @@ export default function CitizenDashboard() {
       router.replace("/onboarding");
     }
   };
+  useEffect(() => {
+    const loadCitizenProfile = async () => {
+      try {
+        const token = await SecureStore.getItemAsync("citizen_token");
+
+        if (!token) {
+          console.log("❌ No citizen JWT found");
+          return;
+        }
+
+        const apiUrl =
+          process.env.EXPO_PUBLIC_API_URL || "http://localhost:5001";
+
+        const response = await fetch(
+          `${apiUrl}/api/auth/citizen/profile`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          console.error("❌ Profile API error:", data);
+          return;
+        }
+
+        console.log("✅ JWT verified successfully");
+        console.log("Citizen profile:", data.user);
+      } catch (error) {
+        console.error("❌ Failed to load citizen profile:", error);
+      }
+    };
+
+    loadCitizenProfile();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

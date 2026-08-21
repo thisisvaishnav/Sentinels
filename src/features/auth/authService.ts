@@ -20,6 +20,7 @@
  */
 
 import { supabase } from '@/src/lib/supabase';
+import * as SecureStore from 'expo-secure-store';
 
 export type Role = 'citizen' | 'enumerator' | 'admin';
 
@@ -83,16 +84,52 @@ export async function loginEnumerator({
 }
 
 export async function loginWithRole(role: Role, data: LoginData) {
+  if (role === 'citizen') {
+    const d = data as CitizenLoginData;
+    const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001';
+
+    const response = await fetch(`${apiUrl}/api/auth/citizen/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        mobile_number: d.mobile,
+        password: d.password,
+      }),
+    });
+
+    const text = await response.text();
+    let resData: any = {};
+    try {
+      resData = text ? JSON.parse(text) : {};
+    } catch {
+      throw new Error(`Server returned non-JSON response (${response.status}): ${text || 'Empty response'}`);
+    }
+
+    if (!response.ok) {
+      const err: any = new Error(
+        resData.error || (resData.details ? JSON.stringify(resData.details) : `Login failed (${response.status})`)
+      );
+      err.status = response.status;
+      err.code = resData.code;
+      throw err;
+    }
+
+    if (resData.token) {
+      await SecureStore.setItemAsync('citizen_token', resData.token);
+      if (resData.user) {
+        await SecureStore.setItemAsync('citizen_user', JSON.stringify(resData.user));
+      }
+    }
+
+    return resData;
+  }
+
   let email: string;
   let password: string;
 
   switch (role) {
-    case 'citizen': {
-      const d = data as CitizenLoginData;
-      email = `${d.mobile.trim()}@citizen.sentinels.app`;
-      password = d.password;
-      break;
-    }
     case 'admin': {
       const d = data as AdminLoginData;
       email = `${d.employeeId.trim()}@admin.sentinels.app`;
@@ -141,7 +178,7 @@ export type RegisterRole = 'citizen' | 'admin';
 export async function registerWithRole(role: RegisterRole, data: RegisterData) {
   if (role === 'citizen') {
     const d = data as CitizenRegisterData;
-    const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5000';
+    const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001';
 
     const response = await fetch(`${apiUrl}/api/auth/citizen/signup`, {
       method: 'POST',
@@ -170,6 +207,13 @@ export async function registerWithRole(role: RegisterRole, data: RegisterData) {
       throw new Error(errorMsg);
     }
 
+    if (resData.token) {
+      await SecureStore.setItemAsync('citizen_token', resData.token);
+      if (resData.user) {
+        await SecureStore.setItemAsync('citizen_user', JSON.stringify(resData.user));
+      }
+    }
+
     return resData;
   } else {
     const d = data as AdminRegisterData;
@@ -196,6 +240,12 @@ export async function registerWithRole(role: RegisterRole, data: RegisterData) {
 // ─── Sign out ────────────────────────────────────────────────────────────────
 
 export async function signOut() {
+  try {
+    await SecureStore.deleteItemAsync('citizen_token');
+    await SecureStore.deleteItemAsync('citizen_user');
+  } catch {
+    // Ignore cleanup errors
+  }
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
 }

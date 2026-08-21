@@ -4,10 +4,18 @@ import jwt from 'jsonwebtoken';
 import { z } from 'zod';
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
+import "dotenv/config";
+import {
+  authenticateCitizen,
+  AuthenticatedRequest,
+} from "../middleware/authenticateCitizen";
 
 dotenv.config();
 
 const router = Router();
+router.get('/test', (_req, res) => {
+  res.json({ message: 'Auth router itself works' });
+});
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '';
@@ -24,6 +32,12 @@ const citizenSignupSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters long'),
   state: z.string().min(1, 'State is required'),
   pincode: z.string().regex(/^[0-9]{6}$/, 'Pincode must be a 6-digit number'),
+});
+
+// Validation Schema for Citizen Login
+const citizenLoginSchema = z.object({
+  mobile_number: z.string().trim().regex(/^[0-9]{10}$/, 'Mobile number must be a 10-digit number'),
+  password: z.string().min(1, 'Password is required'),
 });
 
 /**
@@ -113,5 +127,118 @@ router.post('/citizen/signup', async (req: Request, res: Response): Promise<void
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+/**
+ * POST /api/auth/citizen/login
+ * Endpoint to authenticate a Citizen profile
+ */
+router.post('/citizen/login', async (req: Request, res: Response): Promise<void> => {
+  try {
+    // Step 1: Input Validation
+    const parseResult = citizenLoginSchema.safeParse(req.body);
+    if (!parseResult.success) {
+      const fieldErrors = parseResult.error.flatten().fieldErrors;
+      const errorMsg = fieldErrors.mobile_number?.[0] || fieldErrors.password?.[0] || 'Validation failed';
+      res.status(400).json({
+        error: errorMsg,
+        details: fieldErrors,
+        code: 'validation_failed',
+      });
+      return;
+    }
+
+    const { mobile_number, password } = parseResult.data;
+
+    // Step 2: Fetch user profile from Supabase PostgreSQL
+    const { data: user, error: fetchError } = await supabase
+      .from('citizen_profiles')
+      .select('id, full_name, mobile_number, password_hash, state, pincode')
+      .eq('mobile_number', mobile_number)
+      .maybeSingle();
+
+    if (fetchError) {
+      console.error('[Citizen Login Database Error]:', fetchError);
+      res.status(500).json({ error: 'Database query failed' });
+      return;
+    }
+
+    if (!user) {
+      res.status(404).json({ error: 'Mobile number is not registered', code: 'mobile_not_found' });
+      return;
+    }
+
+    if (!user.password_hash) {
+      console.error('[Citizen Login Error]: Missing password_hash for citizen', user.id);
+      res.status(500).json({ error: 'Citizen credentials are not configured', code: 'credentials_not_configured' });
+      return;
+    }
+
+    // Step 3: Verify Password with bcrypt
+    const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+    if (!isPasswordValid) {
+      res.status(401).json({ error: 'Incorrect password', code: 'incorrect_password' });
+      return;
+    }
+
+    // Step 4: Generate JWT Token
+    const token = jwt.sign(
+      {
+        id: user.id,
+        mobile_number: user.mobile_number,
+        role: 'citizen',
+      },
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'] }
+    );
+
+    // Step 5: Return Response
+    res.status(200).json({
+      message: 'Citizen login successful',
+      user: {
+        id: user.id,
+        full_name: user.full_name,
+        mobile_number: user.mobile_number,
+        state: user.state,
+        pincode: user.pincode,
+      },
+      token,
+    });
+  } catch (err: any) {
+    console.error('[Citizen Login Error]:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+router.get('/citizen/profile',
+  authenticateCitizen,
+  async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      const citizenId = req.citizen!.id;
+
+      const { data: user, error } = await supabase
+        .from('citizen_profiles')
+        .select('id, full_name, mobile_number, state, pincode')
+        .eq('id', citizenId)
+        .single();
+
+      if (error) {
+        console.error('[Citizen Profile Error]:', error);
+        res.status(500).json({
+          error: 'Failed to fetch citizen profile',
+        });
+        return;
+      }
+
+      res.status(200).json({
+        user,
+      });
+    } catch (err) {
+      console.error('[Citizen Profile Error]:', err);
+      res.status(500).json({
+        error: 'Internal server error',
+      });
+    }
+  }
+);
+console.log("🔥 authRoutes loaded, router:", router);
 
 export default router;

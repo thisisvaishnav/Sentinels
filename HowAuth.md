@@ -49,7 +49,7 @@ EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<your-anon-key>
 SUPABASE_SERVICE_ROLE_KEY=<your-service-role-key>
 SUPABASE_URL=https://<your-project-ref>.supabase.co
 
-JWT_SECRET=super_secret_jwt_key_2026
+JWT_SECRET=super_secret_sentinels_jwt_key_2026
 JWT_EXPIRES_IN=7d
 PORT=5001
 EXPO_PUBLIC_API_URL=http://10.0.2.2:5001
@@ -237,7 +237,7 @@ export interface CitizenRegisterData {
 }
 
 export async function registerCitizen(data: CitizenRegisterData) {
-  const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5000';
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001';
 
   const response = await fetch(`${apiUrl}/api/auth/citizen/signup`, {
     method: 'POST',
@@ -345,4 +345,3 @@ When creating another endpoint (e.g. `POST /api/auth/admin/signup` or `POST /api
 ### Issue 4: `npm run server` Exits Immediately
 - **Cause**: Synchronous script runner in CLI mode finishing before asynchronous HTTP listeners keep the process active.
 - **Fix**: Use `npx tsx src/server/index.ts` in `package.json` and add `setInterval(() => {}, 10000)` in `src/server/index.ts` to keep Node's event loop active.
-
