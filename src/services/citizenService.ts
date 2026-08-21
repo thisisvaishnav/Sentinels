@@ -84,7 +84,7 @@ async function getHeaders(): Promise<HeadersInit> {
 async function handleResponse<T>(response: Response): Promise<T> {
   const text = await response.text();
   let data: any = {};
-  
+
   try {
     data = text ? JSON.parse(text) : {};
   } catch {
@@ -105,7 +105,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
 export async function getSchemes(category?: string): Promise<Scheme[]> {
   const apiUrl = getApiUrl();
   const headers = await getHeaders();
-  
+
   let url = `${apiUrl}/api/citizen/schemes`;
   if (category && category !== 'All') {
     url += `?category=${encodeURIComponent(category)}`;
