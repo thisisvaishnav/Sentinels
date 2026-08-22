@@ -1,10 +1,10 @@
-import { Router, Request, Response } from 'express';
-import { z } from 'zod';
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
+import { Response, Router } from 'express';
+import { z } from 'zod';
 import {
-  authenticateCitizen,
-  AuthenticatedRequest,
+    authenticateCitizen,
+    AuthenticatedRequest,
 } from '../middleware/authenticateCitizen';
 
 dotenv.config();
@@ -65,6 +65,42 @@ const backendHouseholdSchema = householdSchema.superRefine((data, ctx) => {
     });
   }
 });
+
+/**
+ * GET /api/household/me
+ * Returns the authenticated citizen's household profile if it exists.
+ */
+router.get(
+  '/me',
+  authenticateCitizen,
+  async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      const citizenId = req.citizen!.id;
+
+      const { data: household, error } = await supabase
+        .from('household_profiles')
+        .select('*')
+        .eq('citizen_id', citizenId)
+        .maybeSingle();
+
+      if (error) {
+        console.error('[Household Profile Fetch Error]:', error);
+        res.status(500).json({ error: 'Failed to fetch household profile' });
+        return;
+      }
+
+      if (!household) {
+        res.status(404).json({ error: 'Household profile not found' });
+        return;
+      }
+
+      res.status(200).json({ household });
+    } catch (err: any) {
+      console.error('[Household Profile Fetch Error]:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
 
 /**
  * POST /api/household

@@ -7,11 +7,11 @@ export default function CitizenLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#0F172A',
-          borderTopColor: '#1E293B',
+          backgroundColor: '#FFFFFF',
+          borderTopColor: '#D1D5DB',
         },
-        tabBarActiveTintColor: '#38BDF8',
-        tabBarInactiveTintColor: '#94A3B8',
+        tabBarActiveTintColor: '#0F172A',
+        tabBarInactiveTintColor: '#6B7280',
       }}
     >
       <Tabs.Screen

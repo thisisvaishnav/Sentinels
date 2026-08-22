@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  StatusBar,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { getCitizenHouseholdStatus, signOut } from "@/src/features/auth/authService";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { signOut, getCitizenHouseholdStatus } from "@/src/features/auth/authService";
 import * as SecureStore from "expo-secure-store";
+import React, { useEffect, useState } from "react";
+import {
+    ActivityIndicator,
+    SafeAreaView,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 
 export default function CitizenDashboard() {
   const router = useRouter();
   const [checkingStatus, setCheckingStatus] = useState(true);
+  const [householdStatus, setHouseholdStatus] = useState<"Verified" | "Pending">("Pending");
 
   const handleSignOut = async () => {
     try {
@@ -48,6 +49,8 @@ export default function CitizenDashboard() {
           return;
         }
 
+        setHouseholdStatus(status.completed ? "Verified" : "Pending");
+
         // Both checks passed
         setCheckingStatus(false);
         console.log("✅ Authenticated & household profile completed.");
@@ -64,21 +67,21 @@ export default function CitizenDashboard() {
   if (checkingStatus) {
     return (
       <SafeAreaView style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <ActivityIndicator size="large" color="#38BDF8" />
+        <ActivityIndicator size="large" color="#0F172A" />
       </SafeAreaView>
     );
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#0F172A" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Text style={styles.brand}>Sentinels Citizen</Text>
-          <Text style={styles.headerSub}>Welcome back</Text>
+          <Text style={styles.brand}>Hello, Citizen</Text>
+          <Text style={styles.headerSub}>Welcome to your central civic hub.</Text>
         </View>
         <TouchableOpacity onPress={handleSignOut} style={styles.signOutBtn}>
-          <Ionicons name="log-out-outline" size={20} color="#94A3B8" />
+          <Ionicons name="log-out-outline" size={20} color="#111111" />
         </TouchableOpacity>
       </View>
 
@@ -86,109 +89,133 @@ export default function CitizenDashboard() {
         contentContainerStyle={styles.body}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.heroCard}>
-          <Text style={styles.heroTitle}>Citizen Dashboard</Text>
-          <Text style={styles.heroSub}>Track household updates, schemes, and support in one place.</Text>
-        </View>
-
-        <View style={styles.statsRow}>
-          <StatCard icon="home-outline" title="Household" value="Active" />
-          <StatCard icon="time-outline" title="Requests" value="In Progress" />
-        </View>
-
         <View style={styles.householdPanel}>
-          <View style={styles.householdPanelHeader}>
-            <Ionicons name="location-outline" size={18} color="#38BDF8" />
-            <Text style={styles.householdPanelTitle}>Household Profile</Text>
+          <View style={styles.householdTopRow}>
+            <View style={styles.householdIconBox}>
+              <Ionicons name="home-outline" size={20} color="#FFFFFF" />
+            </View>
+            <View style={styles.householdCopy}>
+              <Text style={styles.householdPanelTitle}>My Household</Text>
+              <Text style={styles.householdId}>ID: H20451</Text>
+            </View>
+            <View style={styles.badge}>
+              <Ionicons name="checkmark-circle" size={12} color="#FFFFFF" />
+              <Text style={styles.badgeText}>{householdStatus}</Text>
+            </View>
           </View>
-          <Text style={styles.householdPanelText}>
-            Keep your household details updated for better access to services and benefits.
-          </Text>
+
           <TouchableOpacity
             style={styles.householdButton}
             activeOpacity={0.8}
             onPress={() => router.push("/(citizen)/household")}
           >
-            <Text style={styles.householdButtonText}>Manage Household</Text>
-            <Ionicons name="arrow-forward" size={16} color="#0F172A" />
+            <Text style={styles.householdButtonText}>View Details</Text>
           </TouchableOpacity>
         </View>
 
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.grid}>
           <ActionCard
-            icon="stats-chart-outline"
-            label="Progress"
-            color="#10B981"
-            onPress={() => router.push("/(citizen)/progress")}
+            icon="person-add-outline"
+            label="Register Household"
+            onPress={() => router.push("/(citizen)/household")}
           />
           <ActionCard
-            icon="newspaper-outline"
-            label="Schemes"
-            color="#F59E0B"
-            onPress={() => router.push("/(citizen)/schemes")}
+            icon="checkmark-done-outline"
+            label="Was I Counted?"
           />
           <ActionCard
-            icon="help-circle-outline"
-            label="Support"
-            color="#EC4899"
+            icon="alert-circle-outline"
+            label="Report Missing Household"
+          />
+          <ActionCard
+            icon="headset-outline"
+            label="Report a Need"
             onPress={() => router.push("/(citizen)/support")}
           />
           <ActionCard
-            icon="home-outline"
-            label="Household"
-            color="#6366F1"
+            icon="business-outline"
+            label="Find Government Schemes"
+            onPress={() => router.push("/(citizen)/schemes")}
+          />
+          <ActionCard
+            icon="trending-up-outline"
+            label="Track My Requests"
             onPress={() => router.push("/(citizen)/household")}
           />
         </View>
+
+        <Text style={styles.sectionTitle}>Recent Activity</Text>
+        <View style={styles.activityList}>
+          <ActivityItem
+            title="Household Verification Complete"
+            text="Your household details have been successfully verified by the regional team."
+            time="Oct 12, 2023 · 14:30"
+          />
+          <ActivityItem
+            title="Survey Submitted: Water Access"
+            text="Thank you for participating in the community water infrastructure survey."
+            time="Oct 08, 2023 · 10:12"
+          />
+          <ActivityItem
+            title="Scheme Match Updated"
+            text="You have 2 new welfare scheme recommendations based on your profile."
+            time="Oct 04, 2023 · 17:42"
+          />
+        </View>
+
+        <View style={styles.bottomSpacer} />
       </ScrollView>
     </SafeAreaView>
-  );
-}
-
-function StatCard({
-  icon,
-  title,
-  value,
-}: {
-  icon: React.ComponentProps<typeof Ionicons>["name"];
-  title: string;
-  value: string;
-}) {
-  return (
-    <View style={styles.statCard}>
-      <Ionicons name={icon} size={18} color="#38BDF8" />
-      <Text style={styles.statTitle}>{title}</Text>
-      <Text style={styles.statValue}>{value}</Text>
-    </View>
   );
 }
 
 function ActionCard({
   icon,
   label,
-  color,
   onPress,
 }: {
   icon: React.ComponentProps<typeof Ionicons>["name"];
   label: string;
-  color: string;
   onPress?: () => void;
 }) {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
-      <View style={[styles.cardIcon, { backgroundColor: color + "20" }]}>
-        <Ionicons name={icon} size={28} color={color} />
+      <View style={styles.cardIcon}>
+        <Ionicons name={icon} size={22} color="#1E293B" />
       </View>
       <Text style={styles.cardLabel}>{label}</Text>
     </TouchableOpacity>
   );
 }
 
+function ActivityItem({
+  title,
+  text,
+  time,
+}: {
+  title: string;
+  text: string;
+  time: string;
+}) {
+  return (
+    <View style={styles.activityItem}>
+      <View style={styles.activityIconWrap}>
+        <Ionicons name="checkmark-circle-outline" size={18} color="#1E293B" />
+      </View>
+      <View style={styles.activityCopy}>
+        <Text style={styles.activityTitle}>{title}</Text>
+        <Text style={styles.activityText}>{text}</Text>
+        <Text style={styles.activityTime}>{time}</Text>
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0F172A",
+    backgroundColor: "#FFFFFF",
   },
   header: {
     flexDirection: "row",
@@ -197,131 +224,169 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: "#1E293B",
+    borderBottomColor: "#E5E7EB",
   },
   headerLeft: {
     gap: 2,
   },
   brand: {
-    color: "#F1F5F9",
-    fontSize: 20,
+    color: "#1E293B",
+    fontSize: 40,
     fontWeight: "700",
   },
   headerSub: {
-    color: "#94A3B8",
-    fontSize: 13,
+    color: "#4B5563",
+    fontSize: 15,
   },
   signOutBtn: {
     padding: 6,
   },
   body: {
     padding: 20,
-    gap: 24,
-  },
-  heroCard: {
-    backgroundColor: "#1E293B",
-    borderRadius: 16,
-    padding: 20,
-    gap: 8,
-  },
-  heroTitle: {
-    color: "#F1F5F9",
-    fontSize: 24,
-    fontWeight: "700",
-  },
-  heroSub: {
-    color: "#94A3B8",
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  statsRow: {
-    flexDirection: "row",
-    gap: 12,
-  },
-  statCard: {
-    flex: 1,
-    backgroundColor: "#1E293B",
-    borderRadius: 14,
-    padding: 14,
-    gap: 6,
-  },
-  statTitle: {
-    color: "#94A3B8",
-    fontSize: 12,
-    fontWeight: "600",
-  },
-  statValue: {
-    color: "#E2E8F0",
-    fontSize: 15,
-    fontWeight: "700",
+    gap: 18,
   },
   householdPanel: {
-    backgroundColor: "#111827",
+    backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#1E293B",
+    borderColor: "#D1D5DB",
     borderRadius: 14,
     padding: 16,
-    gap: 10,
+    gap: 14,
   },
-  householdPanelHeader: {
+  householdTopRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 12,
+  },
+  householdIconBox: {
+    width: 42,
+    height: 42,
+    borderRadius: 10,
+    backgroundColor: "#1E293B",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  householdCopy: {
+    flex: 1,
   },
   householdPanelTitle: {
-    color: "#E2E8F0",
-    fontSize: 15,
+    color: "#111827",
+    fontSize: 30,
     fontWeight: "700",
   },
-  householdPanelText: {
-    color: "#94A3B8",
-    fontSize: 13,
-    lineHeight: 19,
+  householdId: {
+    marginTop: 3,
+    color: "#6B7280",
+    fontSize: 11,
+    fontWeight: "600",
+  },
+  badge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#0C79B4",
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    gap: 5,
+  },
+  badgeText: {
+    color: "#FFFFFF",
+    fontSize: 11,
+    fontWeight: "700",
   },
   householdButton: {
-    marginTop: 4,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 6,
-    backgroundColor: "#38BDF8",
+    backgroundColor: "#1E293B",
     borderRadius: 10,
     paddingVertical: 10,
   },
   householdButtonText: {
-    color: "#0F172A",
+    color: "#FFFFFF",
     fontSize: 14,
     fontWeight: "700",
   },
   sectionTitle: {
-    color: "#E2E8F0",
-    fontSize: 16,
+    color: "#1F2937",
+    fontSize: 22,
     fontWeight: "700",
   },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 14,
+    justifyContent: "space-between",
+    rowGap: 12,
   },
   card: {
-    width: "47%",
-    backgroundColor: "#1E293B",
-    borderRadius: 14,
-    padding: 18,
+    width: "48%",
+    minHeight: 146,
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 8,
+    padding: 14,
     alignItems: "center",
-    gap: 10,
+    justifyContent: "center",
+    gap: 12,
   },
   cardIcon: {
-    width: 54,
-    height: 54,
-    borderRadius: 14,
+    width: 46,
+    height: 46,
+    borderRadius: 12,
+    backgroundColor: "#EFF2F5",
     alignItems: "center",
     justifyContent: "center",
   },
   cardLabel: {
-    color: "#CBD5E1",
+    color: "#111827",
     fontSize: 14,
     fontWeight: "600",
     textAlign: "center",
+  },
+  activityList: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  activityItem: {
+    flexDirection: "row",
+    gap: 10,
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+  },
+  activityIconWrap: {
+    width: 30,
+    height: 30,
+    borderRadius: 10,
+    backgroundColor: "#F1F5F9",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  activityCopy: {
+    flex: 1,
+    gap: 2,
+  },
+  activityTitle: {
+    fontSize: 13,
+    color: "#111827",
+    fontWeight: "700",
+  },
+  activityText: {
+    fontSize: 13,
+    color: "#374151",
+    lineHeight: 18,
+  },
+  activityTime: {
+    marginTop: 2,
+    fontSize: 11,
+    color: "#6B7280",
+    letterSpacing: 0.3,
+  },
+  bottomSpacer: {
+    height: 24,
   },
 });
