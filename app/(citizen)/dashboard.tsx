@@ -14,10 +14,38 @@ import {
     View,
 } from "react-native";
 
+const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:5001";
+
+type HouseholdProfile = {
+  id: string;
+  head_full_name: string;
+  head_age: number;
+  head_gender: string;
+  head_mobile_number: string;
+  total_members: number;
+  male_members: number;
+  female_members: number;
+  children_count: number;
+  senior_count: number;
+  house_no: string;
+  locality: string;
+  ward: string;
+  district: string;
+  pincode: string;
+  has_electricity: boolean;
+  has_running_water: boolean;
+  has_indoor_toilet: boolean;
+  has_lpg: boolean;
+  has_internet: boolean;
+  latitude: number;
+  longitude: number;
+};
+
 export default function CitizenDashboard() {
   const router = useRouter();
   const [checkingStatus, setCheckingStatus] = useState(true);
   const [householdStatus, setHouseholdStatus] = useState<"Verified" | "Pending">("Pending");
+  const [householdProfile, setHouseholdProfile] = useState<HouseholdProfile | null>(null);
 
   const handleSignOut = async () => {
     try {
@@ -50,6 +78,28 @@ export default function CitizenDashboard() {
         }
 
         setHouseholdStatus(status.completed ? "Verified" : "Pending");
+
+        // Fetch household profile data for dashboard preview
+        if (status.completed) {
+          try {
+            const profileResponse = await fetch(
+              `${API_URL}/api/household/me`,
+              {
+                method: "GET",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (profileResponse.ok) {
+              const profileResult = await profileResponse.json();
+              setHouseholdProfile(profileResult.household ?? null);
+            }
+          } catch (err) {
+            console.error("Failed to fetch household profile:", err);
+          }
+        }
 
         // Both checks passed
         setCheckingStatus(false);
@@ -96,20 +146,55 @@ export default function CitizenDashboard() {
             </View>
             <View style={styles.householdCopy}>
               <Text style={styles.householdPanelTitle}>My Household</Text>
-              <Text style={styles.householdId}>ID: H20451</Text>
+              {householdProfile ? (
+                <Text style={styles.householdId}>
+                  {householdProfile.head_full_name} · {householdProfile.total_members} members
+                </Text>
+              ) : (
+                <Text style={styles.householdId}>No profile registered</Text>
+              )}
             </View>
-            <View style={styles.badge}>
-              <Ionicons name="checkmark-circle" size={12} color="#FFFFFF" />
+            <View style={[styles.badge, householdProfile && styles.badgeVerified]}>
+              <Ionicons
+                name={householdProfile ? "checkmark-circle" : "time-outline"}
+                size={12}
+                color="#FFFFFF"
+              />
               <Text style={styles.badgeText}>{householdStatus}</Text>
             </View>
           </View>
+
+          {householdProfile && (
+            <View style={styles.householdSummary}>
+              <View style={styles.summaryRow}>
+                <Ionicons name="location-outline" size={14} color="#6B7280" />
+                <Text style={styles.summaryText}>
+                  {householdProfile.house_no}, {householdProfile.locality}, {householdProfile.ward}
+                </Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Ionicons name="people-outline" size={14} color="#6B7280" />
+                <Text style={styles.summaryText}>
+                  {householdProfile.male_members} Male · {householdProfile.female_members} Female · {householdProfile.children_count} Children
+                </Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Ionicons name="call-outline" size={14} color="#6B7280" />
+                <Text style={styles.summaryText}>
+                  {householdProfile.head_mobile_number}
+                </Text>
+              </View>
+            </View>
+          )}
 
           <TouchableOpacity
             style={styles.householdButton}
             activeOpacity={0.8}
             onPress={() => router.push("/(citizen)/household")}
           >
-            <Text style={styles.householdButtonText}>View Details</Text>
+            <Text style={styles.householdButtonText}>
+              {householdProfile ? "View Details" : "Register Now"}
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -117,7 +202,7 @@ export default function CitizenDashboard() {
         <View style={styles.grid}>
           <ActionCard
             icon="person-add-outline"
-            label="Register Household"
+            label={householdProfile ? "View Household" : "Register Household"}
             onPress={() => router.push("/(citizen)/household")}
           />
           <ActionCard
@@ -280,6 +365,24 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "600",
   },
+  householdSummary: {
+    gap: 6,
+    paddingTop: 4,
+    paddingBottom: 2,
+    borderTopWidth: 1,
+    borderTopColor: "#E5E7EB",
+  },
+  summaryRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  summaryText: {
+    color: "#374151",
+    fontSize: 12,
+    fontWeight: "500",
+    flex: 1,
+  },
   badge: {
     flexDirection: "row",
     alignItems: "center",
@@ -288,6 +391,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     gap: 5,
+  },
+  badgeVerified: {
+    backgroundColor: "#059669",
   },
   badgeText: {
     color: "#FFFFFF",
