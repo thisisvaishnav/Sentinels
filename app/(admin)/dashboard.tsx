@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signOut } from "@/src/features/auth/authService";
 
 export default function AdminDashboard() {
@@ -17,12 +18,12 @@ export default function AdminDashboard() {
 
   const handleSignOut = async () => {
     try {
+      await AsyncStorage.removeItem("admin_logged_in");
       await signOut();
-      router.replace("/onboarding");
     } catch {
       // signOut already cleaned up locally even if the server call failed
-      router.replace("/onboarding");
     }
+    router.replace("/onboarding");
   };
 
   return (

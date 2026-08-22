@@ -16,7 +16,7 @@ import {
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
-export type Role = "citizen" | "enumerator" | "admin";
+export type Role = "citizen" | "enumerator";
 
 export default function Login() {
   const { role: roleParam } = useLocalSearchParams<{ role: Role }>();
@@ -28,8 +28,8 @@ export default function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isCitizen = role === "citizen";
-  const isAdmin = role === "admin";
   const isEnumerator = role === "enumerator";
+
   const handleLogin = async () => {
     const identifier = firstValue.trim();
     const secret = password.trim();
@@ -89,33 +89,11 @@ export default function Login() {
       return;
     }
 
-    if (isAdmin) {
-      try {
-        await loginWithRole('admin', { employeeId: identifier, password: secret });
-        await AsyncStorage.setItem('hasOnboarded', 'true');
-        router.replace("/(admin)/dashboard");
-      } catch (error: any) {
-        console.error("Admin login error:", error);
-        const isCredentialError =
-          error?.status === 400 || error?.code === "invalid_credentials";
-        alert(
-          isCredentialError
-            ? "Invalid employee ID or password."
-            : "Unable to sign in. Please try again.",
-        );
-      } finally {
-        setIsSubmitting(false);
-      }
-      return;
-    }
-
     setIsSubmitting(false);
   };
 
-
   const getSubtitle = () => {
     if (isCitizen) return "Sign in to your citizen account";
-    if (isAdmin) return "Access the GIS command center";
     return "Secure Enumerator Access";
   };
 
@@ -161,14 +139,6 @@ export default function Login() {
                   />
                 )}
 
-                {isAdmin && (
-                  <MaterialCommunityIcons
-                    name="shield-account"
-                    size={34}
-                    color="#9DB0C5"
-                  />
-                )}
-
                 {isEnumerator && (
                   <MaterialCommunityIcons
                     name="satellite-variant"
@@ -199,34 +169,6 @@ export default function Login() {
                   icon={
                     <Ionicons
                       name="phone-portrait-outline"
-                      size={23}
-                      color="#777F89"
-                    />
-                  }
-                />
-
-                <PasswordField
-                  label="PASSWORD"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChangeText={setPassword}
-                  visible={showPassword}
-                  setVisible={setShowPassword}
-                />
-              </>
-            )}
-
-            {/* Admin */}
-            {isAdmin && (
-              <>
-                <Field
-                  label="EMPLOYEE ID"
-                  placeholder="FP-0000"
-                  value={firstValue}
-                  onChangeText={setFirstValue}
-                  icon={
-                    <MaterialCommunityIcons
-                      name="card-account-details-outline"
                       size={23}
                       color="#777F89"
                     />
@@ -291,8 +233,8 @@ export default function Login() {
               />
             </TouchableOpacity>
 
-            {/* Register */}
-            {!isEnumerator && (
+            {/* Register - only for citizens */}
+            {isCitizen && (
               <View style={styles.registerContainer}>
                 <Text style={styles.registerText}>
                   {"Don't have an account? "}
