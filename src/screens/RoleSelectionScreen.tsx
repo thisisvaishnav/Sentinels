@@ -12,6 +12,8 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 export type Role = "citizen" | "enumerator" | "admin";
 
+/* ───────────────────── Primary Role Card ───────────────────── */
+
 interface RoleCardProps {
   role: Role;
   title: string;
@@ -19,38 +21,16 @@ interface RoleCardProps {
   onPress: () => void;
 }
 
-const RoleCard = ({
-  role,
-  title,
-  description,
-  onPress,
-}: RoleCardProps) => {
+const RoleCard = ({ role, title, description, onPress }: RoleCardProps) => {
   const getIcon = () => {
     if (role === "citizen") {
-      return (
-        <Ionicons
-          name="person"
-          size={32}
-          color="#9DB0C5"
-        />
-      );
+      return <Ionicons name="person" size={36} color="#FFFFFF" />;
     }
-
-    if (role === "enumerator") {
-      return (
-        <MaterialCommunityIcons
-          name="file-document-edit"
-          size={34}
-          color="#9DB0C5"
-        />
-      );
-    }
-
     return (
       <MaterialCommunityIcons
-        name="shield-account"
-        size={34}
-        color="#9DB0C5"
+        name="file-document-edit"
+        size={36}
+        color="#FFFFFF"
       />
     );
   };
@@ -67,9 +47,48 @@ const RoleCard = ({
         <Text style={styles.roleTitle}>{title}</Text>
         <Text style={styles.roleDescription}>{description}</Text>
       </View>
+
+      <Ionicons name="chevron-forward" size={22} color="#9DB0C5" />
     </TouchableOpacity>
   );
 };
+
+/* ───────────────────── Compact Admin Card ───────────────────── */
+
+interface CompactRoleCardProps {
+  title: string;
+  description: string;
+  onPress: () => void;
+}
+
+const CompactRoleCard = ({
+  title,
+  description,
+  onPress,
+}: CompactRoleCardProps) => {
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      style={styles.compactCard}
+      onPress={onPress}
+    >
+      <View style={styles.compactIconContainer}>
+        <MaterialCommunityIcons
+          name="shield-account"
+          size={22}
+          color="#6B7A8D"
+        />
+      </View>
+
+      <View style={styles.compactCardContent}>
+        <Text style={styles.compactTitle}>{title}</Text>
+        <Text style={styles.compactDescription}>{description}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+/* ───────────────────── Main Screen ───────────────────── */
 
 interface RoleSelectionScreenProps {
   onSelectRole?: (role: Role) => void;
@@ -89,24 +108,21 @@ export default function RoleSelectionScreen({
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="#F5F8FA"
-      />
+      <StatusBar barStyle="dark-content" backgroundColor="#F5F8FA" />
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.container}>
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>Welcome to Sentinels</Text>
-
-            <Text style={styles.subtitle}>
-              Select your role to continue
-            </Text>
+            <Text style={styles.subtitle}>Select your role to continue</Text>
           </View>
 
-          {/* Roles */}
-          <View style={styles.rolesContainer}>
+          {/* Primary Roles */}
+          <View style={styles.primaryRoles}>
             <RoleCard
               role="citizen"
               title="Citizen"
@@ -120,14 +136,21 @@ export default function RoleSelectionScreen({
               description="Field data collection and zone verification"
               onPress={() => handleRoleSelect("enumerator")}
             />
-
-            <RoleCard
-              role="admin"
-              title="Admin"
-              description="System oversight, GIS analysis, and command center"
-              onPress={() => handleRoleSelect("admin")}
-            />
           </View>
+
+          {/* Divider */}
+          <View style={styles.dividerRow}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>or</Text>
+            <View style={styles.dividerLine} />
+          </View>
+
+          {/* Secondary Role */}
+          <CompactRoleCard
+            title="Admin"
+            description="System oversight and command center"
+            onPress={() => handleRoleSelect("admin")}
+          />
 
           {/* Help */}
           <TouchableOpacity
@@ -149,6 +172,8 @@ export default function RoleSelectionScreen({
   );
 }
 
+/* ───────────────────── Styles ───────────────────── */
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -168,12 +193,12 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     paddingTop: 38,
-    paddingBottom: 48,
+    paddingBottom: 44,
   },
 
   title: {
-    fontSize: 42,
-    lineHeight: 48,
+    fontSize: 38,
+    lineHeight: 44,
     fontWeight: "800",
     color: "#17293D",
     textAlign: "center",
@@ -181,52 +206,45 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    marginTop: 32,
-    fontSize: 24,
-    lineHeight: 32,
-    fontWeight: "600",
-    color: "#454B52",
+    marginTop: 28,
+    fontSize: 20,
+    lineHeight: 28,
+    fontWeight: "500",
+    color: "#6B7A8D",
     textAlign: "center",
   },
 
-  rolesContainer: {
-    gap: 20,
+  /* ── Primary cards ── */
+
+  primaryRoles: {
+    gap: 16,
   },
 
   roleCard: {
-    minHeight: 120,
+    minHeight: 110,
     backgroundColor: "#FFFFFF",
-    borderWidth: 1.5,
-    borderColor: "#C9CDD2",
-    borderRadius: 15,
-
+    borderWidth: 2,
+    borderColor: "#172A3A",
+    borderRadius: 16,
     flexDirection: "row",
     alignItems: "center",
-
     paddingHorizontal: 20,
     paddingVertical: 18,
-
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 3,
-
-    elevation: 2,
+    shadowColor: "#172A3A",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 4,
   },
 
   iconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 16,
-    backgroundColor: "#2B4055",
-
+    width: 72,
+    height: 72,
+    borderRadius: 18,
+    backgroundColor: "#172A3A",
     alignItems: "center",
     justifyContent: "center",
-
-    marginRight: 20,
+    marginRight: 18,
   },
 
   cardContent: {
@@ -248,15 +266,83 @@ const styles = StyleSheet.create({
     color: "#4B5056",
   },
 
+  /* ── Divider ── */
+
+  dividerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 28,
+    paddingHorizontal: 24,
+  },
+
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#D0D5DC",
+  },
+
+  dividerText: {
+    marginHorizontal: 14,
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#9BA1A6",
+    textTransform: "lowercase",
+  },
+
+  /* ── Compact admin card ── */
+
+  compactCard: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#E0E3E8",
+    borderRadius: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    alignSelf: "flex-start",
+  },
+
+  compactIconContainer: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    backgroundColor: "#EEF1F4",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 14,
+  },
+
+  compactCardContent: {
+    flex: 1,
+  },
+
+  compactTitle: {
+    fontSize: 18,
+    lineHeight: 24,
+    fontWeight: "600",
+    color: "#4B5056",
+    marginBottom: 2,
+  },
+
+  compactDescription: {
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: "400",
+    color: "#9BA1A6",
+  },
+
+  /* ── Help ── */
+
   helpButton: {
     alignItems: "center",
-    marginTop: 32,
+    marginTop: 36,
     marginBottom: 20,
   },
 
   helpText: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#00669D",
+    color: "#172A3A",
   },
 });
