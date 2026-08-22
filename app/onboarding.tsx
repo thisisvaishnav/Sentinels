@@ -14,11 +14,14 @@ export default function OnboardingScreen() {
     }
 
     // Enumerators are provisioned externally — send them straight to login.
-    // Citizens and admins start on the registration screen.
-    if (role === 'enumerator') {
-      router.push({ pathname: '/(auth)/login', params: { role } });
-    } else {
+    // Admins have a dedicated DRISHTI login screen.
+    // Citizens start on the registration screen.
+    if (role === 'citizen') {
       router.push({ pathname: '/(auth)/register', params: { role } });
+    } else if (role === 'admin') {
+      router.push('/(admin)/login');
+    } else {
+      router.push({ pathname: '/(auth)/login', params: { role } });
     }
   };
 

@@ -11,12 +11,10 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { registerWithRole } from "@/src/features/auth/authService";
-
-export type RegisterRole = "citizen" | "admin";
 
 const STATES = [
   "Uttar Pradesh",
@@ -28,77 +26,46 @@ const STATES = [
   "Gujarat",
 ];
 
-const AUTHORITY_LEVELS = [
-  "Level 1 - Field",
-  "Level 2 - District",
-  "Level 3 - State",
-  "Level 4 - National",
-];
-
 export default function Register() {
-  const { role: roleParam } = useLocalSearchParams<{ role: RegisterRole }>();
-  const role: RegisterRole = (roleParam === "admin" ? "admin" : "citizen");
   const router = useRouter();
-  const isCitizen = role === "citizen";
 
   const [fullName, setFullName] = useState("");
   const [mobile, setMobile] = useState("");
-  const [employeeId, setEmployeeId] = useState("");
-  const [authorityLevel, setAuthorityLevel] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [state, setState] = useState("");
-  const [district, setDistrict] = useState("");
   const [pinCode, setPinCode] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
   const [showStates, setShowStates] = useState(false);
-  const [showAuthority, setShowAuthority] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRegister = async () => {
     if (!fullName.trim()) {
-      alert('Please enter your full name.');
+      alert("Please enter your full name.");
+      return;
+    }
+
+    if (!mobile.trim() || !password.trim()) {
+      alert("Please fill in all required fields.");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      if (isCitizen) {
-        if (!mobile.trim() || !password.trim()) {
-          alert('Please fill in all required fields.');
-          return;
-        }
-        await registerWithRole('citizen', {
-          fullName,
-          mobile,
-          password,
-          state,
-          district,
-          pinCode,
-        });
-        await AsyncStorage.setItem('hasOnboarded', 'true');
-        router.replace('/(citizen)/dashboard');
-      } else {
-        if (!employeeId.trim() || !email.trim() || !password.trim()) {
-          alert('Please fill in all required fields.');
-          return;
-        }
-        await registerWithRole('admin', {
-          fullName,
-          employeeId,
-          authorityLevel,
-          email,
-          password,
-        });
-        await AsyncStorage.setItem('hasOnboarded', 'true');
-        router.replace('/(admin)/dashboard');
-      }
+      await registerWithRole("citizen", {
+        fullName,
+        mobile,
+        password,
+        state,
+        district: "",
+        pinCode,
+      });
+      await AsyncStorage.setItem("hasOnboarded", "true");
+      router.replace("/(citizen)/dashboard");
     } catch (error: any) {
-      console.error('Register error:', error);
-      alert(error?.message ?? 'Registration failed. Please try again.');
+      console.error("Register error:", error);
+      alert(error?.message ?? "Registration failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -106,10 +73,7 @@ export default function Register() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="#F5F8FA"
-      />
+      <StatusBar barStyle="dark-content" backgroundColor="#F5F8FA" />
 
       <KeyboardAvoidingView
         style={styles.keyboard}
@@ -120,234 +84,153 @@ export default function Register() {
           contentContainerStyle={styles.scrollContent}
         >
           <View style={styles.container}>
-
             {/* Back */}
             <TouchableOpacity
               style={styles.backButton}
               onPress={() => router.back()}
             >
-              <Ionicons
-                name="arrow-back"
-                size={22}
-                color="#172A3A"
-              />
+              <Ionicons name="arrow-back" size={22} color="#172A3A" />
               <Text style={styles.backText}>Back</Text>
             </TouchableOpacity>
 
             {/* Header */}
             <View style={styles.header}>
-
               <View style={styles.logo}>
-                {isCitizen ? (
-                  <Ionicons
-                    name="person-outline"
-                    size={34}
-                    color="#9DB0C5"
-                  />
-                ) : (
-                  <MaterialCommunityIcons
-                    name="shield-account"
-                    size={36}
-                    color="#9DB0C5"
-                  />
-                )}
+                <Ionicons name="person-outline" size={34} color="#9DB0C5" />
               </View>
 
-              <Text style={styles.brand}>
-                {isCitizen ? "Sentinels" : "Field-Precision"}
-              </Text>
+              <Text style={styles.brand}>Sentinels</Text>
 
-              <Text style={styles.title}>
-                {isCitizen ? "Create Account" : "Admin Signup"}
-              </Text>
+              <Text style={styles.title}>Create Account</Text>
 
               <Text style={styles.subtitle}>
-                {isCitizen
-                  ? "Create your citizen account"
-                  : "Create your administrative credentials to access the GIS command center."}
+                Create your citizen account
               </Text>
             </View>
 
             {/* Full Name */}
             <InputField
               label="FULL NAME"
-              placeholder={isCitizen ? "Enter your full name" : "Jane Doe"}
+              placeholder="Enter your full name"
               value={fullName}
               onChangeText={setFullName}
               icon={
+                <Ionicons name="person-outline" size={22} color="#777F89" />
+              }
+            />
+
+            {/* Mobile Number */}
+            <InputField
+              label="MOBILE NUMBER"
+              placeholder="10-digit mobile number"
+              value={mobile}
+              onChangeText={setMobile}
+              keyboardType="phone-pad"
+              icon={
                 <Ionicons
-                  name="person-outline"
+                  name="phone-portrait-outline"
                   size={22}
                   color="#777F89"
                 />
               }
             />
 
-            {/* Citizen */}
-            {isCitizen && (
-              <>
-                <InputField
-                  label="MOBILE NUMBER"
-                  placeholder="10-digit mobile number"
-                  value={mobile}
-                  onChangeText={setMobile}
-                  keyboardType="phone-pad"
-                  icon={
-                    <Ionicons
-                      name="phone-portrait-outline"
-                      size={22}
-                      color="#777F89"
-                    />
-                  }
+            {/* Password */}
+            <View style={styles.field}>
+              <Text style={styles.label}>PASSWORD</Text>
+              <View style={styles.inputContainer}>
+                <Ionicons
+                  name="lock-closed-outline"
+                  size={22}
+                  color="#777F89"
                 />
-
-                <PasswordField
+                <TextInput
+                  style={styles.input}
+                  placeholder="Create a secure password"
+                  placeholderTextColor="#B9BEC6"
                   value={password}
                   onChangeText={setPassword}
-                  visible={showPassword}
-                  setVisible={setShowPassword}
-                  placeholder="Create a secure password"
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
                 />
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Ionicons
+                    name={showPassword ? "eye-outline" : "eye-off-outline"}
+                    size={23}
+                    color="#777F89"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
 
-                {/* State */}
-                <Dropdown
-                  label="STATE"
-                  value={state || "Select State"}
-                  open={showStates}
-                  onPress={() => setShowStates(!showStates)}
-                />
-
-                {showStates && (
-                  <View style={styles.dropdown}>
-                    {STATES.map((item) => (
-                      <TouchableOpacity
-                        key={item}
-                        style={styles.dropdownItem}
-                        onPress={() => {
-                          setState(item);
-                          setShowStates(false);
-                        }}
-                      >
-                        <Text style={styles.dropdownText}>
-                          {item}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                )}
-
-                {/* PIN */}
-                <InputField
-                  label="PIN CODE"
-                  placeholder="6-digit postal code"
-                  value={pinCode}
-                  onChangeText={setPinCode}
-                  keyboardType="number-pad"
-                  icon={
-                    <Ionicons
-                      name="location-outline"
-                      size={22}
-                      color="#777F89"
-                    />
-                  }
-                />
-              </>
-            )}
-
-            {/* Admin */}
-            {!isCitizen && (
-              <>
-                <InputField
-                  label="EMPLOYEE ID"
-                  placeholder="FP-0000"
-                  value={employeeId}
-                  onChangeText={setEmployeeId}
-                  icon={
-                    <MaterialCommunityIcons
-                      name="card-account-details-outline"
-                      size={22}
-                      color="#777F89"
-                    />
-                  }
-                />
-
-                <Dropdown
-                  label="AUTHORITY LEVEL"
-                  value={authorityLevel || "Select Level"}
-                  open={showAuthority}
-                  onPress={() =>
-                    setShowAuthority(!showAuthority)
-                  }
-                />
-
-                {showAuthority && (
-                  <View style={styles.dropdown}>
-                    {AUTHORITY_LEVELS.map((item) => (
-                      <TouchableOpacity
-                        key={item}
-                        style={styles.dropdownItem}
-                        onPress={() => {
-                          setAuthorityLevel(item);
-                          setShowAuthority(false);
-                        }}
-                      >
-                        <Text style={styles.dropdownText}>
-                          {item}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                )}
-
-                <InputField
-                  label="CORPORATE EMAIL"
-                  placeholder="jane.doe@field-precision.com"
-                  value={email}
-                  onChangeText={setEmail}
-                  keyboardType="email-address"
-                  icon={
-                    <MaterialCommunityIcons
-                      name="email-outline"
-                      size={22}
-                      color="#777F89"
-                    />
-                  }
-                />
-
-                <PasswordField
-                  value={password}
-                  onChangeText={setPassword}
-                  visible={showPassword}
-                  setVisible={setShowPassword}
-                  placeholder="Create a secure password"
-                />
-
-                <Text style={styles.passwordHint}>
-                  ⓘ Minimum 12 characters required
+            {/* State */}
+            <View style={styles.field}>
+              <Text style={styles.label}>STATE</Text>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.inputContainer}
+                onPress={() => setShowStates(!showStates)}
+              >
+                <Text
+                  style={[
+                    styles.dropdownValue,
+                    !state ? styles.placeholder : null,
+                  ]}
+                >
+                  {state || "Select State"}
                 </Text>
-              </>
-            )}
+                <Ionicons
+                  name={showStates ? "chevron-up" : "chevron-down"}
+                  size={21}
+                  color="#69717B"
+                />
+              </TouchableOpacity>
+              {showStates && (
+                <View style={styles.dropdown}>
+                  {STATES.map((item) => (
+                    <TouchableOpacity
+                      key={item}
+                      style={styles.dropdownItem}
+                      onPress={() => {
+                        setState(item);
+                        setShowStates(false);
+                      }}
+                    >
+                      <Text style={styles.dropdownText}>{item}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
+
+            {/* PIN Code */}
+            <InputField
+              label="PIN CODE"
+              placeholder="6-digit postal code"
+              value={pinCode}
+              onChangeText={setPinCode}
+              keyboardType="number-pad"
+              icon={
+                <Ionicons name="location-outline" size={22} color="#777F89" />
+              }
+            />
 
             {/* Create Account */}
             <TouchableOpacity
               activeOpacity={0.8}
-              style={[styles.primaryButton, isSubmitting && { opacity: 0.65 }]}
+              style={[
+                styles.primaryButton,
+                isSubmitting && { opacity: 0.65 },
+              ]}
               onPress={handleRegister}
               disabled={isSubmitting}
             >
               <Text style={styles.primaryButtonText}>
-                {isSubmitting
-                  ? "Please wait..."
-                  : isCitizen
-                  ? "CREATE ACCOUNT"
-                  : "Initialize Account"}
+                {isSubmitting ? "Please wait..." : "CREATE ACCOUNT"}
               </Text>
-
-              <Ionicons
-                name="arrow-forward"
-                size={24}
-                color="#FFFFFF"
-              />
+              <Ionicons name="arrow-forward" size={24} color="#FFFFFF" />
             </TouchableOpacity>
 
             {/* Login */}
@@ -355,14 +238,14 @@ export default function Register() {
               <Text style={styles.loginText}>
                 Already have an account?{" "}
               </Text>
-
-              <TouchableOpacity onPress={() => router.push({ pathname: '/(auth)/login', params: { role } })}>
-                <Text style={styles.loginLink}>
-                  {isCitizen ? "Log in" : "Sign in"}
-                </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  router.push({ pathname: "/(auth)/login", params: { role: "citizen" } })
+                }
+              >
+                <Text style={styles.loginLink}>Log in</Text>
               </TouchableOpacity>
             </View>
-
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -383,10 +266,8 @@ function InputField({
   return (
     <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>
-
       <View style={styles.inputContainer}>
         {icon}
-
         <TextInput
           style={styles.input}
           placeholder={placeholder}
@@ -397,84 +278,6 @@ function InputField({
           autoCapitalize="none"
         />
       </View>
-    </View>
-  );
-}
-
-function PasswordField({
-  value,
-  onChangeText,
-  visible,
-  setVisible,
-  placeholder,
-}: any) {
-  return (
-    <View style={styles.field}>
-      <Text style={styles.label}>PASSWORD</Text>
-
-      <View style={styles.inputContainer}>
-        <Ionicons
-          name="lock-closed-outline"
-          size={22}
-          color="#777F89"
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder={placeholder}
-          placeholderTextColor="#B9BEC6"
-          value={value}
-          onChangeText={onChangeText}
-          secureTextEntry={!visible}
-          autoCapitalize="none"
-        />
-
-        <TouchableOpacity
-          onPress={() => setVisible(!visible)}
-        >
-          <Ionicons
-            name={visible ? "eye-outline" : "eye-off-outline"}
-            size={23}
-            color="#777F89"
-          />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-}
-
-function Dropdown({
-  label,
-  value,
-  open,
-  onPress,
-}: any) {
-  return (
-    <View style={styles.field}>
-      <Text style={styles.label}>{label}</Text>
-
-      <TouchableOpacity
-        activeOpacity={0.8}
-        style={styles.inputContainer}
-        onPress={onPress}
-      >
-        <Text
-          style={[
-            styles.dropdownValue,
-            !open && value.startsWith("Select")
-              ? styles.placeholder
-              : null,
-          ]}
-        >
-          {value}
-        </Text>
-
-        <Ionicons
-          name={open ? "chevron-up" : "chevron-down"}
-          size={21}
-          color="#69717B"
-        />
-      </TouchableOpacity>
     </View>
   );
 }
@@ -615,13 +418,6 @@ const styles = StyleSheet.create({
   dropdownText: {
     fontSize: 16,
     color: "#20252A",
-  },
-
-  passwordHint: {
-    color: "#737981",
-    fontSize: 13,
-    marginTop: -10,
-    marginBottom: 15,
   },
 
   primaryButton: {
