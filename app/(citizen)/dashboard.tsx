@@ -72,12 +72,10 @@ export default function CitizenDashboard() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#0F172A" />
-
-      {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Ionicons name="person" size={26} color="#38BDF8" />
-          <Text style={styles.brand}>Sentinels</Text>
+          <Text style={styles.brand}>Sentinels Citizen</Text>
+          <Text style={styles.headerSub}>Welcome back</Text>
         </View>
         <TouchableOpacity onPress={handleSignOut} style={styles.signOutBtn}>
           <Ionicons name="log-out-outline" size={20} color="#94A3B8" />
@@ -88,44 +86,81 @@ export default function CitizenDashboard() {
         contentContainerStyle={styles.body}
         showsVerticalScrollIndicator={false}
       >
-        {/* Welcome */}
-        <View style={styles.welcomeCard}>
-          <Ionicons name="home" size={40} color="#38BDF8" />
-          <Text style={styles.welcomeTitle}>Citizen Dashboard</Text>
-          <Text style={styles.welcomeSub}>
-            Track your household status and local services
-          </Text>
+        <View style={styles.heroCard}>
+          <Text style={styles.heroTitle}>Citizen Dashboard</Text>
+          <Text style={styles.heroSub}>Track household updates, schemes, and support in one place.</Text>
         </View>
 
-        {/* Quick-action grid */}
+        <View style={styles.statsRow}>
+          <StatCard icon="home-outline" title="Household" value="Active" />
+          <StatCard icon="time-outline" title="Requests" value="In Progress" />
+        </View>
+
+        <View style={styles.householdPanel}>
+          <View style={styles.householdPanelHeader}>
+            <Ionicons name="location-outline" size={18} color="#38BDF8" />
+            <Text style={styles.householdPanelTitle}>Household Profile</Text>
+          </View>
+          <Text style={styles.householdPanelText}>
+            Keep your household details updated for better access to services and benefits.
+          </Text>
+          <TouchableOpacity
+            style={styles.householdButton}
+            activeOpacity={0.8}
+            onPress={() => router.push("/(citizen)/household")}
+          >
+            <Text style={styles.householdButtonText}>Manage Household</Text>
+            <Ionicons name="arrow-forward" size={16} color="#0F172A" />
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.grid}>
           <ActionCard
-            icon="home-outline"
-            label="My Household"
-            color="#6366F1"
-            onPress={() => router.push("/(citizen)/household")}
-          />
-          <ActionCard
-            icon="clipboard-outline"
-            label="Service Requests"
+            icon="stats-chart-outline"
+            label="Progress"
             color="#10B981"
             onPress={() => router.push("/(citizen)/progress")}
           />
           <ActionCard
-            icon="notifications-outline"
-            label="Notifications"
+            icon="newspaper-outline"
+            label="Schemes"
             color="#F59E0B"
             onPress={() => router.push("/(citizen)/schemes")}
           />
           <ActionCard
-            icon="person-circle-outline"
-            label="My Profile"
+            icon="help-circle-outline"
+            label="Support"
             color="#EC4899"
             onPress={() => router.push("/(citizen)/support")}
+          />
+          <ActionCard
+            icon="home-outline"
+            label="Household"
+            color="#6366F1"
+            onPress={() => router.push("/(citizen)/household")}
           />
         </View>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function StatCard({
+  icon,
+  title,
+  value,
+}: {
+  icon: React.ComponentProps<typeof Ionicons>["name"];
+  title: string;
+  value: string;
+}) {
+  return (
+    <View style={styles.statCard}>
+      <Ionicons name={icon} size={18} color="#38BDF8" />
+      <Text style={styles.statTitle}>{title}</Text>
+      <Text style={styles.statValue}>{value}</Text>
+    </View>
   );
 }
 
@@ -165,15 +200,16 @@ const styles = StyleSheet.create({
     borderBottomColor: "#1E293B",
   },
   headerLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
+    gap: 2,
   },
   brand: {
     color: "#F1F5F9",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "700",
-    letterSpacing: 0.4,
+  },
+  headerSub: {
+    color: "#94A3B8",
+    fontSize: 13,
   },
   signOutBtn: {
     padding: 6,
@@ -182,22 +218,85 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 24,
   },
-  welcomeCard: {
-    alignItems: "center",
+  heroCard: {
     backgroundColor: "#1E293B",
     borderRadius: 16,
-    padding: 28,
+    padding: 20,
     gap: 8,
   },
-  welcomeTitle: {
+  heroTitle: {
     color: "#F1F5F9",
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: "700",
   },
-  welcomeSub: {
+  heroSub: {
     color: "#94A3B8",
     fontSize: 14,
-    textAlign: "center",
+    lineHeight: 20,
+  },
+  statsRow: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  statCard: {
+    flex: 1,
+    backgroundColor: "#1E293B",
+    borderRadius: 14,
+    padding: 14,
+    gap: 6,
+  },
+  statTitle: {
+    color: "#94A3B8",
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  statValue: {
+    color: "#E2E8F0",
+    fontSize: 15,
+    fontWeight: "700",
+  },
+  householdPanel: {
+    backgroundColor: "#111827",
+    borderWidth: 1,
+    borderColor: "#1E293B",
+    borderRadius: 14,
+    padding: 16,
+    gap: 10,
+  },
+  householdPanelHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  householdPanelTitle: {
+    color: "#E2E8F0",
+    fontSize: 15,
+    fontWeight: "700",
+  },
+  householdPanelText: {
+    color: "#94A3B8",
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  householdButton: {
+    marginTop: 4,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    backgroundColor: "#38BDF8",
+    borderRadius: 10,
+    paddingVertical: 10,
+  },
+  householdButtonText: {
+    color: "#0F172A",
+    fontSize: 14,
+    fontWeight: "700",
+  },
+  sectionTitle: {
+    color: "#E2E8F0",
+    fontSize: 16,
+    fontWeight: "700",
   },
   grid: {
     flexDirection: "row",
@@ -221,7 +320,7 @@ const styles = StyleSheet.create({
   },
   cardLabel: {
     color: "#CBD5E1",
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: "600",
     textAlign: "center",
   },

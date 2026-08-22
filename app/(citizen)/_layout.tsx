@@ -17,9 +17,9 @@ export default function CitizenLayout() {
       <Tabs.Screen
         name="dashboard"
         options={{
-          title: 'Dashboard',
+          title: 'Home',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="grid-outline" color={color} size={size} />
+            <Ionicons name="home-outline" color={color} size={size} />
           ),
         }}
       />
@@ -33,15 +33,6 @@ export default function CitizenLayout() {
         }}
       />
       <Tabs.Screen
-        name="support"
-        options={{
-          title: 'Support',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="help-circle-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="schemes"
         options={{
           title: 'Schemes',
@@ -51,14 +42,15 @@ export default function CitizenLayout() {
         }}
       />
       <Tabs.Screen
-        name="household"
+        name="support"
         options={{
-          title: 'Household',
+          title: 'Support',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" color={color} size={size} />
+            <Ionicons name="help-circle-outline" color={color} size={size} />
           ),
         }}
       />
+      <Tabs.Screen name="household" options={{ href: null }} />
     </Tabs>
   );
 }
