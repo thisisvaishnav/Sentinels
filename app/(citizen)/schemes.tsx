@@ -1,13 +1,17 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function CitizenSchemesScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.heroCard}>
-        <Text style={styles.title}>Schemes</Text>
-        <Text style={styles.subtitle}>View available schemes and benefits.</Text>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+
+      <View style={styles.header}>
+        <View style={styles.headerLeft}>
+          <Text style={styles.brand}>Schemes</Text>
+          <Text style={styles.headerSub}>View available schemes and benefits.</Text>
+        </View>
       </View>
 
       <View style={styles.card}>
@@ -20,7 +24,7 @@ export default function CitizenSchemesScreen() {
 
       <View style={styles.card}>
         <View style={styles.row}>
-          <Ionicons name="school-outline" size={18} color="#38BDF8" />
+          <Ionicons name="school-outline" size={18} color="#0C79B4" />
           <Text style={styles.schemeName}>Education Benefit</Text>
         </View>
         <Text style={styles.schemeDesc}>Scholarship and supplies support for eligible families.</Text>
@@ -32,29 +36,32 @@ export default function CitizenSchemesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#FFFFFF',
     padding: 20,
     gap: 14,
   },
-  heroCard: {
-    backgroundColor: '#1E293B',
-    borderRadius: 16,
-    padding: 20,
-    gap: 8,
+  header: {
+    paddingHorizontal: 0,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
   },
-  title: {
-    color: '#F1F5F9',
-    fontSize: 22,
+  headerLeft: {
+    gap: 2,
+  },
+  brand: {
+    color: '#1E293B',
+    fontSize: 40,
     fontWeight: '700',
   },
-  subtitle: {
-    color: '#94A3B8',
-    fontSize: 14,
+  headerSub: {
+    color: '#4B5563',
+    fontSize: 15,
   },
   card: {
-    backgroundColor: '#111827',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#1E293B',
+    borderColor: '#D1D5DB',
     borderRadius: 14,
     padding: 16,
     gap: 8,
@@ -65,12 +72,12 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   schemeName: {
-    color: '#E2E8F0',
+    color: '#111827',
     fontSize: 15,
     fontWeight: '700',
   },
   schemeDesc: {
-    color: '#94A3B8',
+    color: '#4B5563',
     fontSize: 13,
     lineHeight: 19,
   },
