@@ -20,7 +20,7 @@ export default function AdminLoginScreen() {
   const router = useRouter();
   const [employeeId, setEmployeeId] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -146,24 +146,7 @@ export default function AdminLoginScreen() {
               </View>
             </View>
 
-            {/* Remember Me */}
-            <TouchableOpacity
-              style={styles.rememberRow}
-              onPress={() => setRememberMe(!rememberMe)}
-              activeOpacity={0.7}
-            >
-              <View
-                style={[
-                  styles.checkbox,
-                  rememberMe && styles.checkboxChecked,
-                ]}
-              >
-                {rememberMe && (
-                  <Ionicons name="checkmark" size={14} color="#FFFFFF" />
-                )}
-              </View>
-              <Text style={styles.rememberText}>Remember me</Text>
-            </TouchableOpacity>
+
 
             {/* Login Button */}
             <TouchableOpacity
@@ -335,39 +318,6 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  /* =========================
-     REMEMBER ME
-  ========================= */
-
-  rememberRow: {
-    marginHorizontal: 19,
-    marginTop: 15,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
-  checkbox: {
-    width: 15,
-    height: 15,
-    borderWidth: 1,
-    borderColor: "#C8C4D1",
-    borderRadius: 2,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FCFAFF",
-  },
-
-  checkboxChecked: {
-    backgroundColor: "#080875",
-    borderColor: "#080875",
-  },
-
-  rememberText: {
-    marginLeft: 8,
-    fontSize: 13,
-    color: "#575560",
   },
 
   /* =========================
