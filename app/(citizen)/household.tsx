@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import { router } from "expo-router";
-import * as Location from "expo-location";
-import * as SecureStore from "expo-secure-store";
 import { Ionicons } from "@expo/vector-icons";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as Location from "expo-location";
+import { router } from "expo-router";
+import * as SecureStore from "expo-secure-store";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import {
+    ActivityIndicator,
+    Alert,
+    KeyboardAvoidingView,
+    Modal,
+    Platform,
+    Pressable,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from "react-native";
+import { z } from "zod";
 
 const API_URL =
   process.env.EXPO_PUBLIC_API_URL || "http://localhost:5001";
@@ -147,6 +147,31 @@ const householdSchema = z
 
 type HouseholdForm = z.infer<typeof householdSchema>;
 
+type HouseholdProfile = {
+  id: string;
+  head_full_name: string;
+  head_age: number;
+  head_gender: "Male" | "Female" | "Other";
+  head_mobile_number: string;
+  total_members: number;
+  male_members: number;
+  female_members: number;
+  children_count: number;
+  senior_count: number;
+  house_no: string;
+  locality: string;
+  ward: string;
+  district: string;
+  pincode: string;
+  has_electricity: boolean;
+  has_running_water: boolean;
+  has_indoor_toilet: boolean;
+  has_lpg: boolean;
+  has_internet: boolean;
+  latitude: number;
+  longitude: number;
+};
+
 /* -------------------------------------------------------------------------- */
 /*                               Reusable Input                               */
 /* -------------------------------------------------------------------------- */
@@ -189,6 +214,15 @@ function InputField({
       />
 
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
+    </View>
+  );
+}
+
+function ProfileRow({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.profileRow}>
+      <Text style={styles.profileLabel}>{label}</Text>
+      <Text style={styles.profileValue}>{value}</Text>
     </View>
   );
 }
@@ -343,6 +377,9 @@ function GenderPicker({
 export default function HouseholdScreen() {
   const [loading, setLoading] = useState(false);
   const [locationLoading, setLocationLoading] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [existingProfile, setExistingProfile] =
+    useState<HouseholdProfile | null>(null);
 
   const [location, setLocation] = useState<{
     latitude: number;
@@ -388,7 +425,7 @@ export default function HouseholdScreen() {
   /* ---------------------------------------------------------------------- */
 
   useEffect(() => {
-    const loadCitizenData = async () => {
+    const initializeScreenData = async () => {
       try {
         const storedUser = await SecureStore.getItemAsync(
           "citizen_user"
@@ -417,12 +454,46 @@ export default function HouseholdScreen() {
           // State isn't currently part of household_profiles.
           // It can be added later if required.
         }
+
+        const token = await SecureStore.getItemAsync(
+          "citizen_token"
+        );
+
+        if (!token) {
+          router.replace("/(auth)/login");
+          return;
+        }
+
+        const response = await fetch(
+          `${API_URL}/api/household/me`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+          setExistingProfile(result.household ?? null);
+        } else if (response.status !== 404) {
+          const text = await response.text();
+          console.error(
+            "Failed to fetch household profile:",
+            response.status,
+            text
+          );
+        }
       } catch (error) {
         console.error("Failed to load citizen:", error);
+      } finally {
+        setLoadingProfile(false);
       }
     };
 
-    loadCitizenData();
+    initializeScreenData();
   }, [setValue]);
 
   /* ---------------------------------------------------------------------- */
@@ -583,6 +654,121 @@ export default function HouseholdScreen() {
   /* ---------------------------------------------------------------------- */
 
   return (
+    loadingProfile ? (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.centeredState}>
+          <ActivityIndicator size="large" color="#172A3A" />
+        </View>
+      </SafeAreaView>
+    ) : existingProfile ? (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.header}>
+          <Pressable
+            style={styles.headerButton}
+            onPress={() => router.back()}
+          >
+            <Ionicons
+              name="arrow-back-outline"
+              size={24}
+              color="#172A3A"
+            />
+          </Pressable>
+
+          <Text style={styles.headerTitle}>My Household Profile</Text>
+
+          <Pressable
+            style={styles.headerButton}
+            onPress={() => router.replace("/(citizen)/dashboard")}
+          >
+            <Ionicons
+              name="home-outline"
+              size={22}
+              color="#172A3A"
+            />
+          </Pressable>
+        </View>
+
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Head of Family</Text>
+            <ProfileRow label="Full Name" value={existingProfile.head_full_name} />
+            <ProfileRow label="Age" value={String(existingProfile.head_age)} />
+            <ProfileRow label="Gender" value={existingProfile.head_gender} />
+            <ProfileRow
+              label="Mobile"
+              value={existingProfile.head_mobile_number}
+            />
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Family Details</Text>
+            <ProfileRow
+              label="Total Members"
+              value={String(existingProfile.total_members)}
+            />
+            <ProfileRow
+              label="Male Members"
+              value={String(existingProfile.male_members)}
+            />
+            <ProfileRow
+              label="Female Members"
+              value={String(existingProfile.female_members)}
+            />
+            <ProfileRow
+              label="Children (<18)"
+              value={String(existingProfile.children_count)}
+            />
+            <ProfileRow
+              label="Seniors (65+)"
+              value={String(existingProfile.senior_count)}
+            />
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Address</Text>
+            <ProfileRow label="House / Flat" value={existingProfile.house_no} />
+            <ProfileRow label="Locality" value={existingProfile.locality} />
+            <ProfileRow label="Ward" value={existingProfile.ward} />
+            <ProfileRow label="District" value={existingProfile.district} />
+            <ProfileRow label="Pincode" value={existingProfile.pincode} />
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Facilities</Text>
+            <ProfileRow
+              label="Electricity"
+              value={existingProfile.has_electricity ? "Yes" : "No"}
+            />
+            <ProfileRow
+              label="Running Water"
+              value={existingProfile.has_running_water ? "Yes" : "No"}
+            />
+            <ProfileRow
+              label="Indoor Toilet"
+              value={existingProfile.has_indoor_toilet ? "Yes" : "No"}
+            />
+            <ProfileRow
+              label="LPG / Gas"
+              value={existingProfile.has_lpg ? "Yes" : "No"}
+            />
+            <ProfileRow
+              label="Internet"
+              value={existingProfile.has_internet ? "Yes" : "No"}
+            />
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Coordinates</Text>
+            <ProfileRow label="Latitude" value={existingProfile.latitude.toFixed(6)} />
+            <ProfileRow label="Longitude" value={existingProfile.longitude.toFixed(6)} />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    ) : (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
         style={styles.container}
@@ -1070,6 +1256,7 @@ export default function HouseholdScreen() {
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
+    )
   );
 }
 
@@ -1086,6 +1273,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F1F4F6",
+  },
+
+  centeredState: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   header: {
@@ -1347,5 +1540,24 @@ const styles = StyleSheet.create({
   genderOptionText: {
     fontSize: 15,
     color: "#252A2F",
+  },
+
+  profileRow: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E8EB",
+    gap: 4,
+  },
+
+  profileLabel: {
+    fontSize: 12,
+    color: "#68717A",
+    fontWeight: "600",
+  },
+
+  profileValue: {
+    fontSize: 15,
+    color: "#1D2329",
+    fontWeight: "600",
   },
 });
