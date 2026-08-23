@@ -1,0 +1,39 @@
+{
+  "name": "api-testing",
+  "version": "1.0.0",
+  "description": "API Testing and Supabase Database Management",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --runInBand --detectOpenHandles",
+    "db:test": "node .agents/skills/supabase/scripts/test_connection.js",
+    "db:inspect": "node .agents/skills/supabase/scripts/inspect_schema.js",
+    "db:exec": "node .agents/skills/supabase/scripts/execute_sql.js"
+  },
+  "keywords": [
+    "supabase",
+    "api-testing",
+    "postgres",
+    "jest",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.13.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 10000
+  }
+}
