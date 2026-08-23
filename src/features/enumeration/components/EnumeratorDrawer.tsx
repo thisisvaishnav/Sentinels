@@ -33,7 +33,7 @@ const MENU_ITEMS: DrawerMenuItem[] = [
   { id: 'report-missing', label: 'Report Missing Household', route: '/(enumerator)/report-missing', iconName: 'alert-decagram-outline' },
   { id: 'gis-map', label: 'GIS Map', route: '/(enumerator)/gis-map', iconName: 'map-search-outline' },
   { id: 'priority-tasks', label: 'Priority Tasks', route: '/(enumerator)/priority-tasks', iconName: 'shield-alert-outline' },
-  { id: 'assigned-zone', label: 'Assigned Zone / Route', route: '/(enumerator)/assigned-zone', iconName: 'map-marker-path' },
+  { id: 'assigned-zone', label: 'Assigned Zone', route: '/(enumerator)/assigned-zone', iconName: 'map-marker-path' },
   { id: 'notifications', label: 'Notifications', route: '/(enumerator)/notifications', iconName: 'bell-outline' },
   { id: 'profile', label: 'Profile / Settings', route: '/(enumerator)/profile', iconName: 'account-cog-outline' },
 ];

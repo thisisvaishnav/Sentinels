@@ -12,18 +12,24 @@ interface AssignedZoneSectionProps {
 export const AssignedZoneSection: React.FC<AssignedZoneSectionProps> = ({ zone }) => {
   const router = useRouter();
 
-  const handleViewRoute = () => {
+  const handleCardPress = () => {
     router.push('/(enumerator)/assigned-zone');
   };
 
+  const handleViewRoute = (e: any) => {
+    e.stopPropagation?.();
+    router.push('/(enumerator)/gis-map');
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={handleCardPress} activeOpacity={0.85}>
       <View style={styles.headerRow}>
         <MaterialCommunityIcons name="map-marker-path" size={24} color={ENUMERATOR_THEME.colors.accent} />
         <View style={styles.headerText}>
           <Text style={styles.sectionTitle}>Assigned Zone</Text>
           <Text style={styles.zoneName}>{zone.zoneName}</Text>
         </View>
+        <Ionicons name="chevron-forward" size={20} color={ENUMERATOR_THEME.colors.textMuted} />
       </View>
 
       <Text style={styles.subAreaText}>{zone.subArea}</Text>
@@ -45,9 +51,9 @@ export const AssignedZoneSection: React.FC<AssignedZoneSectionProps> = ({ zone }
 
       <TouchableOpacity style={styles.routeBtn} onPress={handleViewRoute} activeOpacity={0.8}>
         <Ionicons name="navigate-outline" size={18} color={ENUMERATOR_THEME.colors.textWhite} />
-        <Text style={styles.routeBtnText}>View Route</Text>
+        <Text style={styles.routeBtnText}>View Route Map</Text>
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 

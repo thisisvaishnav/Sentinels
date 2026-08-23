@@ -76,10 +76,10 @@ export const mockQuickActions: QuickActionItem[] = [
   },
   {
     id: 'act-report',
-    label: 'Assigned Zone',
-    iconName: 'map-marker-path',
+    label: 'Report Missing',
+    iconName: 'alert-decagram-outline',
     color: '#F59E0B',
-    route: '/(enumerator)/assigned-zone',
+    route: '/(enumerator)/report-missing',
   },
   {
     id: 'act-map',

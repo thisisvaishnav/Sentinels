@@ -32,7 +32,7 @@ export const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({ action
   };
 
   const handleActionPress = (act: QuickActionItem) => {
-    const route = getActionRoute(act.id, act.label);
+    const route = act.route || getActionRoute(act.id, act.label);
     router.push(route as any);
   };
 
