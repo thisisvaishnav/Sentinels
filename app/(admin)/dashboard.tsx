@@ -90,9 +90,11 @@ export default function AdminDashboard() {
   const handleTabPress = useCallback(
     (tab: string) => {
       setActiveTab(tab);
-      console.log(`[Admin] Tab pressed: ${tab}`);
+      if (tab === 'Staff') {
+        router.push('/(admin)/field-enumerators');
+      }
     },
-    [],
+    [router],
   );
 
   return (

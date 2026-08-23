@@ -14,6 +14,7 @@ const TABS = [
 interface BottomNavigationProps {
   activeTab?: string;
   onTabPress?: (tab: string) => void;
+  onNavigate?: (screen: string) => void;
 }
 
 export default function BottomNavigation({ activeTab = 'Home', onTabPress }: BottomNavigationProps) {
