@@ -1,22 +1,16 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
-  Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { signOut } from '@/src/features/auth/authService';
 
-import DashboardHeader from '@/src/components/admin/DashboardHeader';
+import AdminLayout from '@/src/components/admin/AdminLayout';
 import StatCard from '@/src/components/admin/StatCard';
 import ActionItem from '@/src/components/admin/ActionItem';
 import ZoneProgress from '@/src/components/admin/ZoneProgress';
 import RecentActivityItem from '@/src/components/admin/RecentActivityItem';
-import BottomNavigation from '@/src/components/admin/BottomNavigation';
 import SectionTitle from '@/src/components/admin/SectionTitle';
 import { COLORS } from '@/constants/adminTheme';
 
@@ -64,44 +58,8 @@ const ACTIVITIES = [
 /* ------------------------------------------------------------------ */
 
 export default function AdminDashboard() {
-  const router = useRouter();
-  const [activeTab, setActiveTab] = useState('Home');
-
-  const handleSignOut = useCallback(async () => {
-    Alert.alert('Sign Out', 'Are you sure you want to sign out?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Sign Out',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await AsyncStorage.removeItem('admin_logged_in');
-            await signOut();
-          } catch {
-            // signOut already cleaned up locally even if the server call failed
-          }
-          router.replace('/onboarding');
-        },
-      },
-    ]);
-  }, [router]);
-
-  const handleTabPress = useCallback(
-    (tab: string) => {
-      setActiveTab(tab);
-      if (tab === 'Staff') {
-        router.push('/(admin)/field-enumerators');
-      }
-    },
-    [router],
-  );
-
   return (
-    <SafeAreaView style={styles.safeArea}>
-      {/* ── Fixed Header ──────────────────────────────────────── */}
-      <DashboardHeader onLogout={handleSignOut} />
-
-      {/* ── Scrollable body ───────────────────────────────────── */}
+    <AdminLayout>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.body}
@@ -141,14 +99,8 @@ export default function AdminDashboard() {
             <RecentActivityItem key={i} {...act} />
           ))}
         </View>
-
-        {/* bottom spacing so content isn't hidden behind bottom nav */}
-        <View style={{ height: 24 }} />
       </ScrollView>
-
-      {/* ── Fixed Bottom Nav ──────────────────────────────────── */}
-      <BottomNavigation activeTab={activeTab} onTabPress={handleTabPress} />
-    </SafeAreaView>
+    </AdminLayout>
   );
 }
 
@@ -157,11 +109,6 @@ export default function AdminDashboard() {
 /* ------------------------------------------------------------------ */
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.surface,
-    marginTop: -30,
-  },
   scrollView: {
     flex: 1,
     backgroundColor: COLORS.background,

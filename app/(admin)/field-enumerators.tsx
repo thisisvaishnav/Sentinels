@@ -7,10 +7,9 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 
-import FieldEnumeratorsHeader from '@/src/components/admin/FieldEnumeratorsHeader';
+import AdminLayout from '@/src/components/admin/AdminLayout';
 import IntroductionCard from '@/src/components/admin/IntroductionCard';
 import MetricCard from '@/src/components/admin/MetricCard';
 import LiveMapCard from '@/src/components/admin/LiveMapCard';
@@ -18,7 +17,6 @@ import SearchFilter from '@/src/components/admin/SearchFilter';
 import EnumeratorCard, { Enumerator } from '@/src/components/admin/EnumeratorCard';
 import ComplaintCard from '@/src/components/admin/ComplaintCard';
 import FAB from '@/src/components/admin/FAB';
-import BottomNavigation from '@/src/components/admin/BottomNavigation';
 import { COLORS } from '@/constants/adminTheme';
 
 /* ------------------------------------------------------------------ */
@@ -54,7 +52,6 @@ const PAGE_SIZE = 3;
 
 export default function FieldEnumeratorsScreen() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('Staff');
   const [search, setSearch] = useState('');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [showExtra, setShowExtra] = useState(false);
@@ -81,16 +78,6 @@ export default function FieldEnumeratorsScreen() {
   const totalStaff = allEnumerators.length;
   const activeNow = allEnumerators.filter((e) => e.status === 'active').length;
 
-  const handleTabPress = useCallback(
-    (tab: string) => {
-      setActiveTab(tab);
-      if (tab === 'Home') {
-        router.push('/(admin)/dashboard');
-      }
-    },
-    [router],
-  );
-
   const handleLoadMore = useCallback(() => {
     if (!showExtra) {
       setShowExtra(true);
@@ -99,11 +86,7 @@ export default function FieldEnumeratorsScreen() {
   }, [showExtra]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      {/* ── Fixed Header ──────────────────────────────────────── */}
-      <FieldEnumeratorsHeader />
-
-      {/* ── Scrollable body ───────────────────────────────────── */}
+    <AdminLayout>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.body}
@@ -151,16 +134,13 @@ export default function FieldEnumeratorsScreen() {
           ))}
         </View>
 
-        {/* bottom spacing so content isn't hidden behind FAB + bottom nav */}
-        <View style={{ height: 100 }} />
+        {/* bottom spacing for FAB */}
+        <View style={{ height: 80 }} />
       </ScrollView>
 
       {/* ── FAB ───────────────────────────────────────────────── */}
       <FAB onPress={() => router.push('/(admin)/enumerator-command-center')} />
-
-      {/* ── Fixed Bottom Nav ──────────────────────────────────── */}
-      <BottomNavigation activeTab={activeTab} onTabPress={handleTabPress} />
-    </SafeAreaView>
+    </AdminLayout>
   );
 }
 
@@ -169,11 +149,6 @@ export default function FieldEnumeratorsScreen() {
 /* ------------------------------------------------------------------ */
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.surface,
-    marginTop: -30,
-  },
   scrollView: {
     flex: 1,
     backgroundColor: COLORS.background,

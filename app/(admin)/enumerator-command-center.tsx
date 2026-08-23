@@ -1,19 +1,17 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
   ScrollView,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 
-import DrishtiHeader from '@/src/components/admin/DrishtiHeader';
+import AdminLayout from '@/src/components/admin/AdminLayout';
 import SectionHeader from '@/src/components/admin/SectionHeader';
 import AddStaffButton from '@/src/components/admin/AddStaffButton';
 import EnumeratorRoster from '@/src/components/admin/EnumeratorRoster';
 import CommandCenter from '@/src/components/admin/CommandCenter';
-import BottomNavigation from '@/src/components/admin/BottomNavigation';
 import { COLORS } from '@/constants/adminTheme';
 import { EnumeratorRosterItem } from '@/src/types/admin';
 
@@ -75,30 +73,9 @@ const STAFF_RESPONSE = {
 
 export default function EnumeratorCommandCenterScreen() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('Staff');
-
-  const handleTabPress = useCallback(
-    (tab: string) => {
-      setActiveTab(tab);
-      if (tab === 'Home') {
-        router.push('/(admin)/dashboard');
-      } else if (tab === 'Staff') {
-        router.push('/(admin)/field-enumerators');
-      }
-    },
-    [router],
-  );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      {/* ── Fixed Header ──────────────────────────────────────── */}
-      <DrishtiHeader
-        onNotificationsPress={() =>
-          Alert.alert('Notifications', 'No new notifications.')
-        }
-      />
-
-      {/* ── Scrollable body ───────────────────────────────────── */}
+    <AdminLayout>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.body}
@@ -138,14 +115,8 @@ export default function EnumeratorCommandCenterScreen() {
             )
           }
         />
-
-        {/* bottom spacing for bottom nav */}
-        <View style={{ height: 90 }} />
       </ScrollView>
-
-      {/* ── Fixed Bottom Nav ──────────────────────────────────── */}
-      <BottomNavigation activeTab={activeTab} onTabPress={handleTabPress} />
-    </SafeAreaView>
+    </AdminLayout>
   );
 }
 
@@ -154,11 +125,6 @@ export default function EnumeratorCommandCenterScreen() {
 /* ------------------------------------------------------------------ */
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.surface,
-    marginTop: -30,
-  },
   scrollView: {
     flex: 1,
     backgroundColor: COLORS.background,
