@@ -14,11 +14,8 @@ export const PriorityTasksSection: React.FC<PriorityTasksSectionProps> = ({ task
 
   const handleTaskPress = (item: PriorityTaskMetric) => {
     if (item.id === 'p2') {
-      // Blind Spot Areas -> GIS Map with blind spot overlay
-      router.push({
-        pathname: '/(enumerator)/gis-map',
-        params: { focus: 'blind-spot' },
-      });
+      // Blind Spot Areas -> Blind Spot Detection Control Center
+      router.push('/(enumerator)/blind-spots');
     } else if (item.id === 'p3') {
       // Unverified Households -> Priority Tasks filtered by Needs Verification
       router.push({
