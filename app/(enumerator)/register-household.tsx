@@ -1,126 +1,306 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   SafeAreaView,
   View,
   Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   StatusBar,
   Alert,
-  Modal,
 } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface FamilyMember {
-  id: string;
-  name: string;
-  age: string;
-  gender: 'Male' | 'Female' | 'Other';
-  relationship: string;
-}
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
+import {
+  FamilyMember,
+  GpsLocationData,
+  HeadOfHousehold,
+  HouseholdFormData,
+  HouseholdNeed,
+  HouseholdProfile,
+  IdentityVerification,
+  SchemeItem,
+} from '@/src/features/enumeration/types';
+
+import { HouseholdHeaderCard } from '@/src/features/enumeration/components/register/HouseholdHeaderCard';
+import { HeadOfHouseholdCard } from '@/src/features/enumeration/components/register/HeadOfHouseholdCard';
+import { IdentityVerificationCard } from '@/src/features/enumeration/components/register/IdentityVerificationCard';
+import { HouseholdProfileCard } from '@/src/features/enumeration/components/register/HouseholdProfileCard';
+import { FamilyMemberModal } from '@/src/features/enumeration/components/register/FamilyMemberModal';
+import { FamilyMembersCardList } from '@/src/features/enumeration/components/register/FamilyMembersCardList';
+import { LocationGpsCard } from '@/src/features/enumeration/components/register/LocationGpsCard';
+import { HouseholdNeedsSection } from '@/src/features/enumeration/components/register/HouseholdNeedsSection';
+import { GovernmentSchemesSection } from '@/src/features/enumeration/components/register/GovernmentSchemesSection';
+import { EnumeratorRemarksCard } from '@/src/features/enumeration/components/register/EnumeratorRemarksCard';
+import { CoverageChecklistCard } from '@/src/features/enumeration/components/register/CoverageChecklistCard';
+import { ValidationErrorItem, ValidationSummaryCard } from '@/src/features/enumeration/components/register/ValidationSummaryCard';
+import { DuplicateHouseholdInfo, DuplicateWarningCard } from '@/src/features/enumeration/components/register/DuplicateWarningCard';
+import { ReviewSummaryModal } from '@/src/features/enumeration/components/register/ReviewSummaryModal';
+
+const DRAFT_STORAGE_KEY = '@lokvision_household_draft';
 
 export default function RegisterHouseholdScreen() {
   const router = useRouter();
+  const scrollViewRef = useRef<ScrollView>(null);
 
-  // Form State
-  const [headName, setHeadName] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
-  const [address, setAddress] = useState('');
-  const [selectedState] = useState('Uttar Pradesh');
-  const [selectedDistrict] = useState('Ghaziabad');
-  const [wardLocality, setWardLocality] = useState('Ward 12 - Shastri Nagar North');
+  // Stable Mock Household ID
+  const householdId = 'LV-UP-000124';
 
-  // GPS State
-  const [gpsLocation, setGpsLocation] = useState<{ lat: string; lng: string; accuracy: string } | null>(null);
-  const [isCapturingGps, setIsCapturingGps] = useState(false);
+  // Overall Form Status
+  const [formStatus, setFormStatus] = useState<'Draft' | 'Submitted'>('Draft');
+
+  // Head of Household State
+  const [headOfHousehold, setHeadOfHousehold] = useState<HeadOfHousehold>({
+    name: '',
+    age: '',
+    gender: 'Male',
+    mobile: '',
+    role: 'Head of Household',
+  });
+
+  // Identity Verification State
+  const [identityVerification, setIdentityVerification] = useState<IdentityVerification>({
+    idType: 'Aadhaar',
+    last4Digits: '',
+    status: 'Not Verified',
+  });
+
+  // Household Profile State
+  const [householdProfile, setHouseholdProfile] = useState<HouseholdProfile>({
+    familyMemberCount: 1,
+    houseType: 'Permanent',
+    ownership: 'Owned',
+    locality: 'Shastri Nagar',
+    ward: 'Ward 12',
+    pinCode: '201002',
+    state: 'Uttar Pradesh',
+    district: 'Ghaziabad',
+    fullAddress: '',
+  });
 
   // Family Members State
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
+
+  // GPS Location State
+  const [location, setLocation] = useState<GpsLocationData | null>(null);
+
+  // Needs State
+  const [needs, setNeeds] = useState<HouseholdNeed[]>([]);
+
+  // Government Scheme Status State
+  const [schemeStatus, setSchemeStatus] = useState<SchemeItem[]>([]);
+
+  // Remarks State
+  const [remarks, setRemarks] = useState('');
+
+  // Modals & Banners State
   const [memberModalVisible, setMemberModalVisible] = useState(false);
+  const [editingMember, setEditingMember] = useState<FamilyMember | null>(null);
+  const [reviewModalVisible, setReviewModalVisible] = useState(false);
 
-  // Member Modal Form State
-  const [memberName, setMemberName] = useState('');
-  const [memberAge, setMemberAge] = useState('');
-  const [memberGender, setMemberGender] = useState<'Male' | 'Female' | 'Other'>('Male');
-  const [memberRelationship, setMemberRelationship] = useState('Spouse');
+  // Validation State
+  const [validationErrors, setValidationErrors] = useState<ValidationErrorItem[]>([]);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
-  // GPS Capture Handler
-  const handleCaptureGps = () => {
-    setIsCapturingGps(true);
-    setTimeout(() => {
-      setGpsLocation({
-        lat: '28.6692° N',
-        lng: '77.4538° E',
-        accuracy: '±3.2m (High Precision)',
-      });
-      setIsCapturingGps(false);
-      Alert.alert('GPS Captured', 'Geo-coordinates locked to current field location.');
-    }, 800);
+  // Duplicate Warning State (Frontend-only preview)
+  const [duplicateInfo, setDuplicateInfo] = useState<DuplicateHouseholdInfo | null>(null);
+
+  // Auto-calculate member count whenever head or members change
+  useEffect(() => {
+    const totalCount = 1 + familyMembers.length;
+    setHouseholdProfile((prev) => ({ ...prev, familyMemberCount: totalCount }));
+  }, [familyMembers]);
+
+  // Load draft from AsyncStorage on mount
+  useEffect(() => {
+    const loadDraft = async () => {
+      try {
+        const saved = await AsyncStorage.getItem(DRAFT_STORAGE_KEY);
+        if (saved) {
+          const parsed: HouseholdFormData = JSON.parse(saved);
+          if (parsed.headOfHousehold) setHeadOfHousehold(parsed.headOfHousehold);
+          if (parsed.identityVerification) setIdentityVerification(parsed.identityVerification);
+          if (parsed.householdProfile) setHouseholdProfile(parsed.householdProfile);
+          if (parsed.familyMembers) setFamilyMembers(parsed.familyMembers);
+          if (parsed.location) setLocation(parsed.location);
+          if (parsed.needs) setNeeds(parsed.needs);
+          if (parsed.schemeStatus) setSchemeStatus(parsed.schemeStatus);
+          if (parsed.remarks) setRemarks(parsed.remarks);
+          if (parsed.status) setFormStatus(parsed.status);
+        }
+      } catch {
+        // Silently handle read errors
+      }
+    };
+    loadDraft();
+  }, []);
+
+  // Calculate Registration Progress Percentage
+  const isHeadComplete = !!(headOfHousehold.name.trim() && headOfHousehold.age.trim() && headOfHousehold.mobile.trim().length === 10);
+  const isProfileComplete = !!(householdProfile.fullAddress.trim() && householdProfile.state && householdProfile.district);
+  const isMembersComplete = familyMembers.length > 0;
+  const isLocationComplete = !!location;
+  const isNeedsComplete = needs.length > 0;
+
+  const totalSections = 5;
+  const completedSections = [isHeadComplete, isProfileComplete, isMembersComplete, isLocationComplete, isNeedsComplete].filter(Boolean).length;
+  const progressPercentage = Math.round((completedSections / totalSections) * 100);
+
+  // Save Draft Handler (non-blocking)
+  const handleSaveDraft = async () => {
+    try {
+      const draftPayload: HouseholdFormData = {
+        householdId,
+        status: 'Draft',
+        headOfHousehold,
+        identityVerification,
+        householdProfile,
+        familyMembers,
+        location,
+        needs,
+        schemeStatus,
+        remarks,
+      };
+
+      await AsyncStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draftPayload));
+      setFormStatus('Draft');
+      Alert.alert('Draft Saved', '✓ Household saved as draft locally in device storage.');
+    } catch {
+      Alert.alert('Save Error', 'Unable to save draft locally.');
+    }
   };
 
-  // Add Member Handler
-  const handleAddMember = () => {
-    if (!memberName.trim()) {
-      Alert.alert('Validation', 'Please enter member name.');
-      return;
-    }
-    const newMember: FamilyMember = {
-      id: Date.now().toString(),
-      name: memberName.trim(),
-      age: memberAge.trim() || '25',
-      gender: memberGender,
-      relationship: memberRelationship.trim() || 'Family Member',
-    };
-    const updated = [...familyMembers, newMember];
-    setFamilyMembers(updated);
+  // Family Member Handlers
+  const handleOpenAddMember = () => {
+    setEditingMember(null);
+    setMemberModalVisible(true);
+  };
 
-    // Reset Modal
-    setMemberName('');
-    setMemberAge('');
-    setMemberGender('Male');
-    setMemberRelationship('Spouse');
+  const handleOpenEditMember = (member: FamilyMember) => {
+    setEditingMember(member);
+    setMemberModalVisible(true);
+  };
+
+  const handleSaveMember = (member: FamilyMember) => {
+    if (editingMember) {
+      setFamilyMembers((prev) => prev.map((m) => (m.id === member.id ? member : m)));
+    } else {
+      setFamilyMembers((prev) => [...prev, member]);
+    }
     setMemberModalVisible(false);
+    setEditingMember(null);
   };
 
   const handleRemoveMember = (id: string) => {
-    const updated = familyMembers.filter((m) => m.id !== id);
-    setFamilyMembers(updated);
+    setFamilyMembers((prev) => prev.filter((m) => m.id !== id));
   };
 
-  // Save Draft
-  const handleSaveDraft = () => {
-    Alert.alert('Draft Saved', 'Household record saved locally to offline buffer.');
+  // Smart Validation Handler before submission
+  const validateForm = (): boolean => {
+    const errorsList: ValidationErrorItem[] = [];
+    const fieldErr: Record<string, string> = {};
+
+    if (!headOfHousehold.name.trim()) {
+      errorsList.push({ id: '1', field: 'Head of Household Name', sectionKey: 'head' });
+      fieldErr.name = 'Full name is required';
+    }
+
+    if (!headOfHousehold.age.trim()) {
+      errorsList.push({ id: '2', field: 'Head of Household Age', sectionKey: 'head' });
+      fieldErr.age = 'Age is required';
+    }
+
+    if (!headOfHousehold.mobile.trim() || headOfHousehold.mobile.length < 10) {
+      errorsList.push({ id: '3', field: 'Mobile Number (10 digits)', sectionKey: 'head' });
+      fieldErr.mobile = 'Valid 10-digit mobile number required';
+    }
+
+    if (!headOfHousehold.gender) {
+      errorsList.push({ id: '4', field: 'Head of Household Gender', sectionKey: 'head' });
+      fieldErr.gender = 'Gender selection required';
+    }
+
+    if (!householdProfile.fullAddress.trim()) {
+      errorsList.push({ id: '5', field: 'Full Address', sectionKey: 'profile' });
+      fieldErr.fullAddress = 'Address is required';
+    }
+
+    if (!location) {
+      errorsList.push({ id: '6', field: 'GPS Location Capture', sectionKey: 'location' });
+      fieldErr.location = 'GPS coordinates must be captured';
+    }
+
+    setValidationErrors(errorsList);
+    setFieldErrors(fieldErr);
+
+    return errorsList.length === 0;
   };
 
-  // Submit Household
-  const handleSubmit = () => {
-    if (!headName.trim()) {
-      Alert.alert('Required Field', 'Please enter Head of Household name.');
+  // Submit Handler
+  const handleSubmitPress = () => {
+    const isValid = validateForm();
+    if (!isValid) {
+      scrollViewRef.current?.scrollTo({ y: 0, animated: true });
       return;
     }
-    if (!mobileNumber.trim() || mobileNumber.length < 10) {
-      Alert.alert('Invalid Mobile', 'Please enter a valid 10-digit mobile number.');
+
+    // Check for duplicate warning state simulation (if mobile is 9999999999)
+    if (headOfHousehold.mobile === '9999999999') {
+      setDuplicateInfo({
+        existingId: 'LV-UP-000098',
+        address: 'Ward 12, Shastri Nagar',
+        similarity: 'High',
+      });
       return;
     }
-    if (!address.trim()) {
-      Alert.alert('Required Field', 'Please enter household address.');
-      return;
+
+    // Open Review Summary Modal
+    setReviewModalVisible(true);
+  };
+
+  // Final Confirmation Submit
+  const handleConfirmSubmit = async () => {
+    setReviewModalVisible(false);
+    setFormStatus('Submitted');
+
+    try {
+      await AsyncStorage.removeItem(DRAFT_STORAGE_KEY);
+    } catch {
+      // Ignore cleanup error
     }
 
     Alert.alert(
-      'Household Registered',
-      `Successfully registered household for ${headName}. Reference ID: #HH-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+      'Household Submitted',
+      `Household submitted successfully.\n\nHousehold ID: ${householdId}\nHead: ${headOfHousehold.name}`,
       [
         {
-          text: 'OK',
+          text: 'Return to Dashboard',
           onPress: () => router.push('/(enumerator)/dashboard'),
         },
       ]
     );
+  };
+
+  // Tappable Section Jump
+  const handleJumpToSection = (sectionKey: string) => {
+    // Scroll to top or section
+    scrollViewRef.current?.scrollTo({ y: 120, animated: true });
+  };
+
+  const currentFormData: HouseholdFormData = {
+    householdId,
+    status: formStatus,
+    headOfHousehold,
+    identityVerification,
+    householdProfile,
+    familyMembers,
+    location,
+    needs,
+    schemeStatus,
+    remarks,
   };
 
   return (
@@ -141,163 +321,98 @@ export default function RegisterHouseholdScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
-        {/* Section 1: Basic Household Info */}
-        <View style={styles.card}>
-          <View style={styles.cardHeaderRow}>
-            <MaterialCommunityIcons name="home-account" size={22} color={ENUMERATOR_THEME.colors.accent} />
-            <Text style={styles.cardTitle}>Household Information</Text>
-          </View>
+      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
+        {/* Validation Summary Banner (if errors exist) */}
+        <ValidationSummaryCard errors={validationErrors} onItemPress={handleJumpToSection} />
 
-          {/* Head Name */}
-          <View style={styles.fieldGroup}>
-            <Text style={styles.label}>Head of Household *</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="e.g. Rajesh Kumar Sharma"
-              placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-              value={headName}
-              onChangeText={setHeadName}
-            />
-          </View>
+        {/* Duplicate Warning Card (if triggered) */}
+        <DuplicateWarningCard
+          duplicateInfo={duplicateInfo}
+          onReviewExisting={() => Alert.alert('Existing Household', 'Opening existing record #LV-UP-000098...')}
+          onContinueAnyway={() => {
+            setDuplicateInfo(null);
+            setReviewModalVisible(true);
+          }}
+        />
 
-          {/* Mobile Number */}
-          <View style={styles.fieldGroup}>
-            <Text style={styles.label}>Mobile Number *</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="10-digit mobile number"
-              placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-              keyboardType="phone-pad"
-              maxLength={10}
-              value={mobileNumber}
-              onChangeText={setMobileNumber}
-            />
-          </View>
+        {/* Section 1: Header Card */}
+        <HouseholdHeaderCard
+          householdId={householdId}
+          status={formStatus}
+          progressPercentage={progressPercentage}
+        />
 
-          {/* Address */}
-          <View style={styles.fieldGroup}>
-            <Text style={styles.label}>Full Address *</Text>
-            <TextInput
-              style={[styles.input, styles.multilineInput]}
-              placeholder="House/Plot No, Street, Landmark"
-              placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-              multiline
-              numberOfLines={2}
-              value={address}
-              onChangeText={setAddress}
-            />
-          </View>
+        {/* Section 2: Head of Household */}
+        <HeadOfHouseholdCard
+          data={headOfHousehold}
+          onChange={(updated) => setHeadOfHousehold((prev) => ({ ...prev, ...updated }))}
+          errors={fieldErrors}
+        />
 
-          {/* Location Grid */}
-          <View style={styles.rowGrid}>
-            <View style={[styles.fieldGroup, { flex: 1 }]}>
-              <Text style={styles.label}>State</Text>
-              <View style={styles.selectBox}>
-                <Text style={styles.selectText}>{selectedState}</Text>
-              </View>
-            </View>
+        {/* Section 3: Optional Identity Verification */}
+        <IdentityVerificationCard
+          data={identityVerification}
+          onChange={(updated) => setIdentityVerification((prev) => ({ ...prev, ...updated }))}
+        />
 
-            <View style={[styles.fieldGroup, { flex: 1 }]}>
-              <Text style={styles.label}>District</Text>
-              <View style={styles.selectBox}>
-                <Text style={styles.selectText}>{selectedDistrict}</Text>
-              </View>
-            </View>
-          </View>
+        {/* Section 4: Household Profile & Address */}
+        <HouseholdProfileCard
+          data={householdProfile}
+          onChange={(updated) => setHouseholdProfile((prev) => ({ ...prev, ...updated }))}
+          errors={fieldErrors}
+        />
 
-          {/* Ward / Locality */}
-          <View style={styles.fieldGroup}>
-            <Text style={styles.label}>Ward / Locality</Text>
-            <TextInput
-              style={styles.input}
-              value={wardLocality}
-              onChangeText={setWardLocality}
-              placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-            />
-          </View>
-        </View>
+        {/* Section 5: Family Members */}
+        <FamilyMembersCardList
+          members={familyMembers}
+          onAddPress={handleOpenAddMember}
+          onEditPress={handleOpenEditMember}
+          onRemovePress={handleRemoveMember}
+          errors={fieldErrors}
+        />
 
-        {/* Section 2: GPS Location Capture */}
-        <View style={styles.card}>
-          <View style={styles.cardHeaderRow}>
-            <MaterialCommunityIcons name="crosshairs-gps" size={22} color={ENUMERATOR_THEME.colors.success} />
-            <Text style={styles.cardTitle}>GPS Location</Text>
-          </View>
+        {/* Section 6: Location & GPS */}
+        <LocationGpsCard
+          data={location}
+          onLocationCaptured={setLocation}
+          errors={fieldErrors}
+        />
 
-          {gpsLocation ? (
-            <View style={styles.gpsDisplayBox}>
-              <Ionicons name="location" size={24} color={ENUMERATOR_THEME.colors.successText} />
-              <View style={styles.gpsTextWrap}>
-                <Text style={styles.gpsCoords}>{gpsLocation.lat}, {gpsLocation.lng}</Text>
-                <Text style={styles.gpsAccuracy}>{gpsLocation.accuracy}</Text>
-              </View>
-            </View>
-          ) : (
-            <Text style={styles.gpsHint}>Tap button below to record current field GPS coordinates.</Text>
-          )}
+        {/* Section 7: Household Needs */}
+        <HouseholdNeedsSection
+          selectedNeeds={needs}
+          onChange={setNeeds}
+        />
 
-          <TouchableOpacity
-            style={[styles.gpsBtn, isCapturingGps && styles.gpsBtnDisabled]}
-            onPress={handleCaptureGps}
-            disabled={isCapturingGps}
-            activeOpacity={0.8}
-          >
-            <MaterialCommunityIcons name="map-marker-radius" size={20} color={ENUMERATOR_THEME.colors.textWhite} />
-            <Text style={styles.gpsBtnText}>
-              {isCapturingGps ? 'Locking Satellite Signal...' : gpsLocation ? 'Recapture GPS Location' : 'Capture Location'}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {/* Section 8: Government Scheme Status */}
+        <GovernmentSchemesSection
+          schemeItems={schemeStatus}
+          onChange={setSchemeStatus}
+        />
 
-        {/* Section 3: Family Members */}
-        <View style={styles.card}>
-          <View style={styles.cardHeaderRowBetween}>
-            <View style={styles.cardHeaderRow}>
-              <MaterialCommunityIcons name="account-group-outline" size={22} color={ENUMERATOR_THEME.colors.accent} />
-              <Text style={styles.cardTitle}>Family Members ({familyMembers.length})</Text>
-            </View>
-            <TouchableOpacity
-              style={styles.addMemberBtn}
-              onPress={() => setMemberModalVisible(true)}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="add" size={16} color={ENUMERATOR_THEME.colors.textWhite} />
-              <Text style={styles.addMemberBtnText}>Add Member</Text>
-            </TouchableOpacity>
-          </View>
+        {/* Section 9: Enumerator Remarks */}
+        <EnumeratorRemarksCard
+          remarks={remarks}
+          onChange={setRemarks}
+        />
 
-          {familyMembers.length === 0 ? (
-            <View style={styles.emptyMembersBox}>
-              <Text style={styles.emptyMembersText}>No additional family members added yet.</Text>
-            </View>
-          ) : (
-            <View style={styles.membersList}>
-              {familyMembers.map((item, index) => (
-                <View key={item.id} style={styles.memberCard}>
-                  <View style={styles.memberInfo}>
-                    <Text style={styles.memberName}>{index + 1}. {item.name}</Text>
-                    <Text style={styles.memberDetails}>
-                      {item.relationship} · {item.age} yrs · {item.gender}
-                    </Text>
-                  </View>
-                  <TouchableOpacity onPress={() => handleRemoveMember(item.id)} activeOpacity={0.7}>
-                    <Ionicons name="trash-outline" size={18} color={ENUMERATOR_THEME.colors.danger} />
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </View>
-          )}
-        </View>
+        {/* Section 10: Coverage Verification Checklist */}
+        <CoverageChecklistCard
+          isHeadComplete={isHeadComplete}
+          isMembersComplete={isMembersComplete}
+          isLocationComplete={isLocationComplete}
+          isNeedsComplete={isNeedsComplete}
+          isIdentityVerified={identityVerification.status === 'Verified'}
+        />
 
-        {/* Action Buttons */}
+        {/* Bottom Action Bar */}
         <View style={styles.actionRow}>
           <TouchableOpacity style={styles.draftBtn} onPress={handleSaveDraft} activeOpacity={0.8}>
             <MaterialCommunityIcons name="file-document-outline" size={18} color={ENUMERATOR_THEME.colors.textPrimary} />
             <Text style={styles.draftBtnText}>Save Draft</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit} activeOpacity={0.8}>
+          <TouchableOpacity style={styles.submitBtn} onPress={handleSubmitPress} activeOpacity={0.8}>
             <MaterialCommunityIcons name="check-circle-outline" size={18} color={ENUMERATOR_THEME.colors.textWhite} />
             <Text style={styles.submitBtnText}>Submit Household</Text>
           </TouchableOpacity>
@@ -306,76 +421,21 @@ export default function RegisterHouseholdScreen() {
         <View style={styles.bottomSpacer} />
       </ScrollView>
 
-      {/* Add Family Member Modal */}
-      <Modal visible={memberModalVisible} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Add Family Member</Text>
-              <TouchableOpacity onPress={() => setMemberModalVisible(false)}>
-                <Ionicons name="close" size={22} color={ENUMERATOR_THEME.colors.textMuted} />
-              </TouchableOpacity>
-            </View>
+      {/* Add / Edit Family Member Modal */}
+      <FamilyMemberModal
+        visible={memberModalVisible}
+        editingMember={editingMember}
+        onClose={() => setMemberModalVisible(false)}
+        onSave={handleSaveMember}
+      />
 
-            <View style={styles.fieldGroup}>
-              <Text style={styles.label}>Member Name *</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Full Name"
-                placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-                value={memberName}
-                onChangeText={setMemberName}
-              />
-            </View>
-
-            <View style={styles.rowGrid}>
-              <View style={[styles.fieldGroup, { flex: 1 }]}>
-                <Text style={styles.label}>Age</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Age"
-                  placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-                  keyboardType="numeric"
-                  value={memberAge}
-                  onChangeText={setMemberAge}
-                />
-              </View>
-
-              <View style={[styles.fieldGroup, { flex: 1 }]}>
-                <Text style={styles.label}>Relationship</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Spouse / Son / Daughter"
-                  placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-                  value={memberRelationship}
-                  onChangeText={setMemberRelationship}
-                />
-              </View>
-            </View>
-
-            <View style={styles.fieldGroup}>
-              <Text style={styles.label}>Gender</Text>
-              <View style={styles.genderRow}>
-                {(['Male', 'Female', 'Other'] as const).map((g) => (
-                  <TouchableOpacity
-                    key={g}
-                    style={[styles.genderChip, memberGender === g && styles.genderChipActive]}
-                    onPress={() => setMemberGender(g)}
-                  >
-                    <Text style={[styles.genderChipText, memberGender === g && styles.genderChipTextActive]}>
-                      {g}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-
-            <TouchableOpacity style={styles.modalSaveBtn} onPress={handleAddMember} activeOpacity={0.8}>
-              <Text style={styles.modalSaveBtnText}>Add Member to List</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      {/* Review Summary Modal before final Submit */}
+      <ReviewSummaryModal
+        visible={reviewModalVisible}
+        data={currentFormData}
+        onClose={() => setReviewModalVisible(false)}
+        onConfirmSubmit={handleConfirmSubmit}
+      />
     </SafeAreaView>
   );
 }
@@ -430,163 +490,6 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 16,
   },
-  card: {
-    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
-    borderRadius: ENUMERATOR_THEME.borderRadius.xl,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.border,
-    gap: 14,
-  },
-  cardHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  cardHeaderRowBetween: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  cardTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: ENUMERATOR_THEME.colors.textPrimary,
-  },
-  fieldGroup: {
-    gap: 6,
-  },
-  label: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: ENUMERATOR_THEME.colors.textSecondary,
-  },
-  input: {
-    backgroundColor: ENUMERATOR_THEME.colors.inputBackground,
-    borderRadius: ENUMERATOR_THEME.borderRadius.md,
-    borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
-    color: ENUMERATOR_THEME.colors.textPrimary,
-    paddingHorizontal: 12,
-    height: 44,
-    fontSize: 14,
-  },
-  multilineInput: {
-    height: 64,
-    paddingVertical: 10,
-  },
-  rowGrid: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  selectBox: {
-    backgroundColor: ENUMERATOR_THEME.colors.inputBackground,
-    borderRadius: ENUMERATOR_THEME.borderRadius.md,
-    borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
-    height: 44,
-    justifyContent: 'center',
-    paddingHorizontal: 12,
-  },
-  selectText: {
-    color: ENUMERATOR_THEME.colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  gpsDisplayBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: ENUMERATOR_THEME.colors.successBg,
-    borderRadius: ENUMERATOR_THEME.borderRadius.md,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.successBorder,
-    gap: 10,
-  },
-  gpsTextWrap: {
-    flex: 1,
-  },
-  gpsCoords: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: ENUMERATOR_THEME.colors.successText,
-  },
-  gpsAccuracy: {
-    fontSize: 11,
-    color: ENUMERATOR_THEME.colors.success,
-  },
-  gpsHint: {
-    fontSize: 13,
-    color: ENUMERATOR_THEME.colors.textMuted,
-    lineHeight: 18,
-  },
-  gpsBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: ENUMERATOR_THEME.colors.success,
-    height: 44,
-    borderRadius: ENUMERATOR_THEME.borderRadius.md,
-    gap: 8,
-  },
-  gpsBtnDisabled: {
-    opacity: 0.6,
-  },
-  gpsBtnText: {
-    color: ENUMERATOR_THEME.colors.textWhite,
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  addMemberBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: ENUMERATOR_THEME.colors.accent,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: ENUMERATOR_THEME.borderRadius.sm,
-    gap: 4,
-  },
-  addMemberBtnText: {
-    color: ENUMERATOR_THEME.colors.textWhite,
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  emptyMembersBox: {
-    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
-    borderRadius: ENUMERATOR_THEME.borderRadius.md,
-    padding: 14,
-    alignItems: 'center',
-  },
-  emptyMembersText: {
-    color: ENUMERATOR_THEME.colors.textMuted,
-    fontSize: 13,
-  },
-  membersList: {
-    gap: 8,
-  },
-  memberCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
-    borderRadius: ENUMERATOR_THEME.borderRadius.md,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.border,
-  },
-  memberInfo: {
-    flex: 1,
-    gap: 2,
-  },
-  memberName: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: ENUMERATOR_THEME.colors.textPrimary,
-  },
-  memberDetails: {
-    fontSize: 12,
-    color: ENUMERATOR_THEME.colors.textMuted,
-  },
   actionRow: {
     flexDirection: 'row',
     gap: 12,
@@ -625,69 +528,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   bottomSpacer: {
-    height: 24,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(23, 42, 58, 0.4)',
-    justifyContent: 'center',
-    padding: 18,
-  },
-  modalContent: {
-    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
-    borderRadius: ENUMERATOR_THEME.borderRadius.xl,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.border,
-    gap: 14,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  modalTitle: {
-    fontSize: 17,
-    fontWeight: '800',
-    color: ENUMERATOR_THEME.colors.textPrimary,
-  },
-  genderRow: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  genderChip: {
-    flex: 1,
-    backgroundColor: ENUMERATOR_THEME.colors.inputBackground,
-    borderRadius: ENUMERATOR_THEME.borderRadius.sm,
-    paddingVertical: 10,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
-  },
-  genderChipActive: {
-    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
-    borderColor: ENUMERATOR_THEME.colors.accent,
-  },
-  genderChipText: {
-    color: ENUMERATOR_THEME.colors.textMuted,
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  genderChipTextActive: {
-    color: ENUMERATOR_THEME.colors.accent,
-    fontWeight: '700',
-  },
-  modalSaveBtn: {
-    backgroundColor: ENUMERATOR_THEME.colors.accent,
-    height: 44,
-    borderRadius: ENUMERATOR_THEME.borderRadius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 6,
-  },
-  modalSaveBtnText: {
-    color: ENUMERATOR_THEME.colors.textWhite,
-    fontSize: 14,
-    fontWeight: '700',
+    height: 32,
   },
 });
