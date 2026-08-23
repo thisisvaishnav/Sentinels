@@ -532,3 +532,54 @@ export function getDerivedZoneMetrics(
     lowestAreaUnvisitedCount,
   };
 }
+
+export type PriorityFilterCategory =
+  | 'All'
+  | 'High Priority'
+  | 'Urgent'
+  | 'Needs Verification'
+  | 'Missing'
+  | 'Pending';
+
+/**
+ * Filter households by priority category and combined search query.
+ */
+export function filterPriorityHouseholds(
+  households: ZoneHouseholdItem[],
+  category: PriorityFilterCategory = 'All',
+  searchQuery: string = ''
+): ZoneHouseholdItem[] {
+  const query = searchQuery.trim().toLowerCase();
+
+  return households.filter((h) => {
+    // 1. Category Filter
+    let matchesCategory = true;
+    if (category === 'High Priority') {
+      matchesCategory = h.priority === 'High';
+    } else if (category === 'Urgent') {
+      matchesCategory =
+        (h.needs && h.needs.length > 0) || h.priority === 'High';
+    } else if (category === 'Needs Verification') {
+      matchesCategory =
+        h.verificationStatus === 'Needs Verification' || h.status === 'Needs Verification';
+    } else if (category === 'Missing') {
+      matchesCategory =
+        h.status === 'Missing' || h.verificationStatus === 'Needs Verification';
+    } else if (category === 'Pending') {
+      matchesCategory = h.status === 'Pending' || h.status === 'In Progress';
+    }
+
+    if (!matchesCategory) return false;
+
+    // 2. Search Query Filter
+    if (!query) return true;
+
+    const matchId = h.householdId.toLowerCase().includes(query);
+    const matchName = h.headName.toLowerCase().includes(query);
+    const matchLocality = h.locality.toLowerCase().includes(query);
+    const matchAddress = h.address ? h.address.toLowerCase().includes(query) : false;
+
+    return matchId || matchName || matchLocality || matchAddress;
+  });
+}
+

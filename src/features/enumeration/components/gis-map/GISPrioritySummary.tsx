@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ENUMERATOR_THEME } from '../../theme';
 
@@ -38,27 +38,31 @@ export const GISPrioritySummary: React.FC<GISPrioritySummaryProps> = ({
         </TouchableOpacity>
       </View>
 
-      <View style={styles.grid}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
         <View style={[styles.statBadge, { backgroundColor: '#FEF2F2', borderColor: '#FECACA' }]}>
           <Text style={[styles.statValue, { color: '#DC2626' }]}>{highPriorityCount}</Text>
-          <Text style={styles.statLabel}>High Priority</Text>
+          <Text style={styles.statLabel} numberOfLines={1}>High Priority</Text>
         </View>
 
         <View style={[styles.statBadge, { backgroundColor: '#FFFBEB', borderColor: '#FDE68A' }]}>
           <Text style={[styles.statValue, { color: '#D97706' }]}>{urgentNeedsCount}</Text>
-          <Text style={styles.statLabel}>Urgent Needs</Text>
+          <Text style={styles.statLabel} numberOfLines={1}>Urgent Needs</Text>
         </View>
 
         <View style={[styles.statBadge, { backgroundColor: '#EFF6FF', borderColor: '#BFDBFE' }]}>
           <Text style={[styles.statValue, { color: '#2563EB' }]}>{needsVerificationCount}</Text>
-          <Text style={styles.statLabel}>Needs Review</Text>
+          <Text style={styles.statLabel} numberOfLines={1}>Needs Review</Text>
         </View>
 
         <View style={[styles.statBadge, { backgroundColor: '#FDF2F8', borderColor: '#FBCFE8' }]}>
           <Text style={[styles.statValue, { color: '#DB2777' }]}>{missingCount}</Text>
-          <Text style={styles.statLabel}>Missing Flag</Text>
+          <Text style={styles.statLabel} numberOfLines={1}>Missing Flag</Text>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -107,12 +111,12 @@ const styles = StyleSheet.create({
   toggleBtnTextActive: {
     color: ENUMERATOR_THEME.colors.textWhite,
   },
-  grid: {
-    flexDirection: 'row',
+  scrollContent: {
     gap: 8,
+    paddingRight: 8,
   },
   statBadge: {
-    flex: 1,
+    width: 100,
     alignItems: 'center',
     paddingVertical: 8,
     paddingHorizontal: 6,
