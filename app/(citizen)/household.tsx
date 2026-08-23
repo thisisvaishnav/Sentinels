@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as Haptics from "expo-haptics";
 import * as Location from "expo-location";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
@@ -18,11 +19,19 @@ import {
     TextInput,
     View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { z } from "zod";
+import { AppRadius } from "../../constants/colors";
 
 const API_URL =
-  process.env.EXPO_PUBLIC_API_URL || "http://localhost:5001";
+  process.env.EXPO_PUBLIC_API_URL || "http://localhost:8080";
+
+const RIPPLE_DARK = { color: "rgba(255,255,255,0.18)" };
+const RIPPLE_LIGHT = { color: "rgba(23,42,58,0.10)" };
+
+const selectionHaptic = () => {
+  if (Platform.OS === "android") Haptics.selectionAsync();
+};
 
 /* -------------------------------------------------------------------------- */
 /*                                   Schema                                   */
@@ -247,7 +256,11 @@ function FacilityCheckbox({
   return (
     <Pressable
       style={styles.facilityRow}
-      onPress={() => onChange(!value)}
+      android_ripple={RIPPLE_LIGHT}
+      onPress={() => {
+        selectionHaptic();
+        onChange(!value);
+      }}
     >
       <View style={[styles.checkbox, value && styles.checkboxActive]}>
         {value && (
@@ -305,7 +318,11 @@ function GenderPicker({
             styles.selectInput,
             error && styles.inputError,
           ]}
-          onPress={() => setVisible(true)}
+          android_ripple={RIPPLE_LIGHT}
+          onPress={() => {
+            selectionHaptic();
+            setVisible(true);
+          }}
         >
           <Text
             style={[
@@ -339,13 +356,16 @@ function GenderPicker({
           onPress={() => setVisible(false)}
         >
           <View style={styles.genderModal}>
+            <View style={styles.sheetHandle} />
             <Text style={styles.modalTitle}>Select Gender</Text>
 
             {genders.map((gender) => (
               <Pressable
                 key={gender}
                 style={styles.genderOption}
+                android_ripple={RIPPLE_LIGHT}
                 onPress={() => {
+                  selectionHaptic();
                   onChange(gender);
                   setVisible(false);
                 }}
@@ -375,6 +395,7 @@ function GenderPicker({
 /* -------------------------------------------------------------------------- */
 
 export default function HouseholdScreen() {
+  const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(false);
   const [locationLoading, setLocationLoading] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -655,13 +676,13 @@ export default function HouseholdScreen() {
 
   return (
     loadingProfile ? (
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
         <View style={styles.centeredState}>
           <ActivityIndicator size="large" color="#172A3A" />
         </View>
       </SafeAreaView>
     ) : existingProfile ? (
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView style={styles.safeArea} edges={["top", "left", "right", "bottom"]}>
         <View style={styles.header}>
           <Pressable
             style={styles.headerButton}
@@ -769,7 +790,7 @@ export default function HouseholdScreen() {
         </ScrollView>
       </SafeAreaView>
     ) : (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={
@@ -780,11 +801,12 @@ export default function HouseholdScreen() {
         <View style={styles.header}>
           <Pressable
             style={styles.headerButton}
+            android_ripple={{ ...RIPPLE_LIGHT, borderless: true, radius: 22 }}
             onPress={() => router.back()}
           >
             <Ionicons
-              name="menu-outline"
-              size={27}
+              name="arrow-back-outline"
+              size={24}
               color="#172A3A"
             />
           </Pressable>
@@ -793,13 +815,8 @@ export default function HouseholdScreen() {
             Register My Household
           </Text>
 
-          <Pressable style={styles.headerButton}>
-            <Ionicons
-              name="refresh-outline"
-              size={23}
-              color="#172A3A"
-            />
-          </Pressable>
+          {/* Spacer keeps the title centered (replaced a dead refresh button) */}
+          <View style={styles.headerButton} />
         </View>
 
         {/* Scrollable Form */}
@@ -1173,6 +1190,10 @@ export default function HouseholdScreen() {
                   styles.locationButton,
                   location && styles.locationButtonSuccess,
                 ]}
+                android_ripple={RIPPLE_LIGHT}
+                onPressIn={() => {
+                  if (Platform.OS === "android") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                }}
                 onPress={captureLocation}
                 disabled={locationLoading}
               >
@@ -1228,12 +1249,16 @@ export default function HouseholdScreen() {
         {/* Fixed Submit Button                                             */}
         {/* -------------------------------------------------------------- */}
 
-        <View style={styles.submitContainer}>
+        <View style={[styles.submitContainer, { paddingBottom: insets.bottom + 8 }]}>
           <Pressable
             style={[
               styles.submitButton,
               loading && styles.submitButtonDisabled,
             ]}
+            android_ripple={RIPPLE_DARK}
+            onPressIn={() => {
+              if (Platform.OS === "android") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            }}
             onPress={handleSubmit(onSubmit)}
             disabled={loading}
           >
@@ -1268,7 +1293,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F1F4F6",
-    marginTop: -30,
   },
 
   container: {
@@ -1294,8 +1318,9 @@ const styles = StyleSheet.create({
   },
 
   headerButton: {
-    width: 38,
-    height: 38,
+    width: 44,
+    height: 44,
+    borderRadius: AppRadius.pill,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -1318,9 +1343,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderColor: "#D0D5DB",
-    borderRadius: 0,
+    borderRadius: AppRadius.lg,
     padding: 14,
     marginBottom: 14,
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
   },
 
   sectionTitle: {
@@ -1353,11 +1383,12 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    height: 44,
+    height: 52,
     borderWidth: 1.5,
     borderColor: "#AEB5BE",
     backgroundColor: "#FFFFFF",
-    paddingHorizontal: 11,
+    borderRadius: AppRadius.sm,
+    paddingHorizontal: 12,
     fontSize: 15,
     color: "#20252A",
   },
@@ -1393,10 +1424,11 @@ const styles = StyleSheet.create({
   },
 
   checkbox: {
-    width: 17,
-    height: 17,
+    width: 20,
+    height: 20,
     borderWidth: 1.5,
     borderColor: "#9BA3AD",
+    borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 14,
@@ -1426,6 +1458,7 @@ const styles = StyleSheet.create({
   locationBox: {
     backgroundColor: "#EEF0F2",
     minHeight: 180,
+    borderRadius: AppRadius.md,
     alignItems: "center",
     justifyContent: "center",
     padding: 16,
@@ -1442,13 +1475,14 @@ const styles = StyleSheet.create({
 
   locationButton: {
     width: "100%",
-    height: 46,
+    height: 48,
     backgroundColor: "#57B4F4",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    borderRadius: 0,
+    borderRadius: AppRadius.md,
+    overflow: "hidden",
   },
 
   locationButtonSuccess: {
@@ -1467,7 +1501,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 8,
     backgroundColor: "#FFFFFF",
-    borderRadius: 0,
+    borderRadius: AppRadius.sm,
   },
 
   coordinateText: {
@@ -1475,6 +1509,7 @@ const styles = StyleSheet.create({
     color: "#4A535D",
     fontSize: 11,
     marginVertical: 1,
+    fontVariant: ["tabular-nums"],
   },
 
   submitContainer: {
@@ -1484,18 +1519,21 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingHorizontal: 8,
     paddingTop: 8,
-    paddingBottom: Platform.OS === "ios" ? 8 : 8,
     backgroundColor: "#F1F4F6",
+    borderTopWidth: 1,
+    borderTopColor: "#D8DDE2",
+    elevation: 8,
   },
 
   submitButton: {
-    height: 48,
+    height: 52,
     backgroundColor: "#172A3A",
-    borderRadius: 0,
+    borderRadius: AppRadius.md,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 9,
+    overflow: "hidden",
   },
 
   submitButtonDisabled: {
@@ -1516,10 +1554,19 @@ const styles = StyleSheet.create({
 
   genderModal: {
     backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
+    borderTopLeftRadius: AppRadius.xl,
+    borderTopRightRadius: AppRadius.xl,
     padding: 20,
     paddingBottom: 35,
+  },
+
+  sheetHandle: {
+    alignSelf: "center",
+    width: 36,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "#CBD2D9",
+    marginBottom: 12,
   },
 
   modalTitle: {
@@ -1560,5 +1607,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#1D2329",
     fontWeight: "600",
+    fontVariant: ["tabular-nums"],
   },
 });
