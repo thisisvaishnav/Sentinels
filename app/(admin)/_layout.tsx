@@ -7,6 +7,7 @@ export default function AdminLayout() {
       <Stack.Screen name="dashboard" />
       <Stack.Screen name="field-enumerators" />
       <Stack.Screen name="enumerator-command-center" />
+      <Stack.Screen name="add-new-staff" />
     </Stack>
   );
 }

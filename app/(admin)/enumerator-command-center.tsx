@@ -112,9 +112,7 @@ export default function EnumeratorCommandCenterScreen() {
           title="Enumerator Roster"
           action={
             <AddStaffButton
-              onPress={() =>
-                Alert.alert('Add Staff', 'Add staff form coming soon.')
-              }
+              onPress={() => router.push('/(admin)/add-new-staff')}
             />
           }
         />
