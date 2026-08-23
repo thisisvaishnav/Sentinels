@@ -5,7 +5,7 @@ export default function ModalScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>This is a modal</Text>
-      <Link href="/" dismissTo style={styles.link}>
+      <Link href="/onboarding" dismissTo style={styles.link}>
         <Text style={styles.linkText}>Go to home screen</Text>
       </Link>
     </View>
