@@ -1,19 +1,28 @@
 import { getCitizenHouseholdStatus, signOut } from "@/src/features/auth/authService";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import * as Haptics from "expo-haptics";
 import * as SecureStore from "expo-secure-store";
 import React, { useEffect, useState } from "react";
 import {
     ActivityIndicator,
+    Platform,
+    Pressable,
     ScrollView,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { AppRadius } from "../../constants/colors";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:5001";
+
+const RIPPLE = { color: "rgba(15,23,42,0.10)" };
+
+const selectionHaptic = () => {
+  if (Platform.OS === "android") Haptics.selectionAsync();
+};
 
 type HouseholdProfile = {
   id: string;
@@ -122,15 +131,23 @@ export default function CitizenDashboard() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Text style={styles.brand}>Hello, Citizen</Text>
           <Text style={styles.headerSub}>Welcome to your central civic hub.</Text>
         </View>
-        <TouchableOpacity onPress={handleSignOut} style={styles.signOutBtn}>
+        <Pressable
+          onPress={handleSignOut}
+          onPressIn={() => {
+            if (Platform.OS === "android") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
+          style={styles.signOutBtn}
+          android_ripple={{ ...RIPPLE, borderless: true, radius: 24 }}
+          hitSlop={8}
+        >
           <Ionicons name="log-out-outline" size={20} color="#111111" />
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <ScrollView
@@ -185,15 +202,16 @@ export default function CitizenDashboard() {
             </View>
           )}
 
-          <TouchableOpacity
+          <Pressable
             style={styles.householdButton}
-            activeOpacity={0.8}
+            android_ripple={{ color: "rgba(255,255,255,0.18)" }}
+            onPressIn={selectionHaptic}
             onPress={() => router.push("/(citizen)/household")}
           >
             <Text style={styles.householdButtonText}>
               {householdProfile ? "View Details" : "Register Now"}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         <Text style={styles.sectionTitle}>Quick Actions</Text>
@@ -263,12 +281,18 @@ function ActionCard({
   onPress?: () => void;
 }) {
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
+    <Pressable
+      style={styles.card}
+      disabled={!onPress}
+      android_ripple={onPress ? RIPPLE : undefined}
+      onPressIn={onPress ? selectionHaptic : undefined}
+      onPress={onPress}
+    >
       <View style={styles.cardIcon}>
         <Ionicons name={icon} size={22} color="#1E293B" />
       </View>
       <Text style={styles.cardLabel}>{label}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 
@@ -299,7 +323,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
-    marginTop: -30,
   },
   header: {
     flexDirection: "row",
@@ -323,7 +346,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   signOutBtn: {
-    padding: 6,
+    width: 48,
+    height: 48,
+    borderRadius: AppRadius.pill,
+    alignItems: "center",
+    justifyContent: "center",
   },
   body: {
     padding: 20,
@@ -333,9 +360,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderColor: "#D1D5DB",
-    borderRadius: 0,
+    borderRadius: AppRadius.lg,
     padding: 16,
     gap: 14,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
   },
   householdTopRow: {
     flexDirection: "row",
@@ -345,7 +377,7 @@ const styles = StyleSheet.create({
   householdIconBox: {
     width: 42,
     height: 42,
-    borderRadius: 0,
+    borderRadius: AppRadius.md,
     backgroundColor: "#1E293B",
     alignItems: "center",
     justifyContent: "center",
@@ -363,6 +395,7 @@ const styles = StyleSheet.create({
     color: "#6B7280",
     fontSize: 11,
     fontWeight: "600",
+    fontVariant: ["tabular-nums"],
   },
   householdSummary: {
     gap: 6,
@@ -381,12 +414,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "500",
     flex: 1,
+    fontVariant: ["tabular-nums"],
   },
   badge: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#0C79B4",
-    borderRadius: 0,
+    borderRadius: AppRadius.sm,
     paddingHorizontal: 8,
     paddingVertical: 4,
     gap: 5,
@@ -404,8 +438,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#1E293B",
-    borderRadius: 0,
-    paddingVertical: 10,
+    borderRadius: AppRadius.md,
+    paddingVertical: 12,
+    overflow: "hidden",
   },
   householdButtonText: {
     color: "#FFFFFF",
@@ -429,16 +464,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderColor: "#D1D5DB",
-    borderRadius: 0,
+    borderRadius: AppRadius.lg,
     padding: 14,
     alignItems: "center",
     justifyContent: "center",
     gap: 12,
+    overflow: "hidden",
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
   },
   cardIcon: {
     width: 46,
     height: 46,
-    borderRadius: 0,
+    borderRadius: AppRadius.md,
     backgroundColor: "#EFF2F5",
     alignItems: "center",
     justifyContent: "center",
@@ -453,8 +494,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderColor: "#D1D5DB",
-    borderRadius: 0,
+    borderRadius: AppRadius.lg,
     overflow: "hidden",
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
   },
   activityItem: {
     flexDirection: "row",
@@ -466,7 +512,7 @@ const styles = StyleSheet.create({
   activityIconWrap: {
     width: 30,
     height: 30,
-    borderRadius: 0,
+    borderRadius: AppRadius.md,
     backgroundColor: "#F1F5F9",
     alignItems: "center",
     justifyContent: "center",
@@ -490,6 +536,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: "#6B7280",
     letterSpacing: 0.3,
+    fontVariant: ["tabular-nums"],
   },
   bottomSpacer: {
     height: 24,
