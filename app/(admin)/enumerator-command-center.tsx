@@ -9,7 +9,7 @@ import { useRouter } from 'expo-router';
 
 import AdminLayout from '@/src/components/admin/AdminLayout';
 import SectionHeader from '@/src/components/admin/SectionHeader';
-import AddStaffButton from '@/src/components/admin/AddStaffButton';
+import AddEnumeratorButton from '@/src/components/admin/AddEnumeratorButton';
 import EnumeratorRoster from '@/src/components/admin/EnumeratorRoster';
 import CommandCenter from '@/src/components/admin/CommandCenter';
 import { COLORS } from '@/constants/adminTheme';
@@ -59,7 +59,7 @@ const DEPLOYMENT = {
   total: 12,
 };
 
-const STAFF_RESPONSE = {
+const ENUMERATOR_RESPONSE = {
   enumeratorName: 'Meera Sharma',
   enumeratorId: 'ENUM-492',
   message:
@@ -85,8 +85,8 @@ export default function EnumeratorCommandCenterScreen() {
         <SectionHeader
           title="Enumerator Roster"
           action={
-            <AddStaffButton
-              onPress={() => router.push('/(admin)/add-new-staff')}
+            <AddEnumeratorButton
+              onPress={() => router.push('/(admin)/add-new-enumerator')}
             />
           }
         />
@@ -95,7 +95,7 @@ export default function EnumeratorCommandCenterScreen() {
           enumerators={ENUMERATORS}
           totalCount={142}
           onViewAllPress={() =>
-            Alert.alert('View All Staff', 'Full staff list coming soon.')
+            Alert.alert('View All Enumerators', 'Full enumerator list coming soon.')
           }
           onEnumeratorPress={(e) =>
             Alert.alert('Enumerator Details', `${e.name} — ${e.employeeId}`)
@@ -107,7 +107,7 @@ export default function EnumeratorCommandCenterScreen() {
 
         <CommandCenter
           deployment={DEPLOYMENT}
-          staffResponse={STAFF_RESPONSE}
+          enumeratorResponse={ENUMERATOR_RESPONSE}
           onChangeRecipientsPress={() =>
             Alert.alert(
               'Change Recipients',

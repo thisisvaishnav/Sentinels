@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 import AdminLayout from '@/src/components/admin/AdminLayout';
 import IntroductionCard from '@/src/components/admin/IntroductionCard';
@@ -52,6 +52,10 @@ const PAGE_SIZE = 3;
 
 export default function FieldEnumeratorsScreen() {
   const router = useRouter();
+  const { newEnumeratorName, newEnumeratorId } = useLocalSearchParams<{
+    newEnumeratorName?: string;
+    newEnumeratorId?: string;
+  }>();
   const [search, setSearch] = useState('');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [showExtra, setShowExtra] = useState(false);
@@ -62,21 +66,39 @@ export default function FieldEnumeratorsScreen() {
     [showExtra],
   );
 
+  /* Prepend newly added enumerator (returned from add-new-enumerator) */
+  const enumeratorsWithNew = useMemo(() => {
+    if (!newEnumeratorName || !newEnumeratorId) return allEnumerators;
+    const exists = allEnumerators.some((e) => e.employeeId === newEnumeratorId);
+    if (exists) return allEnumerators;
+    return [
+      {
+        id: newEnumeratorId,
+        name: newEnumeratorName,
+        employeeId: newEnumeratorId,
+        area: 'Unassigned',
+        surveysCompleted: 0,
+        status: 'inactive' as const,
+      },
+      ...allEnumerators,
+    ];
+  }, [allEnumerators, newEnumeratorName, newEnumeratorId]);
+
   /* Search filter */
   const filtered = useMemo(() => {
-    if (!search.trim()) return allEnumerators;
+    if (!search.trim()) return enumeratorsWithNew;
     const q = search.toLowerCase();
-    return allEnumerators.filter(
+    return enumeratorsWithNew.filter(
       (e) =>
         e.name.toLowerCase().includes(q) ||
         e.employeeId.toLowerCase().includes(q),
     );
-  }, [search, allEnumerators]);
+  }, [search, enumeratorsWithNew]);
 
   const visibleEnumerators = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
   const canLoadMore = visibleCount < filtered.length;
-  const totalStaff = allEnumerators.length;
-  const activeNow = allEnumerators.filter((e) => e.status === 'active').length;
+  const totalEnumerators = enumeratorsWithNew.length;
+  const activeNow = enumeratorsWithNew.filter((e) => e.status === 'active').length;
 
   const handleLoadMore = useCallback(() => {
     if (!showExtra) {
@@ -96,7 +118,7 @@ export default function FieldEnumeratorsScreen() {
 
         {/* ── Metric cards ─────────────────────────────────────── */}
         <View style={styles.metricsRow}>
-          <MetricCard label="Total Staff" value={String(totalStaff)} />
+          <MetricCard label="Total Enumerators" value={String(totalEnumerators)} />
           <MetricCard label="Active Now" value={String(activeNow)} accentColor={COLORS.success} />
         </View>
 
@@ -107,7 +129,7 @@ export default function FieldEnumeratorsScreen() {
         <SearchFilter value={search} onChangeText={setSearch} onFilterPress={() => Alert.alert('Filter', 'Advanced filters coming soon.')} />
 
         {/* ── Enumerator list ─────────────────────────────────── */}
-        <Text style={styles.sectionTitle}>Field Staff ({filtered.length})</Text>
+        <Text style={styles.sectionTitle}>Field Enumerators ({filtered.length})</Text>
         <View style={styles.stack}>
           {visibleEnumerators.map((enumerator) => (
             <EnumeratorCard

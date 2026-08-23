@@ -62,3 +62,4 @@ app-example
 # scripts
 script/
 opencode.json
+.dmux/

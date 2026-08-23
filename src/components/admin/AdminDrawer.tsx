@@ -21,9 +21,9 @@ const DRAWER_WIDTH = SCREEN_WIDTH * 0.78;
 
 const MENU_ITEMS = [
   { label: 'Home', icon: 'home-outline' as const, route: '/(admin)/dashboard' },
-  { label: 'Surveys', icon: 'document-text-outline' as const, route: null },
-  { label: 'Staff', icon: 'people-outline' as const, route: '/(admin)/field-enumerators' },
-  { label: 'Reports', icon: 'bar-chart-outline' as const, route: null },
+  { label: 'Surveys', icon: 'document-text-outline' as const, route: '/(admin)/survey-management' },
+  { label: 'Enumerators', icon: 'people-outline' as const, route: '/(admin)/field-enumerators' },
+  { label: 'Citizen Reports', icon: 'megaphone-outline' as const, route: '/(admin)/citizen-reports' },
   { label: 'Settings', icon: 'settings-outline' as const, route: null },
 ] as const;
 
@@ -118,8 +118,13 @@ export default function AdminDrawer() {
       >
         {/* Drawer header */}
         <View style={styles.drawerHeader}>
-          <View style={styles.avatarLarge}>
-            <Text style={styles.avatarLargeText}>AP</Text>
+          <View style={styles.drawerHeaderTop}>
+            <View style={styles.avatarLarge}>
+              <Text style={styles.avatarLargeText}>AP</Text>
+            </View>
+            <TouchableOpacity style={styles.closeBtn} activeOpacity={0.6} onPress={close}>
+              <Ionicons name="close" size={22} color={COLORS.textSecondary} />
+            </TouchableOpacity>
           </View>
           <Text style={styles.drawerTitle}>DRISHTI</Text>
           <Text style={styles.drawerSubtitle}>Admin Panel</Text>
@@ -196,6 +201,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
+  drawerHeaderTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
   avatarLarge: {
     width: 48,
     height: 48,
@@ -203,7 +214,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
+  },
+  closeBtn: {
+    padding: 6,
   },
   avatarLargeText: {
     fontSize: 18,

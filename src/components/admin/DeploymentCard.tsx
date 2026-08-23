@@ -4,11 +4,11 @@ import { COLORS } from '@/constants/adminTheme';
 import { DeploymentOrder } from '@/src/types/admin';
 import OperationalOrder from './OperationalOrder';
 import AcknowledgementBadge from './AcknowledgementBadge';
-import StaffResponse from './StaffResponse';
+import EnumeratorResponse from './EnumeratorResponse';
 
 interface DeploymentCardProps {
   deployment: DeploymentOrder;
-  staffResponse?: {
+  enumeratorResponse?: {
     enumeratorName: string;
     enumeratorId: string;
     message: string;
@@ -19,7 +19,7 @@ interface DeploymentCardProps {
 
 export default function DeploymentCard({
   deployment,
-  staffResponse,
+  enumeratorResponse,
   onChangeRecipientsPress,
 }: DeploymentCardProps) {
   return (
@@ -53,12 +53,12 @@ export default function DeploymentCard({
         total={deployment.total}
       />
 
-      {/* Staff Response */}
-      {staffResponse && (
-        <StaffResponse
+      {/* Enumerator Response */}
+      {enumeratorResponse && (
+        <EnumeratorResponse
           response={{
             id: '1',
-            ...staffResponse,
+            ...enumeratorResponse,
           }}
         />
       )}

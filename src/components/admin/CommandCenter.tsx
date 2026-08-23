@@ -4,7 +4,7 @@ import { COLORS } from '@/constants/adminTheme';
 import { DeploymentOrder } from '@/src/types/admin';
 import DeploymentCard from './DeploymentCard';
 
-interface StaffResponseData {
+interface EnumeratorResponseData {
   enumeratorName: string;
   enumeratorId: string;
   message: string;
@@ -13,20 +13,20 @@ interface StaffResponseData {
 
 interface CommandCenterProps {
   deployment: DeploymentOrder;
-  staffResponse?: StaffResponseData;
+  enumeratorResponse?: EnumeratorResponseData;
   onChangeRecipientsPress?: () => void;
 }
 
 export default function CommandCenter({
   deployment,
-  staffResponse,
+  enumeratorResponse,
   onChangeRecipientsPress,
 }: CommandCenterProps) {
   return (
     <View style={styles.container}>
       <DeploymentCard
         deployment={deployment}
-        staffResponse={staffResponse}
+        enumeratorResponse={enumeratorResponse}
         onChangeRecipientsPress={onChangeRecipientsPress}
       />
     </View>

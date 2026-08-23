@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { COLORS } from '@/constants/adminTheme';
-import { StaffResponseItem } from '@/src/types/admin';
+import { EnumeratorResponseItem } from '@/src/types/admin';
 
-interface StaffResponseProps {
-  response: StaffResponseItem;
+interface EnumeratorResponseProps {
+  response: EnumeratorResponseItem;
 }
 
-export default function StaffResponse({ response }: StaffResponseProps) {
+export default function EnumeratorResponse({ response }: EnumeratorResponseProps) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.bubble}>
