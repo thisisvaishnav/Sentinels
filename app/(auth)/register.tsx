@@ -97,7 +97,7 @@ export default function Register() {
                 <Ionicons name="person-outline" size={34} color={AppColors.textMuted} />
               </View>
 
-              <Text style={styles.brand}>Sentinels</Text>
+              <Text style={styles.brand}>Lokvision</Text>
 
               <Text style={styles.title}>Create Account</Text>
 

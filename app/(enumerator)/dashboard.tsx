@@ -1,184 +1,115 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { signOut } from "@/src/features/auth/authService";
+  getDerivedZoneMetrics,
+  loadEnumeratorHouseholds,
+  mockEnumeratorProfile,
+  mockPriorityTasks,
+  mockQuickActions,
+  mockRecentActivities,
+  mockSyncStatus,
+} from '@/src/features/enumeration/data/households';
+import { AssignedZoneInfo, TodayProgress, ZoneHouseholdItem } from '@/src/features/enumeration/types';
+
+import { AssignedZoneSection } from '@/src/features/enumeration/components/AssignedZoneSection';
+import { EnumeratorDrawer } from '@/src/features/enumeration/components/EnumeratorDrawer';
+import { EnumeratorHeader } from '@/src/features/enumeration/components/EnumeratorHeader';
+import { PriorityTasksSection } from '@/src/features/enumeration/components/PriorityTasksSection';
+import { ProgressSection } from '@/src/features/enumeration/components/ProgressSection';
+import { QuickActionsSection } from '@/src/features/enumeration/components/QuickActionsSection';
+import { RecentActivitySection } from '@/src/features/enumeration/components/RecentActivitySection';
+import { SyncStatusSection } from '@/src/features/enumeration/components/SyncStatusSection';
+import { WelcomeSection } from '@/src/features/enumeration/components/WelcomeSection';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 export default function EnumeratorDashboard() {
-  const router = useRouter();
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [households, setHouseholds] = useState<ZoneHouseholdItem[]>([]);
 
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      router.replace("/onboarding");
-    } catch {
-      // signOut already cleaned up locally even if the server call failed
-      router.replace("/onboarding");
+  useEffect(() => {
+    async function fetchStore() {
+      const list = await loadEnumeratorHouseholds();
+      setHouseholds(list);
     }
+    fetchStore();
+  }, []);
+
+  const metrics = getDerivedZoneMetrics(households);
+
+  const todayProgress: TodayProgress = {
+    totalAssigned: metrics.totalHouseholds,
+    completed: metrics.completedCount,
+    remaining: metrics.pendingCount + metrics.inProgressCount,
+    coveragePercentage: metrics.overallCoveragePercent,
+  };
+
+  const assignedZoneInfo: AssignedZoneInfo = {
+    zoneName: 'Zone A-12 · Ward 12',
+    subArea: 'Shiv Nagar (East & West)',
+    totalHouseholds: metrics.totalHouseholds,
+    completedHouseholds: metrics.completedCount,
+    coveragePercentage: metrics.overallCoveragePercent,
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <MaterialCommunityIcons
-            name="satellite-variant"
-            size={26}
-            color="#38BDF8"
-          />
-          <Text style={styles.brand}>FieldLink GIS</Text>
-        </View>
-        <TouchableOpacity onPress={handleSignOut} style={styles.signOutBtn}>
-          <MaterialCommunityIcons name="logout" size={20} color="#94A3B8" />
-        </TouchableOpacity>
-      </View>
+      <StatusBar barStyle="dark-content" backgroundColor={ENUMERATOR_THEME.colors.background} />
+
+      {/* 1. Header with Hamburger Menu Button */}
+      <EnumeratorHeader
+        profile={mockEnumeratorProfile}
+        onOpenDrawer={() => setDrawerVisible(true)}
+      />
+
+      {/* Navigation Drawer Modal */}
+      <EnumeratorDrawer
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        profile={mockEnumeratorProfile}
+      />
 
       <ScrollView
         contentContainerStyle={styles.body}
         showsVerticalScrollIndicator={false}
       >
-        {/* Welcome */}
-        <View style={styles.welcomeCard}>
-          <MaterialCommunityIcons
-            name="shield-account-outline"
-            size={40}
-            color="#38BDF8"
-          />
-          <Text style={styles.welcomeTitle}>Enumerator Dashboard</Text>
-          <Text style={styles.welcomeSub}>
-            Field data collection and zone verification
-          </Text>
-        </View>
+        {/* 2. Welcome Section */}
+        <WelcomeSection profile={mockEnumeratorProfile} />
 
-        {/* Quick-action grid */}
-        <View style={styles.grid}>
-          <ActionCard
-            icon="home-search-outline"
-            label="Household Survey"
-            color="#6366F1"
-          />
-          <ActionCard
-            icon="map-marker-radius-outline"
-            label="Zone Verification"
-            color="#10B981"
-          />
-          <ActionCard
-            icon="clipboard-list-outline"
-            label="My Assignments"
-            color="#F59E0B"
-          />
-          <ActionCard
-            icon="upload-outline"
-            label="Sync Data"
-            color="#EC4899"
-          />
-        </View>
+        {/* 3. Today's Progress */}
+        <ProgressSection progress={todayProgress} />
+
+        {/* 4. Priority Tasks */}
+        <PriorityTasksSection tasks={mockPriorityTasks} />
+
+        {/* 5. Assigned Zone */}
+        <AssignedZoneSection zone={assignedZoneInfo} />
+
+        {/* 6. Quick Actions */}
+        <QuickActionsSection actions={mockQuickActions} />
+
+        {/* 7. Sync Status */}
+        <SyncStatusSection syncInfo={mockSyncStatus} />
+
+        {/* 8. Recent Activity */}
+        <RecentActivitySection activities={mockRecentActivities} />
+
+        <View style={styles.bottomSpacer} />
       </ScrollView>
     </SafeAreaView>
-  );
-}
-
-function ActionCard({
-  icon,
-  label,
-  color,
-}: {
-  icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
-  label: string;
-  color: string;
-}) {
-  return (
-    <TouchableOpacity style={styles.card}>
-      <View style={[styles.cardIcon, { backgroundColor: color + "20" }]}>
-        <MaterialCommunityIcons name={icon} size={28} color={color} />
-      </View>
-      <Text style={styles.cardLabel}>{label}</Text>
-    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0F172A",
-    marginTop: -30,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: "#1E293B",
-  },
-  headerLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  brand: {
-    color: "#F1F5F9",
-    fontSize: 18,
-    fontWeight: "700",
-    letterSpacing: 0.4,
-  },
-  signOutBtn: {
-    padding: 6,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
   },
   body: {
-    padding: 20,
-    gap: 24,
+    padding: 16,
+    gap: 20,
   },
-  welcomeCard: {
-    alignItems: "center",
-    backgroundColor: "#1E293B",
-    borderRadius: 16,
-    padding: 28,
-    gap: 8,
-  },
-  welcomeTitle: {
-    color: "#F1F5F9",
-    fontSize: 22,
-    fontWeight: "700",
-  },
-  welcomeSub: {
-    color: "#94A3B8",
-    fontSize: 14,
-    textAlign: "center",
-  },
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 14,
-  },
-  card: {
-    width: "47%",
-    backgroundColor: "#1E293B",
-    borderRadius: 14,
-    padding: 18,
-    alignItems: "center",
-    gap: 10,
-  },
-  cardIcon: {
-    width: 54,
-    height: 54,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cardLabel: {
-    color: "#CBD5E1",
-    fontSize: 13,
-    fontWeight: "600",
-    textAlign: "center",
+  bottomSpacer: {
+    height: 32,
   },
 });
