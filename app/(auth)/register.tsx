@@ -4,17 +4,26 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import * as Haptics from "expo-haptics";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { registerWithRole } from "@/src/features/auth/authService";
 import { AppColors, AppRadius } from "../../constants/colors";
+
+const RIPPLE_LIGHT = { color: "rgba(23,42,58,0.10)" };
+const RIPPLE_DARK = { color: "rgba(255,255,255,0.18)" };
+
+const selectionHaptic = () => {
+  if (Platform.OS === "android") Haptics.selectionAsync();
+};
 
 const STATES = [
   "Uttar Pradesh",
@@ -42,12 +51,12 @@ export default function Register() {
 
   const handleRegister = async () => {
     if (!fullName.trim()) {
-      alert("Please enter your full name.");
+      Alert.alert("Missing information", "Please enter your full name.");
       return;
     }
 
     if (!mobile.trim() || !password.trim()) {
-      alert("Please fill in all required fields.");
+      Alert.alert("Missing information", "Please fill in all required fields.");
       return;
     }
 
@@ -65,14 +74,14 @@ export default function Register() {
       router.replace("/(citizen)/dashboard");
     } catch (error: any) {
       console.error("Register error:", error);
-      alert(error?.message ?? "Registration failed. Please try again.");
+      Alert.alert("Registration failed", error?.message ?? "Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={["top", "left", "right", "bottom"]}>
       <KeyboardAvoidingView
         style={styles.keyboard}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -83,13 +92,16 @@ export default function Register() {
         >
           <View style={styles.container}>
             {/* Back */}
-            <TouchableOpacity
+            <Pressable
               style={styles.backButton}
+              android_ripple={{ ...RIPPLE_LIGHT, borderless: true, radius: 22 }}
+              onPressIn={selectionHaptic}
               onPress={() => router.back()}
+              hitSlop={8}
             >
               <Ionicons name="arrow-back" size={22} color={AppColors.primary} />
               <Text style={styles.backText}>Back</Text>
-            </TouchableOpacity>
+            </Pressable>
 
             {/* Header */}
             <View style={styles.header}>
@@ -151,24 +163,28 @@ export default function Register() {
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
                 />
-                <TouchableOpacity
+                <Pressable
                   onPress={() => setShowPassword(!showPassword)}
+                  onPressIn={selectionHaptic}
+                  android_ripple={{ ...RIPPLE_LIGHT, borderless: true, radius: 20 }}
+                  hitSlop={8}
                 >
                   <Ionicons
                     name={showPassword ? "eye-outline" : "eye-off-outline"}
                     size={23}
                     color={AppColors.textMuted}
                   />
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </View>
 
             {/* State */}
             <View style={styles.field}>
               <Text style={styles.label}>STATE</Text>
-              <TouchableOpacity
-                activeOpacity={0.8}
+              <Pressable
                 style={styles.inputContainer}
+                android_ripple={RIPPLE_LIGHT}
+                onPressIn={selectionHaptic}
                 onPress={() => setShowStates(!showStates)}
               >
                 <Text
@@ -184,20 +200,22 @@ export default function Register() {
                   size={21}
                   color={AppColors.textMuted}
                 />
-              </TouchableOpacity>
+              </Pressable>
               {showStates && (
                 <View style={styles.dropdown}>
                   {STATES.map((item) => (
-                    <TouchableOpacity
+                    <Pressable
                       key={item}
                       style={styles.dropdownItem}
+                      android_ripple={RIPPLE_LIGHT}
                       onPress={() => {
+                        selectionHaptic();
                         setState(item);
                         setShowStates(false);
                       }}
                     >
                       <Text style={styles.dropdownText}>{item}</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                   ))}
                 </View>
               )}
@@ -216,12 +234,16 @@ export default function Register() {
             />
 
             {/* Create Account */}
-            <TouchableOpacity
-              activeOpacity={0.8}
+            <Pressable
               style={[
                 styles.primaryButton,
                 isSubmitting && { opacity: 0.65 },
               ]}
+              android_ripple={RIPPLE_DARK}
+              onPressIn={() => {
+                if (Platform.OS === "android")
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              }}
               onPress={handleRegister}
               disabled={isSubmitting}
             >
@@ -229,20 +251,23 @@ export default function Register() {
                 {isSubmitting ? "Please wait..." : "CREATE ACCOUNT"}
               </Text>
               <Ionicons name="arrow-forward" size={24} color={AppColors.textWhite} />
-            </TouchableOpacity>
+            </Pressable>
 
             {/* Login */}
             <View style={styles.loginContainer}>
               <Text style={styles.loginText}>
                 Already have an account?{" "}
               </Text>
-              <TouchableOpacity
+              <Pressable
                 onPress={() =>
                   router.push({ pathname: "/(auth)/login", params: { role: "citizen" } })
                 }
+                onPressIn={selectionHaptic}
+                android_ripple={{ ...RIPPLE_LIGHT, borderless: true, radius: 24 }}
+                hitSlop={8}
               >
                 <Text style={styles.loginLink}>Log in</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </View>
         </ScrollView>
@@ -286,7 +311,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: AppColors.bgMain,
-    marginTop: -30,
   },
 
   keyboard: {
@@ -376,9 +400,11 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: AppColors.borderInput,
     backgroundColor: AppColors.bgInput,
+    borderRadius: AppRadius.sm,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 14,
+    overflow: "hidden",
   },
 
   input: {
@@ -403,8 +429,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: AppColors.borderInput,
     backgroundColor: AppColors.bgCard,
-    marginTop: -12,
+    borderRadius: AppRadius.sm,
+    marginTop: 6,
     marginBottom: 20,
+    overflow: "hidden",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 4,
   },
 
   dropdownItem: {
@@ -422,11 +455,13 @@ const styles = StyleSheet.create({
   primaryButton: {
     height: 58,
     backgroundColor: AppColors.primary,
+    borderRadius: AppRadius.md,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 14,
     marginTop: 5,
+    overflow: "hidden",
   },
 
   primaryButtonText: {
