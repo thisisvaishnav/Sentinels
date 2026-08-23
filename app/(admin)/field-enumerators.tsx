@@ -159,7 +159,7 @@ export default function FieldEnumeratorsScreen() {
       </ScrollView>
 
       {/* ── FAB ───────────────────────────────────────────────── */}
-      <FAB onPress={() => Alert.alert('New Enumerator', 'Add enumerator form coming soon.')} />
+      <FAB onPress={() => router.push('/(admin)/enumerator-command-center')} />
 
       {/* ── Fixed Bottom Nav ──────────────────────────────────── */}
       <BottomNavigation activeTab={activeTab} onTabPress={handleTabPress} />

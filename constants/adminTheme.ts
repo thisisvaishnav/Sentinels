@@ -47,6 +47,15 @@ export const COLORS = {
   inactiveLight: '#F3F4F6',
   mapMarker: '#07145C',
 
+  // Roster / Command Center
+  activeBg: '#E8E8FF',
+  offDuty: '#555560',
+  offDutyBg: '#E8E7ED',
+  issueReported: '#D52F2F',
+  issueReportedBg: '#FFDCD9',
+  operationalBg: '#F0EFF4',
+  operationalAccent: '#080866',
+
   // Misc
   dot: '#FF3B30',
   tabBarActive: '#07145C',
