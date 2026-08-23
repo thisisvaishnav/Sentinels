@@ -5,16 +5,16 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   ActivityIndicator,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AppColors } from "../../constants/colors";
 
 export default function AdminLoginScreen() {
   const router = useRouter();
@@ -52,8 +52,6 @@ export default function AdminLoginScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F8F5FC" />
-
       <KeyboardAvoidingView
         style={styles.keyboardView}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -67,7 +65,7 @@ export default function AdminLoginScreen() {
           <View style={styles.card}>
             {/* Logo */}
             <View style={styles.logoContainer}>
-              <Ionicons name="eye" size={34} color="#FFFFFF" />
+              <Ionicons name="eye" size={34} color={AppColors.textWhite} />
             </View>
 
             {/* Title */}
@@ -82,7 +80,7 @@ export default function AdminLoginScreen() {
               <Ionicons
                 name="information-circle"
                 size={17}
-                color="#55555F"
+                color={AppColors.textSecondary}
                 style={styles.noticeIcon}
               />
               <Text style={styles.noticeText}>
@@ -98,14 +96,14 @@ export default function AdminLoginScreen() {
                 <Ionicons
                   name="briefcase"
                   size={17}
-                  color="#555561"
+                  color={AppColors.textMuted}
                   style={styles.inputIcon}
                 />
                 <TextInput
                   value={employeeId}
                   onChangeText={setEmployeeId}
                   placeholder="e.g. EMP-2023-458"
-                  placeholderTextColor="#888795"
+                  placeholderTextColor={AppColors.textMuted}
                   style={styles.input}
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -120,14 +118,14 @@ export default function AdminLoginScreen() {
                 <Ionicons
                   name="lock-closed"
                   size={17}
-                  color="#555561"
+                  color={AppColors.textMuted}
                   style={styles.inputIcon}
                 />
                 <TextInput
                   value={password}
                   onChangeText={setPassword}
                   placeholder="••••••••"
-                  placeholderTextColor="#888795"
+                  placeholderTextColor={AppColors.textMuted}
                   style={styles.input}
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
@@ -140,7 +138,7 @@ export default function AdminLoginScreen() {
                   <Ionicons
                     name={showPassword ? "eye-outline" : "eye-off"}
                     size={19}
-                    color="#555561"
+                    color={AppColors.textMuted}
                   />
                 </TouchableOpacity>
               </View>
@@ -156,9 +154,9 @@ export default function AdminLoginScreen() {
               disabled={isSubmitting}
             >
               {isSubmitting ? (
-                <ActivityIndicator size="small" color="#FFFFFF" />
+                <ActivityIndicator size="small" color={AppColors.textWhite} />
               ) : (
-                <Ionicons name="log-in-outline" size={20} color="#FFFFFF" />
+                <Ionicons name="log-in-outline" size={20} color={AppColors.textWhite} />
               )}
               <Text style={styles.loginButtonText}>
                 {isSubmitting ? "Signing In..." : "Secure Login"}
@@ -168,7 +166,7 @@ export default function AdminLoginScreen() {
 
           {/* Footer */}
           <View style={styles.footer}>
-            <Ionicons name="business" size={22} color="#777482" />
+            <Ionicons name="business" size={22} color={AppColors.textMuted} />
             <Text style={styles.governmentText}>
               Government of India - Department of Statistics
             </Text>
@@ -185,7 +183,8 @@ export default function AdminLoginScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#F8F5FC",
+    backgroundColor: AppColors.bgMain,
+    marginTop: -30,
   },
 
   keyboardView: {
@@ -203,10 +202,10 @@ const styles = StyleSheet.create({
   ========================= */
 
   card: {
-    backgroundColor: "#FBF9FE",
+    backgroundColor: AppColors.bgCard,
     borderWidth: 1,
-    borderColor: "#CFCBD8",
-    borderRadius: 9,
+    borderColor: AppColors.border,
+    borderRadius: 0,
     overflow: "hidden",
     paddingBottom: 18,
   },
@@ -214,8 +213,8 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: 59,
     height: 59,
-    borderRadius: 11,
-    backgroundColor: "#080875",
+    borderRadius: 0,
+    backgroundColor: AppColors.primary,
     alignSelf: "center",
     marginTop: 30,
     alignItems: "center",
@@ -227,7 +226,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     fontSize: 21,
     fontWeight: "800",
-    color: "#080875",
+    color: AppColors.primary,
     letterSpacing: 0.2,
   },
 
@@ -235,12 +234,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 3,
     fontSize: 13,
-    color: "#696774",
+    color: AppColors.textMuted,
   },
 
   divider: {
     height: 1,
-    backgroundColor: "#D7D3DF",
+    backgroundColor: AppColors.border,
     marginTop: 24,
     marginBottom: 18,
   },
@@ -251,10 +250,10 @@ const styles = StyleSheet.create({
 
   noticeBox: {
     marginHorizontal: 19,
-    backgroundColor: "#E4E1E8",
+    backgroundColor: AppColors.bgSubtle,
     borderWidth: 1,
-    borderColor: "#D1CDD7",
-    borderRadius: 5,
+    borderColor: AppColors.border,
+    borderRadius: 0,
     minHeight: 74,
     paddingHorizontal: 12,
     paddingVertical: 11,
@@ -271,7 +270,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 11.5,
     lineHeight: 18,
-    color: "#484751",
+    color: AppColors.textSecondary,
   },
 
   /* =========================
@@ -286,16 +285,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12.5,
     fontWeight: "600",
-    color: "#33323B",
+    color: AppColors.textPrimary,
     marginBottom: 7,
   },
 
   inputContainer: {
     height: 40,
     borderWidth: 1,
-    borderColor: "#CBC7D4",
-    borderRadius: 5,
-    backgroundColor: "#FCFAFF",
+    borderColor: AppColors.borderInput,
+    borderRadius: 0,
+    backgroundColor: AppColors.bgInput,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -309,7 +308,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
     fontSize: 13,
-    color: "#33323B",
+    color: AppColors.textPrimary,
     paddingVertical: 0,
   },
 
@@ -328,15 +327,15 @@ const styles = StyleSheet.create({
     height: 41,
     marginHorizontal: 19,
     marginTop: 26,
-    backgroundColor: "#080875",
-    borderRadius: 4,
+    backgroundColor: AppColors.primary,
+    borderRadius: 0,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
   },
 
   loginButtonText: {
-    color: "#FFFFFF",
+    color: AppColors.textWhite,
     fontSize: 12,
     fontWeight: "700",
     marginLeft: 9,
@@ -356,14 +355,14 @@ const styles = StyleSheet.create({
   governmentText: {
     marginTop: 11,
     fontSize: 10.5,
-    color: "#777482",
+    color: AppColors.textMuted,
     textAlign: "center",
   },
 
   copyright: {
     marginTop: 8,
     fontSize: 9.5,
-    color: "#96929E",
+    color: AppColors.textMuted,
     textAlign: "center",
   },
 });

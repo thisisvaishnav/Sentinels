@@ -5,14 +5,13 @@ import * as SecureStore from "expo-secure-store";
 import React, { useEffect, useState } from "react";
 import {
     ActivityIndicator,
-    SafeAreaView,
     ScrollView,
-    StatusBar,
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:5001";
 
@@ -124,7 +123,6 @@ export default function CitizenDashboard() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Text style={styles.brand}>Hello, Citizen</Text>
@@ -301,6 +299,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
+    marginTop: -30,
   },
   header: {
     flexDirection: "row",
@@ -334,7 +333,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderColor: "#D1D5DB",
-    borderRadius: 14,
+    borderRadius: 0,
     padding: 16,
     gap: 14,
   },
@@ -346,7 +345,7 @@ const styles = StyleSheet.create({
   householdIconBox: {
     width: 42,
     height: 42,
-    borderRadius: 10,
+    borderRadius: 0,
     backgroundColor: "#1E293B",
     alignItems: "center",
     justifyContent: "center",
@@ -387,7 +386,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#0C79B4",
-    borderRadius: 6,
+    borderRadius: 0,
     paddingHorizontal: 8,
     paddingVertical: 4,
     gap: 5,
@@ -405,7 +404,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#1E293B",
-    borderRadius: 10,
+    borderRadius: 0,
     paddingVertical: 10,
   },
   householdButtonText: {
@@ -430,7 +429,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderColor: "#D1D5DB",
-    borderRadius: 8,
+    borderRadius: 0,
     padding: 14,
     alignItems: "center",
     justifyContent: "center",
@@ -439,7 +438,7 @@ const styles = StyleSheet.create({
   cardIcon: {
     width: 46,
     height: 46,
-    borderRadius: 12,
+    borderRadius: 0,
     backgroundColor: "#EFF2F5",
     alignItems: "center",
     justifyContent: "center",
@@ -454,7 +453,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderColor: "#D1D5DB",
-    borderRadius: 10,
+    borderRadius: 0,
     overflow: "hidden",
   },
   activityItem: {
@@ -467,7 +466,7 @@ const styles = StyleSheet.create({
   activityIconWrap: {
     width: 30,
     height: 30,
-    borderRadius: 10,
+    borderRadius: 0,
     backgroundColor: "#F1F5F9",
     alignItems: "center",
     justifyContent: "center",

@@ -5,16 +5,16 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TextInput,
   TouchableOpacity,
-  StatusBar,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { AppColors, AppRadius } from "../../constants/colors";
 
 export type Role = "citizen" | "enumerator";
 
@@ -99,11 +99,6 @@ export default function Login() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="#F5F8FA"
-      />
-
       <KeyboardAvoidingView
         style={styles.keyboard}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -122,7 +117,7 @@ export default function Login() {
                 <Ionicons
                   name="arrow-back"
                   size={22}
-                  color="#172A3A"
+                  color={AppColors.primary}
                 />
                 <Text style={styles.backText}>Back</Text>
               </TouchableOpacity>
@@ -135,7 +130,7 @@ export default function Login() {
                   <Ionicons
                     name="person"
                     size={32}
-                    color="#9DB0C5"
+                    color={AppColors.textMuted}
                   />
                 )}
 
@@ -143,7 +138,7 @@ export default function Login() {
                   <MaterialCommunityIcons
                     name="satellite-variant"
                     size={34}
-                    color="#FFFFFF"
+                    color={AppColors.textWhite}
                   />
                 )}
               </View>
@@ -168,7 +163,7 @@ export default function Login() {
                     <Ionicons
                       name="phone-portrait-outline"
                       size={23}
-                      color="#777F89"
+                      color={AppColors.textMuted}
                     />
                   }
                 />
@@ -196,7 +191,7 @@ export default function Login() {
                     <MaterialCommunityIcons
                       name="card-account-details-outline"
                       size={23}
-                      color="#777F89"
+                      color={AppColors.textMuted}
                     />
                   }
                 />
@@ -227,7 +222,7 @@ export default function Login() {
               <Ionicons
                 name="arrow-forward"
                 size={24}
-                color="#FFFFFF"
+                color={AppColors.textWhite}
               />
             </TouchableOpacity>
 
@@ -261,7 +256,7 @@ export default function Login() {
                 <Ionicons
                   name="shield-checkmark-outline"
                   size={20}
-                  color="#555D66"
+                  color={AppColors.textSecondary}
                 />
 
                 <Text style={styles.securityTitle}>
@@ -302,7 +297,7 @@ function Field({
         <TextInput
           style={styles.input}
           placeholder={placeholder}
-          placeholderTextColor="#B9BEC6"
+          placeholderTextColor={AppColors.textMuted}
           value={value}
           onChangeText={onChangeText}
           keyboardType={keyboardType}
@@ -330,13 +325,13 @@ function PasswordField({
         <Ionicons
           name="lock-closed-outline"
           size={23}
-          color="#777F89"
+          color={AppColors.textMuted}
         />
 
         <TextInput
           style={styles.input}
           placeholder={placeholder}
-          placeholderTextColor="#B9BEC6"
+          placeholderTextColor={AppColors.textMuted}
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={!visible}
@@ -347,7 +342,7 @@ function PasswordField({
           <Ionicons
             name={visible ? "eye-outline" : "eye-off-outline"}
             size={24}
-            color="#777F89"
+            color={AppColors.textMuted}
           />
         </TouchableOpacity>
       </View>
@@ -366,7 +361,8 @@ function PasswordField({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#F5F8FA",
+    backgroundColor: AppColors.bgMain,
+    marginTop: -30,
   },
 
   keyboard: {
@@ -382,10 +378,10 @@ const styles = StyleSheet.create({
     width: "92%",
     maxWidth: 540,
     alignSelf: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: AppColors.bgCard,
     borderWidth: 1,
-    borderColor: "#CBD1D8",
-    borderRadius: 12,
+    borderColor: AppColors.borderInput,
+    borderRadius: AppRadius.lg,
     paddingHorizontal: 28,
     paddingVertical: 28,
   },
@@ -399,7 +395,7 @@ const styles = StyleSheet.create({
 
   backText: {
     fontSize: 16,
-    color: "#172A3A",
+    color: AppColors.primary,
     fontWeight: "500",
   },
 
@@ -411,8 +407,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 72,
     height: 72,
-    borderRadius: 18,
-    backgroundColor: "#172A3A",
+    borderRadius: AppRadius.xl,
+    backgroundColor: AppColors.primary,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 18,
@@ -421,13 +417,13 @@ const styles = StyleSheet.create({
   brand: {
     fontSize: 34,
     fontWeight: "700",
-    color: "#172A3A",
+    color: AppColors.primary,
     letterSpacing: -0.8,
   },
 
   subtitle: {
     fontSize: 19,
-    color: "#4A4F55",
+    color: AppColors.textSecondary,
     marginTop: 8,
     textAlign: "center",
   },
@@ -439,7 +435,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     letterSpacing: 1.5,
-    color: "#444A51",
+    color: AppColors.textSecondary,
     fontWeight: "600",
     marginBottom: 9,
   },
@@ -447,8 +443,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     height: 56,
     borderWidth: 1.5,
-    borderColor: "#C4CAD2",
-    backgroundColor: "#F5F7F9",
+    borderColor: AppColors.borderInput,
+    backgroundColor: AppColors.bgInput,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 14,
@@ -457,13 +453,13 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 18,
-    color: "#20252A",
+    color: AppColors.textPrimary,
     marginLeft: 10,
   },
 
   primaryButton: {
     height: 58,
-    backgroundColor: "#172A3A",
+    backgroundColor: AppColors.primary,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -476,7 +472,7 @@ const styles = StyleSheet.create({
   },
 
   primaryButtonText: {
-    color: "#FFFFFF",
+    color: AppColors.textWhite,
     fontSize: 19,
     fontWeight: "600",
   },
@@ -490,12 +486,12 @@ const styles = StyleSheet.create({
 
   registerText: {
     fontSize: 16,
-    color: "#555B62",
+    color: AppColors.textSecondary,
   },
 
   registerLink: {
     fontSize: 16,
-    color: "#0069A6",
+    color: AppColors.blue,
     fontWeight: "600",
   },
 
@@ -505,7 +501,7 @@ const styles = StyleSheet.create({
   },
 
   requestAccessText: {
-    color: "#0069A6",
+    color: AppColors.blue,
     fontSize: 17,
     fontWeight: "600",
     letterSpacing: 1,
@@ -513,7 +509,7 @@ const styles = StyleSheet.create({
 
   securityContainer: {
     borderTopWidth: 1,
-    borderTopColor: "#D8DCE0",
+    borderTopColor: AppColors.border,
     marginTop: 30,
     paddingTop: 22,
     alignItems: "center",
@@ -527,7 +523,7 @@ const styles = StyleSheet.create({
 
   securityTitle: {
     fontSize: 16,
-    color: "#555D66",
+    color: AppColors.textSecondary,
     fontWeight: "600",
     letterSpacing: 1,
   },
@@ -535,13 +531,13 @@ const styles = StyleSheet.create({
   securityText: {
     textAlign: "center",
     marginTop: 8,
-    color: "#777D85",
+    color: AppColors.textMuted,
     fontSize: 14,
     lineHeight: 21,
   },
 
   securityHint: {
-    color: "#777D85",
+    color: AppColors.textMuted,
     fontSize: 13,
     marginTop: 7,
   },

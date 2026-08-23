@@ -2,34 +2,32 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '@/constants/adminTheme';
+import { useAdminDrawer } from '@/src/contexts/AdminDrawerContext';
 
-interface DashboardHeaderProps {
-  onLogout?: () => void;
-}
+export default function AdminHeader() {
+  const { toggle } = useAdminDrawer();
 
-export default function DashboardHeader({ onLogout }: DashboardHeaderProps) {
   return (
     <View style={styles.container}>
       {/* Left: hamburger */}
-      <TouchableOpacity style={styles.iconBtn} activeOpacity={0.6}>
+      <TouchableOpacity style={styles.iconBtn} activeOpacity={0.6} onPress={toggle}>
         <Ionicons name="menu" size={24} color={COLORS.textPrimary} />
       </TouchableOpacity>
 
       {/* Centre: title */}
       <View style={styles.titleRow}>
         <Text style={styles.title}>DRISHTI</Text>
-        <Text style={styles.subtitle}>Admin</Text>
       </View>
 
-      {/* Right: bell + logout */}
+      {/* Right: bell + avatar */}
       <View style={styles.rightRow}>
         <TouchableOpacity style={styles.iconBtn} activeOpacity={0.6}>
           <Ionicons name="notifications-outline" size={22} color={COLORS.textPrimary} />
           <View style={styles.dot} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={onLogout} style={styles.iconBtn} activeOpacity={0.6}>
-          <Ionicons name="log-out-outline" size={22} color={COLORS.danger} />
+        <TouchableOpacity style={styles.avatarBtn} activeOpacity={0.6}>
+          <Text style={styles.avatarText}>AP</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -62,15 +60,10 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     letterSpacing: 0.4,
   },
-  subtitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: COLORS.textSecondary,
-  },
   rightRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 8,
   },
   dot: {
     position: 'absolute',
@@ -80,5 +73,18 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: COLORS.dot,
+  },
+  avatarBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: COLORS.textOnPrimary,
   },
 });

@@ -1,25 +1,129 @@
-# Mobile Application Development Focus
+# DRISHTI — AI Coding Agent Instructions
 
-This project is primarily a **React Native & Expo mobile application** targeting iOS and Android. 
+## Project Overview
 
-All future development, fixes, and feature additions must focus **solely on mobile constraints and mobile UX/UI guidelines**.
+DRISHTI is a React Native application built with Expo Router.
 
-## Key Guidelines
+The application has:
+- Citizen flows
+- Admin flows
+- Enumerator flows
+- Survey management
+- Reports
+- Authentication
 
-1. **Strict Mobile Focus**: 
-   * Always design and implement features specifically for native mobile screens and mobile-first users.
-   * Do not optimize or compromise mobile design, layouts, or functionality for the web version. Mobile performance, responsiveness, and touch interactions are the highest priorities.
+## Tech Stack
 
-2. **React Native Components & Styling**:
-   * Never use web-specific HTML tags (e.g., `<div>`, `<span>`, `<button>`, `<a>`, `<p>`).
-   * Always use standard React Native primitives: `<View>`, `<Text>`, `<TouchableOpacity>`, `<Pressable>`, `<ScrollView>`, `<FlatList>`, `<Image>`.
-   * Use React Native stylesheets (`StyleSheet.create`) and keep styling rules responsive to variable mobile screen heights and widths.
-   * Make proper use of `react-native-safe-area-context` (`SafeAreaView`, `useSafeAreaInsets`) to avoid notch, status bar, and home indicator overlaps.
+- React Native
+- Expo
+- Expo Router
+- TypeScript
+- React Native Reanimated
+- React Native Gesture Handler
+- Supabase
+- PostgreSQL
 
-3. **Storage & Native APIs**:
-   * Do not use browser-specific storage APIs (e.g., `localStorage`, `sessionStorage`, `cookies`).
-   * Use `expo-secure-store` for confidential data (tokens, user credentials) and native Storage Adapters.
-   * Always use Expo APIs (e.g., `expo-location`, `expo-haptics`) when interacting with hardware or OS-level configurations.
+## Project Structure
 
-4. **Versioned Reference**:
-   * Read the exact versioned Expo docs at https://docs.expo.dev/versions/v54.0.0/ before writing or updating any code.
+app/
+├── (auth)/
+├── (admin)/
+└── ...
+
+src/
+├── components/
+├── contexts/
+├── services/
+├── hooks/
+├── lib/
+└── ...
+
+## Important Architecture Rules
+
+### Navigation
+
+Use Expo Router for navigation.
+
+Do NOT introduce React Navigation navigators unless explicitly requested.
+
+Existing navigation structure should be preserved.
+
+### Components
+
+Reusable UI components should live inside:
+
+src/components/
+
+Admin-specific components should live inside:
+
+src/components/admin/
+
+### Context
+
+Global state shared across multiple admin screens should use React Context.
+
+### Styling
+
+Follow the existing DRISHTI design system.
+
+Do not introduce a new color palette.
+
+Do not redesign existing screens unless explicitly requested.
+
+### Dependencies
+
+Before installing a new dependency:
+
+1. Check package.json.
+2. Check whether an existing dependency already provides the functionality.
+3. Avoid unnecessary dependencies.
+
+Already installed:
+- react-native-gesture-handler
+- react-native-reanimated
+
+### Coding Rules
+
+- TypeScript only.
+- Reuse existing components whenever possible.
+- Do not duplicate components.
+- Do not modify unrelated files.
+- Preserve existing functionality.
+- Keep changes minimal and focused.
+- Follow existing naming conventions.
+
+## Before Coding
+
+First inspect:
+
+1. package.json
+2. app/
+3. src/
+4. relevant existing components
+5. relevant contexts/hooks
+6. existing navigation
+7. database/service layer if the task involves data
+
+Then explain:
+
+- what currently exists
+- what needs to change
+- files that will be created
+- files that will be modified
+- files that will be removed
+- potential risks
+
+Only then implement.
+
+## After Coding
+
+Verify:
+
+- TypeScript errors
+- imports
+- navigation
+- existing functionality
+- affected screens
+- unused files/imports
+
+Do not stop after creating files. Make sure the feature is actually integrated.
