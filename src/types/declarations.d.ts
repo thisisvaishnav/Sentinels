@@ -17,6 +17,10 @@ declare module 'react-native-maps' {
     provider?: string;
     showsUserLocation?: boolean;
     showsMyLocationButton?: boolean;
+    scrollEnabled?: boolean;
+    zoomEnabled?: boolean;
+    pitchEnabled?: boolean;
+    rotateEnabled?: boolean;
     children?: React.ReactNode;
   }
 
