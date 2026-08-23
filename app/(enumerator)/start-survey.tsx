@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   View,
@@ -10,10 +10,14 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
+import {
+  loadEnumeratorHouseholds,
+  updateHouseholdStatusInStore,
+} from '@/src/features/enumeration/data/households';
 import {
   AssignedHouseholdSummary,
   BasicFacilitiesData,
@@ -148,6 +152,7 @@ const STEP_TITLES = [
 
 export default function StartSurveyScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ householdId?: string; readOnly?: string }>();
 
   // Landing List State
   const [households, setHouseholds] = useState<AssignedHouseholdSummary[]>(INITIAL_HOUSEHOLDS);
@@ -200,34 +205,11 @@ export default function StartSurveyScreen() {
   ]);
   const [remarks, setRemarks] = useState('');
 
-  // Counts for Header Card
-  const pendingCount = households.filter((h) => h.status === 'Pending').length;
-  const inProgressCount = households.filter((h) => h.status === 'In Progress').length;
-  const completedCount = households.filter((h) => h.status === 'Completed').length;
-
-  // Filtered List
-  const filteredHouseholds = households.filter((item) => {
-    const matchesSearch =
-      item.householdId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.headName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.address.toLowerCase().includes(searchQuery.toLowerCase());
-
-    if (!matchesSearch) return false;
-
-    if (activeFilter === 'All') return true;
-    if (activeFilter === 'Pending') return item.status === 'Pending';
-    if (activeFilter === 'In Progress') return item.status === 'In Progress';
-    if (activeFilter === 'Completed') return item.status === 'Completed';
-    if (activeFilter === 'Priority') return item.priority === 'High';
-
-    return true;
-  });
-
   // Launch Active Survey
-  const handleLaunchSurvey = async (item: AssignedHouseholdSummary) => {
+  const handleLaunchSurvey = async (item: AssignedHouseholdSummary, forceReadOnly?: boolean) => {
     setActiveHousehold(item);
     setSurveyStatus(item.status);
-    setIsReadOnly(item.status === 'Completed');
+    setIsReadOnly(forceReadOnly ?? item.status === 'Completed');
     setCurrentStep(0);
 
     // Initialize fields from selected household summary
@@ -282,6 +264,64 @@ export default function StartSurveyScreen() {
     }
   };
 
+  // Load local households on mount & check navigation params
+  useEffect(() => {
+    async function init() {
+      const storeList = await loadEnumeratorHouseholds();
+      const mappedSummaries: AssignedHouseholdSummary[] = storeList.map((h) => ({
+        householdId: h.householdId,
+        headName: h.headName,
+        address: h.address || `${h.locality}, ${h.ward || 'Ward 12'}`,
+        memberCount: h.members,
+        status: h.status === 'Needs Verification' || h.status === 'Missing' ? 'Pending' : (h.status as SurveyStatus),
+        priority: h.priority === 'High' ? 'High' : 'Normal',
+        mobile: h.mobile || '9876543210',
+        state: 'Uttar Pradesh',
+        district: h.district || 'Varanasi',
+        ward: h.ward || 'Ward 12',
+        pinCode: h.pinCode || '221005',
+        houseType: h.houseType || 'Permanent',
+        ownership: h.ownership || 'Owned',
+      }));
+
+      setHouseholds(mappedSummaries);
+
+      if (params.householdId) {
+        const target = mappedSummaries.find(
+          (item) => item.householdId.toLowerCase() === params.householdId?.toLowerCase()
+        );
+        if (target) {
+          handleLaunchSurvey(target, params.readOnly === 'true');
+        }
+      }
+    }
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.householdId, params.readOnly]);
+
+  // Counts for Header Card
+  const pendingCount = households.filter((h) => h.status === 'Pending').length;
+  const inProgressCount = households.filter((h) => h.status === 'In Progress').length;
+  const completedCount = households.filter((h) => h.status === 'Completed').length;
+
+  // Filtered List
+  const filteredHouseholds = households.filter((item) => {
+    const matchesSearch =
+      item.householdId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.headName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.address.toLowerCase().includes(searchQuery.toLowerCase());
+
+    if (!matchesSearch) return false;
+
+    if (activeFilter === 'All') return true;
+    if (activeFilter === 'Pending') return item.status === 'Pending';
+    if (activeFilter === 'In Progress') return item.status === 'In Progress';
+    if (activeFilter === 'Completed') return item.status === 'Completed';
+    if (activeFilter === 'Priority') return item.priority === 'High';
+
+    return true;
+  });
+
   // Save Progress Handler
   const handleSaveProgress = async () => {
     if (!activeHousehold) return;
@@ -318,6 +358,7 @@ export default function StartSurveyScreen() {
 
     try {
       await AsyncStorage.setItem(`@lokvision_survey_${activeHousehold.householdId}`, JSON.stringify(payload));
+      await updateHouseholdStatusInStore(activeHousehold.householdId, 'In Progress');
 
       // Update local households status to In Progress
       setHouseholds((prev) =>
@@ -341,6 +382,7 @@ export default function StartSurveyScreen() {
         onPress: async () => {
           try {
             await AsyncStorage.removeItem(`@lokvision_survey_${activeHousehold.householdId}`);
+            await updateHouseholdStatusInStore(activeHousehold.householdId, 'Completed');
           } catch {
             // Ignore cleanup error
           }

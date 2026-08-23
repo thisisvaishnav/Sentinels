@@ -10,10 +10,11 @@ import {
   Alert,
 } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
+import { loadEnumeratorHouseholds } from '@/src/features/enumeration/data/households';
 import {
   FamilyMember,
   GpsLocationData,
@@ -44,10 +45,11 @@ const DRAFT_STORAGE_KEY = '@lokvision_household_draft';
 
 export default function RegisterHouseholdScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ householdId?: string }>();
   const scrollViewRef = useRef<ScrollView>(null);
 
-  // Stable Mock Household ID
-  const householdId = 'LV-UP-000124';
+  // Stable or Parameter Household ID
+  const householdId = params.householdId || 'LV-UP-000124';
 
   // Overall Form Status
   const [formStatus, setFormStatus] = useState<'Draft' | 'Submitted'>('Draft');
@@ -80,6 +82,35 @@ export default function RegisterHouseholdScreen() {
     district: 'Ghaziabad',
     fullAddress: '',
   });
+
+  // Check navigation params for existing household
+  useEffect(() => {
+    async function loadTarget() {
+      if (params.householdId) {
+        const store = await loadEnumeratorHouseholds();
+        const target = store.find((h) => h.householdId.toLowerCase() === params.householdId?.toLowerCase());
+        if (target) {
+          setHeadOfHousehold({
+            name: target.headName,
+            age: '45',
+            gender: 'Male',
+            mobile: target.mobile || '9876543210',
+            role: 'Head of Household',
+          });
+          setHouseholdProfile((prev) => ({
+            ...prev,
+            locality: target.locality,
+            fullAddress: target.address || `${target.locality}, ${target.ward || 'Ward 12'}`,
+            familyMemberCount: target.members,
+            houseType: target.houseType || 'Permanent',
+            ownership: target.ownership || 'Owned',
+          }));
+          if (target.needs) setNeeds(target.needs);
+        }
+      }
+    }
+    loadTarget();
+  }, [params.householdId]);
 
   // Family Members State
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);

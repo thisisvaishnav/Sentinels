@@ -243,4 +243,71 @@ export interface SurveyFormData {
   remarks: string;
 }
 
+// ==========================================
+// ASSIGNED ZONE DATA MODELS
+// ==========================================
+
+export type ZoneHouseholdStatus =
+  | 'Completed'
+  | 'In Progress'
+  | 'Pending'
+  | 'Needs Verification'
+  | 'Missing';
+
+export type ZoneHouseholdPriority = 'High' | 'Normal';
+
+export interface ZoneAreaItem {
+  id: string;
+  name: string;
+  totalHouseholds: number;
+  completedHouseholds: number;
+}
+
+export interface ZoneHouseholdItem {
+  id: string;
+  householdId: string;
+  headName: string;
+  locality: string;
+  members: number;
+  status: ZoneHouseholdStatus;
+  priority: ZoneHouseholdPriority;
+  areaId: string;
+  lastVisit?: string;
+  address?: string;
+  ward?: string;
+  district?: string;
+  pinCode?: string;
+  mobile?: string;
+  houseType?: 'Permanent' | 'Semi-Permanent' | 'Temporary';
+  ownership?: 'Owned' | 'Rented' | 'Other';
+  needs?: HouseholdNeed[];
+  verificationStatus?: 'Verified' | 'Pending' | 'Needs Verification' | 'Not Verified';
+}
+
+export interface ZoneActivityItem {
+  id: string;
+  type: 'survey' | 'priority' | 'registration' | 'verification';
+  message: string;
+  timestamp: string;
+  householdId: string;
+}
+
+export interface AssignedZoneFullData {
+  zoneId: string;
+  zoneName: string;
+  ward: string;
+  subArea: string;
+  district: string;
+  pinCode: string;
+  enumeratorId: string;
+  dailyTarget: {
+    target: number;
+    completed: number;
+  };
+  areas: ZoneAreaItem[];
+  households: ZoneHouseholdItem[];
+  activities: ZoneActivityItem[];
+}
+
+
 

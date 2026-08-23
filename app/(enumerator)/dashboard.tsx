@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  mockAssignedZone,
+  getDerivedZoneMetrics,
+  loadEnumeratorHouseholds,
   mockEnumeratorProfile,
   mockPriorityTasks,
   mockQuickActions,
   mockRecentActivities,
   mockSyncStatus,
-  mockTodayProgress,
-} from '@/src/features/enumeration/mockEnumeratorData';
+} from '@/src/features/enumeration/data/households';
+import { AssignedZoneInfo, TodayProgress, ZoneHouseholdItem } from '@/src/features/enumeration/types';
 
 import { AssignedZoneSection } from '@/src/features/enumeration/components/AssignedZoneSection';
 import { EnumeratorDrawer } from '@/src/features/enumeration/components/EnumeratorDrawer';
@@ -24,6 +25,32 @@ import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 export default function EnumeratorDashboard() {
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const [households, setHouseholds] = useState<ZoneHouseholdItem[]>([]);
+
+  useEffect(() => {
+    async function fetchStore() {
+      const list = await loadEnumeratorHouseholds();
+      setHouseholds(list);
+    }
+    fetchStore();
+  }, []);
+
+  const metrics = getDerivedZoneMetrics(households);
+
+  const todayProgress: TodayProgress = {
+    totalAssigned: metrics.totalHouseholds,
+    completed: metrics.completedCount,
+    remaining: metrics.pendingCount + metrics.inProgressCount,
+    coveragePercentage: metrics.overallCoveragePercent,
+  };
+
+  const assignedZoneInfo: AssignedZoneInfo = {
+    zoneName: 'Zone A-12 · Ward 12',
+    subArea: 'Shiv Nagar (East & West)',
+    totalHouseholds: metrics.totalHouseholds,
+    completedHouseholds: metrics.completedCount,
+    coveragePercentage: metrics.overallCoveragePercent,
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -50,13 +77,13 @@ export default function EnumeratorDashboard() {
         <WelcomeSection profile={mockEnumeratorProfile} />
 
         {/* 3. Today's Progress */}
-        <ProgressSection progress={mockTodayProgress} />
+        <ProgressSection progress={todayProgress} />
 
         {/* 4. Priority Tasks */}
         <PriorityTasksSection tasks={mockPriorityTasks} />
 
         {/* 5. Assigned Zone */}
-        <AssignedZoneSection zone={mockAssignedZone} />
+        <AssignedZoneSection zone={assignedZoneInfo} />
 
         {/* 6. Quick Actions */}
         <QuickActionsSection actions={mockQuickActions} />
