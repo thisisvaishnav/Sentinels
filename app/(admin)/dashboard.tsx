@@ -112,7 +112,7 @@ export default function AdminDashboard() {
       >
         {/* Welcome */}
         <Text style={styles.welcomeTitle}>Welcome, Admin Central</Text>
-        <Text style={styles.welcomeSub}>Here's your system overview for today</Text>
+        <Text style={styles.welcomeSub}>Here&apos;s your system overview for today</Text>
 
         {/* ── Stats grid ──────────────────────────────────────── */}
         <View style={styles.statsGrid}>

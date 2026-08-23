@@ -272,6 +272,8 @@ export interface ZoneHouseholdItem {
   status: ZoneHouseholdStatus;
   priority: ZoneHouseholdPriority;
   areaId: string;
+  latitude?: number;
+  longitude?: number;
   lastVisit?: string;
   address?: string;
   ward?: string;
