@@ -51,8 +51,8 @@ SUPABASE_URL=https://<your-project-ref>.supabase.co
 
 JWT_SECRET=super_secret_sentinels_jwt_key_2026
 JWT_EXPIRES_IN=7d
-PORT=5001
-EXPO_PUBLIC_API_URL=http://10.0.2.2:5001
+PORT=8080
+EXPO_PUBLIC_API_URL=http://10.0.2.2:8080
 ```
 
 ---
@@ -237,7 +237,7 @@ export interface CitizenRegisterData {
 }
 
 export async function registerCitizen(data: CitizenRegisterData) {
-  const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001';
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080';
 
   const response = await fetch(`${apiUrl}/api/auth/citizen/signup`, {
     method: 'POST',
@@ -332,11 +332,11 @@ When creating another endpoint (e.g. `POST /api/auth/admin/signup` or `POST /api
 
 ### Issue 1: `TypeError: Network request failed` on Android Emulator
 - **Cause**: Using `http://localhost:5000` inside an Android Emulator tries to connect to the emulator device itself rather than your Mac host machine.
-- **Fix**: Set `EXPO_PUBLIC_API_URL=http://10.0.2.2:5001` in `.env` (`10.0.2.2` is Android's special alias for the host Mac). Re-run `npx expo start -c`.
+- **Fix**: Set `EXPO_PUBLIC_API_URL=http://10.0.2.2:8080` in `.env` (`10.0.2.2` is Android's special alias for the host Mac). Re-run `npx expo start -c`.
 
-### Issue 2: `403 Forbidden` from AirTunes / ControlCenter on Port 5000
-- **Cause**: On macOS Monterey+, **macOS AirPlay Receiver (ControlCenter)** binds to port `5000` by default. Requests to port `5000` hit AirPlay instead of your Express server.
-- **Fix**: Change your Express server port to `5001` in `src/server/index.ts` and `.env` (`PORT=5001` and `EXPO_PUBLIC_API_URL=http://10.0.2.2:5001`).
+### Issue 2: `403 Forbidden` from AirTunes / ControlCenter on Ports 5000/5001
+- **Cause**: On macOS Monterey+, **macOS AirPlay Receiver (ControlCenter)** binds to both port `5000` and `5001` by default. Requests to those ports hit AirPlay instead of your Express server.
+- **Fix**: Change your Express server port to `8080` in `src/server/index.ts` and `.env` (`PORT=8080` and `EXPO_PUBLIC_API_URL=http://10.0.2.2:8080`).
 
 ### Issue 3: `SyntaxError: JSON Parse error: Unexpected end of input`
 - **Cause**: Client calls `response.json()`, but the server returned an empty body or HTML error response (e.g. 403 or 404).

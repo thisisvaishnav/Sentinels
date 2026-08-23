@@ -1,7 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 
 const getApiUrl = () => {
-  return process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001';
+  return process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080';
 };
 
 // Interface types matching backend models and API responses

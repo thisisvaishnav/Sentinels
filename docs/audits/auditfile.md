@@ -757,7 +757,7 @@ Zero importers. The same branch is instead duplicated inline in app/(citizen)/da
 
 src/services/citizenService.ts (190 lines) — what data should be on screen (also dead code)
 
-Exports (all with Authorization: Bearer <citizen_token> from SecureStore, base EXPO_PUBLIC_API_URL || http://localhost:5001):
+Exports (all with Authorization: Bearer <citizen_token> from SecureStore, base EXPO_PUBLIC_API_URL || http://localhost:8080):
 - getSchemes(category?) → Scheme[] — { id, title, description, details, eligibility_criteria, benefit_amount: string|null, category, status: 'Active'|'Closing Soon'|'Closed', created_at } (L8-18). The category param + 'All' sentinel (L110) implies a filter-chip row on the Schemes tab, and status implies status chips.
 - applyForScheme(schemeId) (L122), getApplications() → SchemeApplication[] with status: 'Applied'|'Under Verification'|'Approved'|'Rejected' (L20-32) — a 4-state progress/stepper for the Progress tab.
 - getSupportTickets() / createSupportTicket() → SupportTicket with priority: 'Low'|'Medium'|'High', status: 'Open'|'In Progress'|'Resolved'|'Closed' (L34-42).

@@ -16,7 +16,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppRadius } from "../../constants/colors";
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:5001";
+const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:8080";
 
 const RIPPLE = { color: "rgba(15,23,42,0.10)" };
 

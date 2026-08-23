@@ -86,7 +86,7 @@ export async function loginEnumerator({
 export async function loginWithRole(role: Role, data: LoginData) {
   if (role === 'citizen') {
     const d = data as CitizenLoginData;
-    const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001';
+    const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080';
 
     const response = await fetch(`${apiUrl}/api/auth/citizen/login`, {
       method: 'POST',
@@ -178,7 +178,7 @@ export type RegisterRole = 'citizen' | 'admin';
 export async function registerWithRole(role: RegisterRole, data: RegisterData) {
   if (role === 'citizen') {
     const d = data as CitizenRegisterData;
-    const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001';
+    const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080';
 
     const response = await fetch(`${apiUrl}/api/auth/citizen/signup`, {
       method: 'POST',
@@ -252,7 +252,7 @@ export async function getCitizenHouseholdStatus(): Promise<HouseholdStatus> {
   }
 
   const apiUrl =
-    process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001';
+    process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080';
 
   const response = await fetch(
     `${apiUrl}/api/auth/citizen/household-status`,
