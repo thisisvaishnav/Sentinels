@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { registerWithRole } from "@/src/features/auth/authService";
+import { AppColors, AppRadius } from "../../constants/colors";
 
 const STATES = [
   "Uttar Pradesh",
@@ -73,7 +74,7 @@ export default function Register() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F5F8FA" />
+      <StatusBar barStyle="dark-content" backgroundColor={AppColors.bgMain} />
 
       <KeyboardAvoidingView
         style={styles.keyboard}
@@ -89,14 +90,14 @@ export default function Register() {
               style={styles.backButton}
               onPress={() => router.back()}
             >
-              <Ionicons name="arrow-back" size={22} color="#172A3A" />
+              <Ionicons name="arrow-back" size={22} color={AppColors.primary} />
               <Text style={styles.backText}>Back</Text>
             </TouchableOpacity>
 
             {/* Header */}
             <View style={styles.header}>
               <View style={styles.logo}>
-                <Ionicons name="person-outline" size={34} color="#9DB0C5" />
+                <Ionicons name="person-outline" size={34} color={AppColors.textMuted} />
               </View>
 
               <Text style={styles.brand}>Sentinels</Text>
@@ -115,7 +116,7 @@ export default function Register() {
               value={fullName}
               onChangeText={setFullName}
               icon={
-                <Ionicons name="person-outline" size={22} color="#777F89" />
+                <Ionicons name="person-outline" size={22} color={AppColors.textMuted} />
               }
             />
 
@@ -130,7 +131,7 @@ export default function Register() {
                 <Ionicons
                   name="phone-portrait-outline"
                   size={22}
-                  color="#777F89"
+                  color={AppColors.textMuted}
                 />
               }
             />
@@ -142,12 +143,12 @@ export default function Register() {
                 <Ionicons
                   name="lock-closed-outline"
                   size={22}
-                  color="#777F89"
+                  color={AppColors.textMuted}
                 />
                 <TextInput
                   style={styles.input}
                   placeholder="Create a secure password"
-                  placeholderTextColor="#B9BEC6"
+                  placeholderTextColor={AppColors.textMuted}
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={!showPassword}
@@ -159,7 +160,7 @@ export default function Register() {
                   <Ionicons
                     name={showPassword ? "eye-outline" : "eye-off-outline"}
                     size={23}
-                    color="#777F89"
+                    color={AppColors.textMuted}
                   />
                 </TouchableOpacity>
               </View>
@@ -184,7 +185,7 @@ export default function Register() {
                 <Ionicons
                   name={showStates ? "chevron-up" : "chevron-down"}
                   size={21}
-                  color="#69717B"
+                  color={AppColors.textMuted}
                 />
               </TouchableOpacity>
               {showStates && (
@@ -213,7 +214,7 @@ export default function Register() {
               onChangeText={setPinCode}
               keyboardType="number-pad"
               icon={
-                <Ionicons name="location-outline" size={22} color="#777F89" />
+                <Ionicons name="location-outline" size={22} color={AppColors.textMuted} />
               }
             />
 
@@ -230,7 +231,7 @@ export default function Register() {
               <Text style={styles.primaryButtonText}>
                 {isSubmitting ? "Please wait..." : "CREATE ACCOUNT"}
               </Text>
-              <Ionicons name="arrow-forward" size={24} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={24} color={AppColors.textWhite} />
             </TouchableOpacity>
 
             {/* Login */}
@@ -271,7 +272,7 @@ function InputField({
         <TextInput
           style={styles.input}
           placeholder={placeholder}
-          placeholderTextColor="#B9BEC6"
+          placeholderTextColor={AppColors.textMuted}
           value={value}
           onChangeText={onChangeText}
           keyboardType={keyboardType}
@@ -287,7 +288,7 @@ function InputField({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#F5F8FA",
+    backgroundColor: AppColors.bgMain,
   },
 
   keyboard: {
@@ -303,10 +304,10 @@ const styles = StyleSheet.create({
     width: "92%",
     maxWidth: 540,
     alignSelf: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: AppColors.bgCard,
     borderWidth: 1,
-    borderColor: "#CBD1D8",
-    borderRadius: 12,
+    borderColor: AppColors.borderInput,
+    borderRadius: AppRadius.lg,
     paddingHorizontal: 28,
     paddingVertical: 28,
   },
@@ -320,7 +321,7 @@ const styles = StyleSheet.create({
 
   backText: {
     fontSize: 16,
-    color: "#172A3A",
+    color: AppColors.primary,
   },
 
   header: {
@@ -331,8 +332,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 72,
     height: 72,
-    borderRadius: 18,
-    backgroundColor: "#172A3A",
+    borderRadius: AppRadius.xl,
+    backgroundColor: AppColors.primary,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 14,
@@ -341,21 +342,21 @@ const styles = StyleSheet.create({
   brand: {
     fontSize: 25,
     fontWeight: "700",
-    color: "#172A3A",
+    color: AppColors.primary,
     marginBottom: 16,
   },
 
   title: {
     fontSize: 36,
     fontWeight: "700",
-    color: "#171B20",
+    color: AppColors.textPrimary,
     alignSelf: "flex-start",
   },
 
   subtitle: {
     fontSize: 18,
     lineHeight: 27,
-    color: "#4C5259",
+    color: AppColors.textSecondary,
     marginTop: 5,
     alignSelf: "flex-start",
   },
@@ -367,7 +368,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 15,
     letterSpacing: 1.5,
-    color: "#444A51",
+    color: AppColors.textSecondary,
     fontWeight: "600",
     marginBottom: 8,
   },
@@ -375,8 +376,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     minHeight: 56,
     borderWidth: 1.5,
-    borderColor: "#C4CAD2",
-    backgroundColor: "#F5F7F9",
+    borderColor: AppColors.borderInput,
+    backgroundColor: AppColors.bgInput,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 14,
@@ -385,25 +386,25 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 18,
-    color: "#20252A",
+    color: AppColors.textPrimary,
     marginLeft: 10,
   },
 
   dropdownValue: {
     flex: 1,
     fontSize: 18,
-    color: "#20252A",
+    color: AppColors.textPrimary,
   },
 
   placeholder: {
-    color: "#B9BEC6",
+    color: AppColors.textMuted,
     fontWeight: "500",
   },
 
   dropdown: {
     borderWidth: 1,
-    borderColor: "#C4CAD2",
-    backgroundColor: "#FFFFFF",
+    borderColor: AppColors.borderInput,
+    backgroundColor: AppColors.bgCard,
     marginTop: -12,
     marginBottom: 20,
   },
@@ -412,17 +413,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: "#E3E6E9",
+    borderBottomColor: AppColors.border,
   },
 
   dropdownText: {
     fontSize: 16,
-    color: "#20252A",
+    color: AppColors.textPrimary,
   },
 
   primaryButton: {
     height: 58,
-    backgroundColor: "#172A3A",
+    backgroundColor: AppColors.primary,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -431,7 +432,7 @@ const styles = StyleSheet.create({
   },
 
   primaryButtonText: {
-    color: "#FFFFFF",
+    color: AppColors.textWhite,
     fontSize: 18,
     fontWeight: "600",
   },
@@ -444,12 +445,12 @@ const styles = StyleSheet.create({
 
   loginText: {
     fontSize: 16,
-    color: "#555B62",
+    color: AppColors.textSecondary,
   },
 
   loginLink: {
     fontSize: 16,
-    color: "#0069A6",
+    color: AppColors.blue,
     fontWeight: "600",
   },
 });

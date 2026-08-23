@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { AppColors, AppRadius } from "../../constants/colors";
 
 export type Role = "citizen" | "enumerator" | "admin";
 
@@ -24,13 +25,13 @@ interface RoleCardProps {
 const RoleCard = ({ role, title, description, onPress }: RoleCardProps) => {
   const getIcon = () => {
     if (role === "citizen") {
-      return <Ionicons name="person" size={36} color="#FFFFFF" />;
+      return <Ionicons name="person" size={36} color={AppColors.textWhite} />;
     }
     return (
       <MaterialCommunityIcons
         name="file-document-edit"
         size={36}
-        color="#FFFFFF"
+        color={AppColors.textWhite}
       />
     );
   };
@@ -48,7 +49,7 @@ const RoleCard = ({ role, title, description, onPress }: RoleCardProps) => {
         <Text style={styles.roleDescription}>{description}</Text>
       </View>
 
-      <Ionicons name="chevron-forward" size={22} color="#9DB0C5" />
+      <Ionicons name="chevron-forward" size={22} color={AppColors.textMuted} />
     </TouchableOpacity>
   );
 };
@@ -76,7 +77,7 @@ const CompactRoleCard = ({
         <MaterialCommunityIcons
           name="shield-account"
           size={22}
-          color="#6B7A8D"
+          color={AppColors.textMuted}
         />
       </View>
 
@@ -108,7 +109,7 @@ export default function RoleSelectionScreen({
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F5F8FA" />
+      <StatusBar barStyle="dark-content" backgroundColor={AppColors.bgMain} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -177,7 +178,7 @@ export default function RoleSelectionScreen({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#F5F8FA",
+    backgroundColor: AppColors.bgMain,
   },
 
   scrollContent: {
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
     fontSize: 38,
     lineHeight: 44,
     fontWeight: "800",
-    color: "#17293D",
+    color: AppColors.textPrimary,
     textAlign: "center",
     letterSpacing: -1.2,
   },
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 28,
     fontWeight: "500",
-    color: "#6B7A8D",
+    color: AppColors.textMuted,
     textAlign: "center",
   },
 
@@ -222,15 +223,15 @@ const styles = StyleSheet.create({
 
   roleCard: {
     minHeight: 110,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: AppColors.bgCard,
     borderWidth: 2,
-    borderColor: "#172A3A",
-    borderRadius: 16,
+    borderColor: AppColors.primary,
+    borderRadius: AppRadius.xl,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 18,
-    shadowColor: "#172A3A",
+    shadowColor: AppColors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.12,
     shadowRadius: 8,
@@ -240,8 +241,8 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 72,
     height: 72,
-    borderRadius: 18,
-    backgroundColor: "#172A3A",
+    borderRadius: AppRadius.xl,
+    backgroundColor: AppColors.primary,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 18,
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 30,
     fontWeight: "700",
-    color: "#17293D",
+    color: AppColors.textPrimary,
     marginBottom: 6,
   },
 
@@ -263,7 +264,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
     fontWeight: "400",
-    color: "#4B5056",
+    color: AppColors.textSecondary,
   },
 
   /* ── Divider ── */
@@ -278,24 +279,24 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: "#D0D5DC",
+    backgroundColor: AppColors.border,
   },
 
   dividerText: {
     marginHorizontal: 14,
     fontSize: 14,
     fontWeight: "500",
-    color: "#9BA1A6",
+    color: AppColors.textMuted,
     textTransform: "lowercase",
   },
 
   /* ── Compact admin card ── */
 
   compactCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: AppColors.bgCard,
     borderWidth: 1,
-    borderColor: "#E0E3E8",
-    borderRadius: 14,
+    borderColor: AppColors.border,
+    borderRadius: AppRadius.lg,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
@@ -306,8 +307,8 @@ const styles = StyleSheet.create({
   compactIconContainer: {
     width: 42,
     height: 42,
-    borderRadius: 12,
-    backgroundColor: "#EEF1F4",
+    borderRadius: AppRadius.lg,
+    backgroundColor: AppColors.bgSubtle,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 14,
@@ -321,7 +322,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 24,
     fontWeight: "600",
-    color: "#4B5056",
+    color: AppColors.textSecondary,
     marginBottom: 2,
   },
 
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 18,
     fontWeight: "400",
-    color: "#9BA1A6",
+    color: AppColors.textMuted,
   },
 
   /* ── Help ── */
@@ -343,6 +344,6 @@ const styles = StyleSheet.create({
   helpText: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#172A3A",
+    color: AppColors.primary,
   },
 });
