@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ENUMERATOR_THEME } from '../../theme';
 
@@ -57,7 +57,11 @@ export function PriorityMetricsSection({
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>Field Priority Overview</Text>
 
-      <View style={styles.grid}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
         {tiles.map((t) => (
           <TouchableOpacity
             key={t.id}
@@ -71,10 +75,10 @@ export function PriorityMetricsSection({
               </View>
               <Text style={[styles.tileCount, { color: t.color }]}>{t.count}</Text>
             </View>
-            <Text style={styles.tileLabel}>{t.label}</Text>
+            <Text style={styles.tileLabel} numberOfLines={1}>{t.label}</Text>
           </TouchableOpacity>
         ))}
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -88,13 +92,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: ENUMERATOR_THEME.colors.textPrimary,
   },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  scrollContent: {
     gap: 10,
+    paddingRight: 16,
   },
   tile: {
-    width: '48%',
+    width: 145,
     backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: ENUMERATOR_THEME.borderRadius.xl,
     padding: 12,
