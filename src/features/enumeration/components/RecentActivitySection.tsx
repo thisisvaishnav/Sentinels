@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { EnumeratorActivity } from '../types';
+import { ENUMERATOR_THEME } from '../theme';
 
 interface RecentActivitySectionProps {
   activities: EnumeratorActivity[];
@@ -11,15 +12,15 @@ export const RecentActivitySection: React.FC<RecentActivitySectionProps> = ({ ac
   const getIconConfig = (type: EnumeratorActivity['type']) => {
     switch (type) {
       case 'registered':
-        return { name: 'home-plus-outline' as const, color: '#10B981', bg: '#064E3B' };
+        return { name: 'home-plus-outline' as const, color: ENUMERATOR_THEME.colors.success, bg: ENUMERATOR_THEME.colors.successBg };
       case 'verified':
-        return { name: 'checkbox-marked-circle-outline' as const, color: '#38BDF8', bg: '#0C4A6E' };
+        return { name: 'checkbox-marked-circle-outline' as const, color: ENUMERATOR_THEME.colors.accent, bg: ENUMERATOR_THEME.colors.accentSubtle };
       case 'missing':
-        return { name: 'alert-decagram-outline' as const, color: '#F59E0B', bg: '#451A03' };
+        return { name: 'alert-decagram-outline' as const, color: ENUMERATOR_THEME.colors.warning, bg: ENUMERATOR_THEME.colors.warningBg };
       case 'sync':
-        return { name: 'cloud-check-outline' as const, color: '#EC4899', bg: '#4C0519' };
+        return { name: 'cloud-check-outline' as const, color: ENUMERATOR_THEME.colors.accentDark, bg: ENUMERATOR_THEME.colors.accentSubtle };
       default:
-        return { name: 'text-box-outline' as const, color: '#94A3B8', bg: '#1E293B' };
+        return { name: 'text-box-outline' as const, color: ENUMERATOR_THEME.colors.textMuted, bg: ENUMERATOR_THEME.colors.subtleBackground };
     }
   };
 
@@ -56,13 +57,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   list: {
-    backgroundColor: '#1E293B',
-    borderRadius: 16,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
+    borderRadius: ENUMERATOR_THEME.borderRadius.xl,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: ENUMERATOR_THEME.colors.border,
     overflow: 'hidden',
   },
   item: {
@@ -70,13 +71,13 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     padding: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#334155',
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
     gap: 12,
   },
   iconBox: {
     width: 36,
     height: 36,
-    borderRadius: 10,
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
@@ -88,16 +89,16 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   itemDetail: {
     fontSize: 13,
-    color: '#CBD5E1',
+    color: ENUMERATOR_THEME.colors.textSecondary,
     lineHeight: 18,
   },
   timestamp: {
     fontSize: 11,
-    color: '#94A3B8',
+    color: ENUMERATOR_THEME.colors.textMuted,
     marginTop: 2,
   },
 });

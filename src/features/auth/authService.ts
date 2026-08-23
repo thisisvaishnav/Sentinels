@@ -62,6 +62,17 @@ export async function loginEnumerator({
   enumeratorId,
   securityKey,
 }: EnumeratorLoginData): Promise<{ profile: EnumeratorProfile | null }> {
+  // DEVELOPMENT ONLY: Temporary dev authentication for testing while backend and database authentication are not implemented.
+  if (enumeratorId.trim() === 'ENUM001' && securityKey.trim() === '123456') {
+    return {
+      profile: {
+        user_id: 'dev-enumerator-001',
+        enumerator_id: 'ENUM001',
+        name: 'Test Enumerator',
+      },
+    };
+  }
+
   // Step 1 — authenticate and receive JWT
   const { data: authData, error: authError } =
     await supabase.auth.signInWithPassword({
@@ -138,6 +149,15 @@ export async function loginWithRole(role: Role, data: LoginData) {
     }
     case 'enumerator': {
       const d = data as EnumeratorLoginData;
+      // DEVELOPMENT ONLY: Temporary dev authentication for testing while backend and database authentication are not implemented.
+      if (d.enumeratorId.trim() === 'ENUM001' && d.securityKey.trim() === '123456') {
+        return {
+          user: {
+            id: 'dev-enumerator-001',
+            email: 'ENUM001@enumerator.sentinels.app',
+          },
+        };
+      }
       email = `${d.enumeratorId.trim()}@enumerator.sentinels.app`;
       password = d.securityKey;
       break;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SyncStatusInfo } from '../types';
+import { ENUMERATOR_THEME } from '../theme';
 
 interface SyncStatusSectionProps {
   syncInfo: SyncStatusInfo;
@@ -31,7 +32,7 @@ export const SyncStatusSection: React.FC<SyncStatusSectionProps> = ({ syncInfo }
     <View style={styles.container}>
       <View style={styles.topRow}>
         <View style={styles.iconBox}>
-          <MaterialCommunityIcons name="cloud-sync-outline" size={24} color="#EC4899" />
+          <MaterialCommunityIcons name="cloud-sync-outline" size={24} color={ENUMERATOR_THEME.colors.accent} />
         </View>
 
         <View style={styles.textWrap}>
@@ -52,9 +53,9 @@ export const SyncStatusSection: React.FC<SyncStatusSectionProps> = ({ syncInfo }
         activeOpacity={0.8}
       >
         {isSyncing ? (
-          <ActivityIndicator color="#FFFFFF" size="small" />
+          <ActivityIndicator color={ENUMERATOR_THEME.colors.textWhite} size="small" />
         ) : (
-          <MaterialCommunityIcons name="cloud-upload-outline" size={18} color="#FFFFFF" />
+          <MaterialCommunityIcons name="cloud-upload-outline" size={18} color={ENUMERATOR_THEME.colors.textWhite} />
         )}
         <Text style={styles.syncBtnText}>
           {isSyncing ? 'Syncing...' : 'Sync Now'}
@@ -66,11 +67,11 @@ export const SyncStatusSection: React.FC<SyncStatusSectionProps> = ({ syncInfo }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1E293B',
-    borderRadius: 16,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
+    borderRadius: ENUMERATOR_THEME.borderRadius.xl,
     padding: 18,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: ENUMERATOR_THEME.colors.border,
     gap: 14,
   },
   topRow: {
@@ -81,8 +82,8 @@ const styles = StyleSheet.create({
   iconBox: {
     width: 44,
     height: 44,
-    borderRadius: 12,
-    backgroundColor: '#311F36',
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -93,31 +94,31 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   subtitle: {
     fontSize: 13,
-    color: '#CBD5E1',
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   lastSyncText: {
     fontSize: 11,
-    color: '#94A3B8',
+    color: ENUMERATOR_THEME.colors.textMuted,
     marginTop: 2,
   },
   syncBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#DB2777',
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
     gap: 8,
   },
   syncBtnDisabled: {
     opacity: 0.65,
   },
   syncBtnText: {
-    color: '#FFFFFF',
+    color: ENUMERATOR_THEME.colors.textWhite,
     fontSize: 14,
     fontWeight: '700',
   },

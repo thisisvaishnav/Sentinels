@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TodayProgress } from '../types';
+import { ENUMERATOR_THEME } from '../theme';
 
 interface ProgressSectionProps {
   progress: TodayProgress;
@@ -30,14 +31,14 @@ export const ProgressSection: React.FC<ProgressSectionProps> = ({ progress }) =>
 
         <View style={styles.metricItem}>
           <Text style={styles.metricLabel}>Completed</Text>
-          <Text style={[styles.metricValue, { color: '#34D399' }]}>{progress.completed}</Text>
+          <Text style={[styles.metricValue, { color: ENUMERATOR_THEME.colors.success }]}>{progress.completed}</Text>
         </View>
 
         <View style={styles.divider} />
 
         <View style={styles.metricItem}>
           <Text style={styles.metricLabel}>Remaining</Text>
-          <Text style={[styles.metricValue, { color: '#F87171' }]}>{progress.remaining}</Text>
+          <Text style={[styles.metricValue, { color: ENUMERATOR_THEME.colors.danger }]}>{progress.remaining}</Text>
         </View>
       </View>
     </View>
@@ -46,12 +47,12 @@ export const ProgressSection: React.FC<ProgressSectionProps> = ({ progress }) =>
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1E293B',
-    borderRadius: 16,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
+    borderRadius: ENUMERATOR_THEME.borderRadius.xl,
     padding: 18,
     gap: 14,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: ENUMERATOR_THEME.colors.border,
   },
   headerRow: {
     flexDirection: 'row',
@@ -61,22 +62,22 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   percentBadge: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#38BDF8',
+    color: ENUMERATOR_THEME.colors.accent,
   },
   track: {
     height: 10,
-    backgroundColor: '#0F172A',
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderRadius: 5,
     overflow: 'hidden',
   },
   fill: {
     height: '100%',
-    backgroundColor: '#38BDF8',
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
     borderRadius: 5,
   },
   metricsRow: {
@@ -91,18 +92,18 @@ const styles = StyleSheet.create({
   },
   metricLabel: {
     fontSize: 11,
-    color: '#94A3B8',
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: '500',
     textTransform: 'uppercase',
   },
   metricValue: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#F8FAFC',
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   divider: {
     width: 1,
     height: 28,
-    backgroundColor: '#334155',
+    backgroundColor: ENUMERATOR_THEME.colors.border,
   },
 });

@@ -1,15 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { EnumeratorProfile } from '../types';
 import { signOut } from '@/src/features/auth/authService';
+import { ENUMERATOR_THEME } from '../theme';
 
 interface EnumeratorHeaderProps {
   profile: EnumeratorProfile;
+  onOpenDrawer?: () => void;
 }
 
-export const EnumeratorHeader: React.FC<EnumeratorHeaderProps> = ({ profile }) => {
+export const EnumeratorHeader: React.FC<EnumeratorHeaderProps> = ({ profile, onOpenDrawer }) => {
   const router = useRouter();
 
   const handleSignOut = async () => {
@@ -22,17 +24,21 @@ export const EnumeratorHeader: React.FC<EnumeratorHeaderProps> = ({ profile }) =
   };
 
   const handleNotificationPress = () => {
-    Alert.alert(
-      'Notifications',
-      `You have ${profile.unreadNotificationsCount} new field alerts.`
-    );
+    router.push('/(enumerator)/notifications');
   };
 
   return (
     <View style={styles.header}>
       <View style={styles.headerLeft}>
+        {/* Hamburger Menu Button */}
+        {onOpenDrawer && (
+          <TouchableOpacity style={styles.menuBtn} onPress={onOpenDrawer} activeOpacity={0.7}>
+            <Ionicons name="menu-outline" size={24} color={ENUMERATOR_THEME.colors.textPrimary} />
+          </TouchableOpacity>
+        )}
+
         <View style={styles.brandIconBox}>
-          <MaterialCommunityIcons name="satellite-variant" size={22} color="#38BDF8" />
+          <MaterialCommunityIcons name="satellite-variant" size={22} color={ENUMERATOR_THEME.colors.accent} />
         </View>
         <View>
           <Text style={styles.brandName}>Lokvision</Text>
@@ -51,7 +57,7 @@ export const EnumeratorHeader: React.FC<EnumeratorHeaderProps> = ({ profile }) =
 
         {/* Notification Bell */}
         <TouchableOpacity style={styles.iconBtn} onPress={handleNotificationPress} activeOpacity={0.7}>
-          <Ionicons name="notifications-outline" size={22} color="#CBD5E1" />
+          <Ionicons name="notifications-outline" size={22} color={ENUMERATOR_THEME.colors.textMuted} />
           {profile.unreadNotificationsCount > 0 && (
             <View style={styles.badge}>
               <Text style={styles.badgeText}>{profile.unreadNotificationsCount}</Text>
@@ -61,7 +67,7 @@ export const EnumeratorHeader: React.FC<EnumeratorHeaderProps> = ({ profile }) =
 
         {/* Logout */}
         <TouchableOpacity style={styles.iconBtn} onPress={handleSignOut} activeOpacity={0.7}>
-          <MaterialCommunityIcons name="logout" size={20} color="#94A3B8" />
+          <MaterialCommunityIcons name="logout" size={20} color={ENUMERATOR_THEME.colors.textMuted} />
         </TouchableOpacity>
       </View>
     </View>
@@ -71,56 +77,64 @@ export const EnumeratorHeader: React.FC<EnumeratorHeaderProps> = ({ profile }) =
 const styles = StyleSheet.create({
   header: {
     height: 66,
-    backgroundColor: '#0F172A',
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderBottomWidth: 1,
-    borderBottomColor: '#1E293B',
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
+    paddingHorizontal: 14,
   },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
   },
+  menuBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   brandIconBox: {
     width: 36,
     height: 36,
-    borderRadius: 10,
-    backgroundColor: '#1E293B',
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
     alignItems: 'center',
     justifyContent: 'center',
   },
   brandName: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#F8FAFC',
+    color: ENUMERATOR_THEME.colors.textPrimary,
     letterSpacing: 0.2,
   },
   roleSub: {
     fontSize: 11,
-    color: '#94A3B8',
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: '500',
   },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
   },
   statusPill: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 12,
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
     gap: 5,
   },
   onlinePill: {
-    backgroundColor: '#064E3B',
+    backgroundColor: ENUMERATOR_THEME.colors.successBg,
   },
   offlinePill: {
-    backgroundColor: '#451A03',
+    backgroundColor: ENUMERATOR_THEME.colors.warningBg,
   },
   statusDot: {
     width: 6,
@@ -128,26 +142,26 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   onlineDot: {
-    backgroundColor: '#34D399',
+    backgroundColor: ENUMERATOR_THEME.colors.success,
   },
   offlineDot: {
-    backgroundColor: '#F59E0B',
+    backgroundColor: ENUMERATOR_THEME.colors.warning,
   },
   statusText: {
     fontSize: 11,
     fontWeight: '700',
   },
   onlineText: {
-    color: '#A7F3D0',
+    color: ENUMERATOR_THEME.colors.successText,
   },
   offlineText: {
-    color: '#FDE68A',
+    color: ENUMERATOR_THEME.colors.warningText,
   },
   iconBtn: {
     width: 36,
     height: 36,
-    borderRadius: 10,
-    backgroundColor: '#1E293B',
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
@@ -156,7 +170,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 4,
     right: 4,
-    backgroundColor: '#EF4444',
+    backgroundColor: ENUMERATOR_THEME.colors.danger,
     borderRadius: 8,
     width: 14,
     height: 14,
@@ -164,7 +178,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   badgeText: {
-    color: '#FFFFFF',
+    color: ENUMERATOR_THEME.colors.textWhite,
     fontSize: 9,
     fontWeight: '800',
   },

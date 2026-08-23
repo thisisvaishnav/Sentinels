@@ -148,9 +148,7 @@ export default function Login() {
                 )}
               </View>
 
-              <Text style={styles.brand}>
-                {isEnumerator ? "FieldLink GIS" : "Sentinels"}
-              </Text>
+              <Text style={styles.brand}>Lokvision</Text>
 
               <Text style={styles.subtitle}>
                 {getSubtitle()}

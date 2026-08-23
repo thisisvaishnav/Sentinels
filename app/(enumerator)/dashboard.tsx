@@ -1,5 +1,6 @@
-import React from 'react';
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   mockAssignedZone,
   mockEnumeratorProfile,
@@ -11,6 +12,7 @@ import {
 } from '@/src/features/enumeration/mockEnumeratorData';
 
 import { AssignedZoneSection } from '@/src/features/enumeration/components/AssignedZoneSection';
+import { EnumeratorDrawer } from '@/src/features/enumeration/components/EnumeratorDrawer';
 import { EnumeratorHeader } from '@/src/features/enumeration/components/EnumeratorHeader';
 import { PriorityTasksSection } from '@/src/features/enumeration/components/PriorityTasksSection';
 import { ProgressSection } from '@/src/features/enumeration/components/ProgressSection';
@@ -18,14 +20,27 @@ import { QuickActionsSection } from '@/src/features/enumeration/components/Quick
 import { RecentActivitySection } from '@/src/features/enumeration/components/RecentActivitySection';
 import { SyncStatusSection } from '@/src/features/enumeration/components/SyncStatusSection';
 import { WelcomeSection } from '@/src/features/enumeration/components/WelcomeSection';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 export default function EnumeratorDashboard() {
+  const [drawerVisible, setDrawerVisible] = useState(false);
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#0F172A" />
+      <StatusBar barStyle="dark-content" backgroundColor={ENUMERATOR_THEME.colors.background} />
 
-      {/* 1. Header */}
-      <EnumeratorHeader profile={mockEnumeratorProfile} />
+      {/* 1. Header with Hamburger Menu Button */}
+      <EnumeratorHeader
+        profile={mockEnumeratorProfile}
+        onOpenDrawer={() => setDrawerVisible(true)}
+      />
+
+      {/* Navigation Drawer Modal */}
+      <EnumeratorDrawer
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        profile={mockEnumeratorProfile}
+      />
 
       <ScrollView
         contentContainerStyle={styles.body}
@@ -61,7 +76,7 @@ export default function EnumeratorDashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: ENUMERATOR_THEME.colors.background,
   },
   body: {
     padding: 16,

@@ -117,7 +117,7 @@ export default function RoleSelectionScreen({
         <View style={styles.container}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.title}>Welcome to Sentinels</Text>
+            <Text style={styles.title}>Welcome to Lokvision</Text>
             <Text style={styles.subtitle}>Select your role to continue</Text>
           </View>
 
