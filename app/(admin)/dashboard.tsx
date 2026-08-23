@@ -3,11 +3,10 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { signOut } from '@/src/features/auth/authService';
@@ -99,8 +98,6 @@ export default function AdminDashboard() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.surface} />
-
       {/* ── Fixed Header ──────────────────────────────────────── */}
       <DashboardHeader onLogout={handleSignOut} />
 
@@ -163,6 +160,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: COLORS.surface,
+    marginTop: -30,
   },
   scrollView: {
     flex: 1,

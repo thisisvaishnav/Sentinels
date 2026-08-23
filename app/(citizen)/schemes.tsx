@@ -1,12 +1,11 @@
 import React from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function CitizenSchemesScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Text style={styles.brand}>Schemes</Text>
@@ -39,6 +38,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 20,
     gap: 14,
+    marginTop: -30,
   },
   header: {
     paddingHorizontal: 0,
