@@ -39,6 +39,14 @@ export const COLORS = {
   border: '#E5E7EB',
   divider: '#F0F0F0',
 
+  // Extended palette
+  primaryDark: '#050E3A',
+  lightBlue: '#E3F2FD',
+  successLight: '#C8E6C9',
+  inactive: '#9CA3AF',
+  inactiveLight: '#F3F4F6',
+  mapMarker: '#07145C',
+
   // Misc
   dot: '#FF3B30',
   tabBarActive: '#07145C',
