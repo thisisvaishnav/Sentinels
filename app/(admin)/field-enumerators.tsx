@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     marginTop: 14,
     paddingVertical: 10,
     paddingHorizontal: 28,
-    borderRadius: 10,
+    borderRadius: 0,
     backgroundColor: COLORS.accentSoft,
   },
   loadMoreText: {
