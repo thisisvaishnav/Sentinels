@@ -7,21 +7,18 @@ import {
   Alert,
   Pressable,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
-import DrishtiHeader from '@/src/components/admin/DrishtiHeader';
+import AdminLayout from '@/src/components/admin/AdminLayout';
 import PhotoUpload from '@/src/components/admin/PhotoUpload';
 import FormSection from '@/src/components/admin/FormSection';
 import FormInput from '@/src/components/admin/FormInput';
 import SelectField from '@/src/components/admin/SelectField';
-import BottomNavigation from '@/src/components/admin/BottomNavigation';
 import { COLORS } from '@/constants/adminTheme';
 
 export default function AddNewStaffScreen() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('Staff');
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -37,18 +34,6 @@ export default function AddNewStaffScreen() {
     router.back();
   }, [router]);
 
-  const handleTabPress = useCallback(
-    (tab: string) => {
-      setActiveTab(tab);
-      if (tab === 'Home') {
-        router.push('/(admin)/dashboard');
-      } else if (tab === 'Staff') {
-        router.push('/(admin)/field-enumerators');
-      }
-    },
-    [router],
-  );
-
   const handlePhotoUpload = useCallback(() => {
     Alert.alert('Upload Photo', 'Photo upload coming soon.');
   }, []);
@@ -62,13 +47,7 @@ export default function AddNewStaffScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <DrishtiHeader
-        onNotificationsPress={() =>
-          Alert.alert('Notifications', 'No new notifications.')
-        }
-      />
-
+    <AdminLayout>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.body}
@@ -150,21 +129,12 @@ export default function AddNewStaffScreen() {
             error={errors.zone}
           />
         </FormSection>
-
-        <View style={{ height: 100 }} />
       </ScrollView>
-
-      <BottomNavigation activeTab={activeTab} onTabPress={handleTabPress} />
-    </SafeAreaView>
+    </AdminLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.surface,
-    marginTop: -30,
-  },
   scrollView: {
     flex: 1,
     backgroundColor: COLORS.background,
@@ -172,7 +142,7 @@ const styles = StyleSheet.create({
   body: {
     paddingHorizontal: 18,
     paddingTop: 16,
-    paddingBottom: 100,
+    paddingBottom: 40,
   },
   backRow: {
     flexDirection: 'row',
