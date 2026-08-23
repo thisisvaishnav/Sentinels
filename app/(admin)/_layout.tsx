@@ -9,7 +9,9 @@ export default function AdminLayout() {
         <Stack.Screen name="dashboard" />
         <Stack.Screen name="field-enumerators" />
         <Stack.Screen name="enumerator-command-center" />
-        <Stack.Screen name="add-new-staff" />
+        <Stack.Screen name="add-new-enumerator" />
+        <Stack.Screen name="survey-management" />
+        <Stack.Screen name="citizen-reports" />
       </Stack>
     </AdminDrawerProvider>
   );

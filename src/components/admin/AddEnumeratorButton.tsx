@@ -3,18 +3,18 @@ import { Text, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '@/constants/adminTheme';
 
-interface AddStaffButtonProps {
+interface AddEnumeratorButtonProps {
   onPress?: () => void;
 }
 
-export default function AddStaffButton({ onPress }: AddStaffButtonProps) {
+export default function AddEnumeratorButton({ onPress }: AddEnumeratorButtonProps) {
   return (
     <Pressable
       style={({ pressed }) => [styles.btn, pressed && { opacity: 0.8 }]}
       onPress={onPress}
     >
       <Ionicons name="person-add-outline" size={15} color={COLORS.textOnPrimary} />
-      <Text style={styles.label}>Add Staff</Text>
+      <Text style={styles.label}>Add Enumerator</Text>
     </Pressable>
   );
 }

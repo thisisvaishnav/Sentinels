@@ -47,6 +47,24 @@ export const COLORS = {
   inactiveLight: '#F3F4F6',
   mapMarker: '#07145C',
 
+  // Info
+  info: '#1976D2',
+  infoSoft: '#E3F2FD',
+  infoLight: '#BBDEFB',
+
+  // Warning light
+  warningLight: '#FFE0B2',
+
+  // Report-specific
+  reportOrange: '#FF6D00',
+  reportOrangeSoft: '#FFF3E0',
+  reportBlue: '#1565C0',
+  reportBlueSoft: '#E3F2FD',
+  reportGreen: '#2E7D32',
+  reportGreenSoft: '#E8F5E9',
+  reportGray: '#78909C',
+  reportGraySoft: '#ECEFF1',
+
   // Roster / Command Center
   activeBg: '#E8E8FF',
   offDuty: '#555560',

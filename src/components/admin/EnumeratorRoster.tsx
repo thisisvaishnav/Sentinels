@@ -69,7 +69,7 @@ export default function EnumeratorRoster({
         style={({ pressed }) => [styles.viewAllBtn, pressed && { opacity: 0.6 }]}
         onPress={onViewAllPress}
       >
-        <Text style={styles.viewAllText}>View All {totalCount} Staff</Text>
+        <Text style={styles.viewAllText}>View All {totalCount} Enumerators</Text>
       </Pressable>
     </View>
   );
