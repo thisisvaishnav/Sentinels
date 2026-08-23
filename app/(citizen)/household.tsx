@@ -1317,7 +1317,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderColor: "#D0D5DB",
-    borderRadius: 4,
+    borderRadius: 0,
     padding: 14,
     marginBottom: 14,
   },
@@ -1447,7 +1447,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    borderRadius: 3,
+    borderRadius: 0,
   },
 
   locationButtonSuccess: {
@@ -1466,7 +1466,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 8,
     backgroundColor: "#FFFFFF",
-    borderRadius: 3,
+    borderRadius: 0,
   },
 
   coordinateText: {
@@ -1490,7 +1490,7 @@ const styles = StyleSheet.create({
   submitButton: {
     height: 48,
     backgroundColor: "#172A3A",
-    borderRadius: 3,
+    borderRadius: 0,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -1515,8 +1515,8 @@ const styles = StyleSheet.create({
 
   genderModal: {
     backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 18,
-    borderTopRightRadius: 18,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
     padding: 20,
     paddingBottom: 35,
   },
