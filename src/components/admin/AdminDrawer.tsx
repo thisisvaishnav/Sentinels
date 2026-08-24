@@ -7,7 +7,7 @@ const ADMIN_MENU_ITEMS: DrawerMenuItem[] = [
   { id: 'surveys', label: 'Surveys', route: '/(admin)/survey-management', iconName: 'clipboard-text-outline' },
   { id: 'enumerators', label: 'Enumerators', route: '/(admin)/field-enumerators', iconName: 'account-group-outline' },
   { id: 'citizen-reports', label: 'Citizen Reports', route: '/(admin)/citizen-reports', iconName: 'bullhorn-outline' },
-  { id: 'settings', label: 'Settings', route: '/(admin)/dashboard', iconName: 'cog-outline' },
+  { id: 'settings', label: 'Settings', route: '/(admin)/settings', iconName: 'cog-outline' },
 ];
 
 interface AdminDrawerProps {

@@ -13,6 +13,7 @@ export default function AdminLayout() {
         <Stack.Screen name="survey-management" />
         <Stack.Screen name="citizen-reports" />
         <Stack.Screen name="notifications" />
+        <Stack.Screen name="settings" />
       </Stack>
     </AdminDrawerProvider>
   );
