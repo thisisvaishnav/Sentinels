@@ -62,7 +62,7 @@ export default function Register() {
         pinCode,
       });
       await AsyncStorage.setItem("hasOnboarded", "true");
-      router.replace("/(citizen)/dashboard");
+      router.replace("/(citizen)/(tabs)/dashboard");
     } catch (error: any) {
       console.error("Register error:", error);
       alert(error?.message ?? "Registration failed. Please try again.");

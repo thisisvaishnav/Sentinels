@@ -630,7 +630,7 @@ export default function HouseholdScreen() {
           {
             text: "Continue",
             onPress: () => {
-              router.replace("/(citizen)/dashboard");
+              router.replace("/(citizen)/(tabs)/dashboard");
             },
           },
         ]
@@ -678,7 +678,7 @@ export default function HouseholdScreen() {
 
           <Pressable
             style={styles.headerButton}
-            onPress={() => router.replace("/(citizen)/dashboard")}
+            onPress={() => router.replace("/(citizen)/(tabs)/dashboard")}
           >
             <Ionicons
               name="home-outline"
