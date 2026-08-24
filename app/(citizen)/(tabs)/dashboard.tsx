@@ -1,7 +1,4 @@
-import { AppColors } from "@/constants/colors";
 import { getCitizenHouseholdStatus, signOut } from "@/src/features/auth/authService";
-import ActivityItem from "@/src/components/citizen/ActivityItem";
-import QuickActionCard from "@/src/components/citizen/QuickActionCard";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
@@ -15,6 +12,7 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useCitizenDrawer } from "@/src/contexts/CitizenDrawerContext";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:5001";
 
@@ -45,8 +43,8 @@ type HouseholdProfile = {
 
 export default function CitizenDashboard() {
   const router = useRouter();
+  const { open: openDrawer } = useCitizenDrawer();
   const [checkingStatus, setCheckingStatus] = useState(true);
-  const [householdStatus, setHouseholdStatus] = useState<"Verified" | "Pending">("Pending");
   const [householdProfile, setHouseholdProfile] = useState<HouseholdProfile | null>(null);
 
   const handleSignOut = async () => {
@@ -70,11 +68,9 @@ export default function CitizenDashboard() {
 
         const status = await getCitizenHouseholdStatus();
         if (!status.completed) {
-          router.replace("/(citizen)/(tabs)/household");
+          router.replace("/(citizen)/household" as any);
           return;
         }
-
-        setHouseholdStatus(status.completed ? "Verified" : "Pending");
 
         if (status.completed) {
           try {
@@ -107,139 +103,202 @@ export default function CitizenDashboard() {
   if (checkingStatus) {
     return (
       <SafeAreaView style={[styles.container, { justifyContent: "center", alignItems: "center" }]}>
-        <ActivityIndicator size="large" color={AppColors.primary} />
+        <ActivityIndicator size="large" color="#0EA5E9" />
       </SafeAreaView>
     );
   }
 
+  const firstName = householdProfile?.head_full_name?.split(" ")[0] ?? "Citizen";
+  const locationLabel = householdProfile
+    ? `${householdProfile.locality} · Ward ${householdProfile.ward}`
+    : "No location set";
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Text style={styles.brand}>Hello, Citizen</Text>
-          <Text style={styles.headerSub}>Welcome to your central civic hub.</Text>
-        </View>
-        <View style={styles.headerRight}>
-          <TouchableOpacity
-            onPress={() => router.push('/(citizen)/notifications')}
-            style={styles.headerIconBtn}
-          >
-            <Ionicons name="notifications-outline" size={20} color={AppColors.textPrimary} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleSignOut} style={styles.signOutBtn}>
-            <Ionicons name="log-out-outline" size={20} color={AppColors.textPrimary} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
       <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
-        <View style={styles.householdPanel}>
-          <View style={styles.householdTopRow}>
-            <View style={styles.householdIconBox}>
-              <Ionicons name="home-outline" size={20} color={AppColors.textWhite} />
+        {/* Top Bar */}
+        <View style={styles.topBar}>
+          <TouchableOpacity style={styles.iconBtn} onPress={openDrawer}>
+            <Ionicons name="menu" size={22} color="#1E293B" />
+          </TouchableOpacity>
+          <View style={styles.topBarCenter}>
+            <View style={styles.appIcon}>
+              <Ionicons name="globe-outline" size={18} color="#0EA5E9" />
             </View>
-            <View style={styles.householdCopy}>
-              <Text style={styles.householdPanelTitle}>My Household</Text>
-              {householdProfile ? (
-                <Text style={styles.householdId}>
-                  {householdProfile.head_full_name} · {householdProfile.total_members} members
-                </Text>
-              ) : (
-                <Text style={styles.householdId}>No profile registered</Text>
-              )}
-            </View>
-            <View style={[styles.badge, householdProfile && styles.badgeVerified]}>
-              <Ionicons
-                name={householdProfile ? "checkmark-circle" : "time-outline"}
-                size={12}
-                color={AppColors.textWhite}
-              />
-              <Text style={styles.badgeText}>{householdStatus}</Text>
+            <View>
+              <Text style={styles.appName}>Drishti</Text>
+              <Text style={styles.appSubtitle}>
+                {householdProfile?.head_full_name ?? "Citizen"} · Zone
+              </Text>
             </View>
           </View>
-
-          {householdProfile && (
-            <View style={styles.householdSummary}>
-              <View style={styles.summaryRow}>
-                <Ionicons name="location-outline" size={14} color={AppColors.textMuted} />
-                <Text style={styles.summaryText}>
-                  {householdProfile.house_no}, {householdProfile.locality}, {householdProfile.ward}
-                </Text>
-              </View>
-              <View style={styles.summaryRow}>
-                <Ionicons name="people-outline" size={14} color={AppColors.textMuted} />
-                <Text style={styles.summaryText}>
-                  {householdProfile.male_members} Male · {householdProfile.female_members} Female · {householdProfile.children_count} Children
-                </Text>
-              </View>
-              <View style={styles.summaryRow}>
-                <Ionicons name="call-outline" size={14} color={AppColors.textMuted} />
-                <Text style={styles.summaryText}>
-                  {householdProfile.head_mobile_number}
-                </Text>
-              </View>
+          <View style={styles.topBarRight}>
+            <View style={styles.onlineBadge}>
+              <View style={styles.onlineDot} />
+              <Text style={styles.onlineText}>Online</Text>
             </View>
-          )}
+            <TouchableOpacity style={styles.iconBtn}>
+              <Ionicons name="notifications-outline" size={20} color="#1E293B" />
+              <View style={styles.notifBadge}>
+                <Text style={styles.notifBadgeText}>3</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleSignOut} style={styles.iconBtn}>
+              <Ionicons name="log-out-outline" size={20} color="#1E293B" />
+            </TouchableOpacity>
+          </View>
+        </View>
 
-          <TouchableOpacity
-            style={styles.householdButton}
-            activeOpacity={0.8}
-            onPress={() => router.push("/(citizen)/(tabs)/household")}
-          >
-            <Text style={styles.householdButtonText}>
-              {householdProfile ? "View Details" : "Register Now"}
-            </Text>
+        {/* Greeting Card */}
+        <View style={styles.greetingCard}>
+          <View style={styles.greetingRow}>
+            <View style={styles.avatarCircle}>
+              <Ionicons name="person" size={28} color="#0EA5E9" />
+            </View>
+            <View style={styles.greetingCopy}>
+              <Text style={styles.greetingLabel}>Good morning,</Text>
+              <Text style={styles.greetingName}>{firstName}</Text>
+            </View>
+          </View>
+          <TouchableOpacity style={styles.locationPill} activeOpacity={0.7}>
+            <Ionicons name="location" size={14} color="#0EA5E9" />
+            <Text style={styles.locationText}>{locationLabel}</Text>
+            <Ionicons name="chevron-forward" size={14} color="#9CA3AF" />
           </TouchableOpacity>
         </View>
 
+        {/* Today's Progress */}
+        <View style={styles.progressCard}>
+          <View style={styles.progressHeader}>
+            <Text style={styles.progressTitle}>Today{"'"}s Progress</Text>
+            <Text style={styles.progressPercent}>36% Covered</Text>
+          </View>
+          <View style={styles.progressBarBg}>
+            <View style={[styles.progressBarFill, { width: "36%" }]} />
+          </View>
+          <View style={styles.progressCols}>
+            <View style={styles.progressCol}>
+              <Text style={styles.progressColLabel}>ASSIGNED</Text>
+              <Text style={styles.progressColValue}>14</Text>
+            </View>
+            <View style={styles.progressCol}>
+              <Text style={[styles.progressColLabel, { color: "#059669" }]}>COMPLETED</Text>
+              <Text style={[styles.progressColValue, { color: "#059669" }]}>5</Text>
+            </View>
+            <View style={styles.progressCol}>
+              <Text style={[styles.progressColLabel, { color: "#DC2626" }]}>REMAINING</Text>
+              <Text style={[styles.progressColValue, { color: "#DC2626" }]}>7</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Priority Tasks */}
+        <View style={styles.sectionRow}>
+          <Text style={styles.sectionTitle}>Priority Tasks</Text>
+          <TouchableOpacity>
+            <Text style={styles.viewAllLink}>View All →</Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.priorityRow}
+        >
+          <View style={styles.priorityCard}>
+            <View style={styles.priorityCardHeader}>
+              <View style={[styles.priorityIcon, { backgroundColor: "#FEE2E2" }]}>
+                <Ionicons name="home" size={18} color="#DC2626" />
+              </View>
+              <Text style={[styles.priorityCount, { color: "#DC2626" }]}>8</Text>
+            </View>
+            <Text style={styles.priorityLabel}>High-Priority House...</Text>
+            <Text style={styles.prioritySub}>urgent surveys</Text>
+          </View>
+          <View style={styles.priorityCard}>
+            <View style={styles.priorityCardHeader}>
+              <View style={[styles.priorityIcon, { backgroundColor: "#FEF3C7" }]}>
+                <Ionicons name="wifi" size={18} color="#D97706" />
+              </View>
+              <Text style={[styles.priorityCount, { color: "#D97706" }]}>3</Text>
+            </View>
+            <Text style={styles.priorityLabel}>Blind-Spot Areas</Text>
+            <Text style={styles.prioritySub}>unmapped clusters</Text>
+          </View>
+          <View style={styles.priorityCard}>
+            <View style={styles.priorityCardHeader}>
+              <View style={[styles.priorityIcon, { backgroundColor: "#DBEAFE" }]}>
+                <Ionicons name="alert-circle" size={18} color="#2563EB" />
+              </View>
+              <Text style={[styles.priorityCount, { color: "#2563EB" }]}>5</Text>
+            </View>
+            <Text style={styles.priorityLabel}>Unverified Entries</Text>
+            <Text style={styles.prioritySub}>pending review</Text>
+          </View>
+        </ScrollView>
+
+        {/* Assigned Zone */}
+        <View style={styles.zoneCard}>
+          <View style={styles.zoneHeader}>
+            <View style={styles.zoneTitleRow}>
+              <Ionicons name="location-outline" size={20} color="#0EA5E9" />
+              <View>
+                <Text style={styles.zoneLabel}>ASSIGNED ZONE</Text>
+                <Text style={styles.zoneTitle}>Zone {householdProfile?.locality ?? "A-12"} · Ward {householdProfile?.ward ?? "12"}</Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+          </View>
+          <Text style={styles.zoneSub}>{householdProfile?.locality ?? "Shiv Nagar"} (East & West)</Text>
+          <View style={styles.zoneStatsRow}>
+            <View style={styles.zoneStat}>
+              <Text style={styles.zoneStatLabel}>Households</Text>
+              <Text style={styles.zoneStatValue}>{householdProfile?.total_members ?? 14}</Text>
+            </View>
+            <View style={styles.zoneStat}>
+              <Text style={styles.zoneStatLabel}>Completed</Text>
+              <Text style={styles.zoneStatValue}>5</Text>
+            </View>
+            <View style={styles.zoneStat}>
+              <Text style={styles.zoneStatLabel}>Coverage</Text>
+              <Text style={[styles.zoneStatValue, { color: "#0EA5E9" }]}>36%</Text>
+            </View>
+          </View>
+          <TouchableOpacity style={styles.routeBtn} activeOpacity={0.8}>
+            <Ionicons name="navigate" size={18} color="#FFFFFF" />
+            <Text style={styles.routeBtnText}>View Route Map</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Quick Actions */}
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.grid}>
-          <QuickActionCard
+          <ActionCard
             icon="person-add-outline"
             label={householdProfile ? "View Household" : "Register Household"}
-            onPress={() => router.push("/(citizen)/(tabs)/household")}
+            onPress={() => router.push("/(citizen)/household" as any)}
           />
-          <QuickActionCard
+          <ActionCard
             icon="checkmark-done-outline"
             label="Was I Counted?"
           />
-          <QuickActionCard
+          <ActionCard
             icon="alert-circle-outline"
-            label="Report Missing Household"
+            label="Report Missing"
           />
-          <QuickActionCard
+          <ActionCard
             icon="headset-outline"
             label="Report a Need"
-            onPress={() => router.push("/(citizen)/report-need")}
+            onPress={() => router.push("/(citizen)/support" as any)}
           />
-          <QuickActionCard
+          <ActionCard
             icon="business-outline"
-            label="Find Government Schemes"
-            onPress={() => router.push("/(citizen)/(tabs)/schemes")}
+            label="Find Schemes"
+            onPress={() => router.push("/(citizen)/schemes" as any)}
           />
-          <QuickActionCard
+          <ActionCard
             icon="trending-up-outline"
-            label="Track My Requests"
-            onPress={() => router.push("/(citizen)/(tabs)/household")}
-          />
-        </View>
-
-        <Text style={styles.sectionTitle}>Recent Activity</Text>
-        <View style={styles.activityList}>
-          <ActivityItem
-            title="Household Verification Complete"
-            text="Your household details have been successfully verified by the regional team."
-            time="Oct 12, 2023 · 14:30"
-          />
-          <ActivityItem
-            title="Survey Submitted: Water Access"
-            text="Thank you for participating in the community water infrastructure survey."
-            time="Oct 08, 2023 · 10:12"
-          />
-          <ActivityItem
-            title="Scheme Match Updated"
-            text="You have 2 new welfare scheme recommendations based on your profile."
-            time="Oct 04, 2023 · 17:42"
+            label="Track Requests"
+            onPress={() => router.push("/(citizen)/household" as any)}
           />
         </View>
 
@@ -249,149 +308,386 @@ export default function CitizenDashboard() {
   );
 }
 
+function ActionCard({
+  icon,
+  label,
+  onPress,
+}: {
+  icon: React.ComponentProps<typeof Ionicons>["name"];
+  label: string;
+  onPress?: () => void;
+}) {
+  return (
+    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
+      <View style={styles.cardIcon}>
+        <Ionicons name={icon} size={22} color="#1E293B" />
+      </View>
+      <Text style={styles.cardLabel}>{label}</Text>
+    </TouchableOpacity>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: AppColors.bgMain,
-    marginTop: -30,
+    backgroundColor: "#F1F5F9",
   },
-  header: {
+  body: {
+    padding: 16,
+    gap: 16,
+  },
+
+  /* Top Bar */
+  topBar: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: AppColors.border,
+    paddingVertical: 4,
   },
-  headerLeft: {
-    gap: 2,
-  },
-  headerRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  headerIconBtn: {
-    padding: 6,
-  },
-  brand: {
-    color: AppColors.textPrimary,
-    fontSize: 40,
-    fontWeight: "700",
-  },
-  headerSub: {
-    color: AppColors.textSecondary,
-    fontSize: 15,
-  },
-  signOutBtn: {
-    padding: 6,
-  },
-  body: {
-    padding: 20,
-    gap: 18,
-  },
-  householdPanel: {
-    backgroundColor: AppColors.bgCard,
-    borderWidth: 1,
-    borderColor: AppColors.border,
-    borderRadius: 0,
-    padding: 16,
-    gap: 14,
-  },
-  householdTopRow: {
+  topBarCenter: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    gap: 10,
   },
-  householdIconBox: {
-    width: 42,
-    height: 42,
-    borderRadius: 0,
-    backgroundColor: AppColors.primary,
+  topBarRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  appIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: "#E0F2FE",
     alignItems: "center",
     justifyContent: "center",
   },
-  householdCopy: {
-    flex: 1,
-  },
-  householdPanelTitle: {
-    color: AppColors.textPrimary,
-    fontSize: 30,
+  appName: {
+    fontSize: 18,
     fontWeight: "700",
+    color: "#0F172A",
   },
-  householdId: {
-    marginTop: 3,
-    color: AppColors.textMuted,
-    fontSize: 11,
-    fontWeight: "600",
-  },
-  householdSummary: {
-    gap: 6,
-    paddingTop: 4,
-    paddingBottom: 2,
-    borderTopWidth: 1,
-    borderTopColor: AppColors.border,
-  },
-  summaryRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  summaryText: {
-    color: AppColors.textSecondary,
+  appSubtitle: {
     fontSize: 12,
-    fontWeight: "500",
-    flex: 1,
+    color: "#6B7280",
   },
-  badge: {
+  onlineBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: AppColors.blue,
-    borderRadius: 0,
-    paddingHorizontal: 8,
+    backgroundColor: "#ECFDF5",
+    borderRadius: 20,
+    paddingHorizontal: 10,
     paddingVertical: 4,
     gap: 5,
   },
-  badgeVerified: {
-    backgroundColor: AppColors.success,
+  onlineDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: "#10B981",
   },
-  badgeText: {
-    color: AppColors.textWhite,
+  onlineText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#059669",
+  },
+  iconBtn: {
+    padding: 6,
+    position: "relative",
+  },
+  notifBadge: {
+    position: "absolute",
+    top: 2,
+    right: 2,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: "#DC2626",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  notifBadgeText: {
+    fontSize: 9,
+    fontWeight: "700",
+    color: "#FFFFFF",
+  },
+
+  /* Greeting Card */
+  greetingCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    padding: 18,
+    gap: 14,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  greetingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+  },
+  avatarCircle: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: "#E0F2FE",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "#BAE6FD",
+  },
+  greetingCopy: {
+    gap: 2,
+  },
+  greetingLabel: {
+    fontSize: 14,
+    color: "#6B7280",
+  },
+  greetingName: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#0F172A",
+  },
+  locationPill: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F8FAFC",
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  locationText: {
+    flex: 1,
+    fontSize: 13,
+    fontWeight: "500",
+    color: "#374151",
+  },
+
+  /* Progress Card */
+  progressCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    padding: 18,
+    gap: 14,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  progressHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  progressTitle: {
+    fontSize: 17,
+    fontWeight: "700",
+    color: "#0F172A",
+  },
+  progressPercent: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#0EA5E9",
+  },
+  progressBarBg: {
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#E2E8F0",
+    overflow: "hidden",
+  },
+  progressBarFill: {
+    height: "100%",
+    borderRadius: 4,
+    backgroundColor: "#0EA5E9",
+  },
+  progressCols: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  progressCol: {
+    alignItems: "center",
+    flex: 1,
+  },
+  progressColLabel: {
     fontSize: 11,
     fontWeight: "700",
+    color: "#6B7280",
+    letterSpacing: 0.5,
   },
-  householdButton: {
+  progressColValue: {
+    fontSize: 28,
+    fontWeight: "800",
+    color: "#0F172A",
+    marginTop: 2,
+  },
+
+  /* Section Row */
+  sectionRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#0F172A",
+  },
+  viewAllLink: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#0EA5E9",
+  },
+
+  /* Priority Tasks */
+  priorityRow: {
+    gap: 12,
+  },
+  priorityCard: {
+    width: 170,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 14,
+    padding: 16,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  priorityCardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  priorityIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  priorityCount: {
+    fontSize: 24,
+    fontWeight: "800",
+  },
+  priorityLabel: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#0F172A",
+  },
+  prioritySub: {
+    fontSize: 12,
+    color: "#9CA3AF",
+  },
+
+  /* Zone Card */
+  zoneCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    padding: 18,
+    gap: 10,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  zoneHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
+  zoneTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  zoneLabel: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: "#9CA3AF",
+    letterSpacing: 0.5,
+  },
+  zoneTitle: {
+    fontSize: 17,
+    fontWeight: "700",
+    color: "#0F172A",
+    marginTop: 2,
+  },
+  zoneSub: {
+    fontSize: 13,
+    color: "#6B7280",
+    marginLeft: 30,
+  },
+  zoneStatsRow: {
+    flexDirection: "row",
+    backgroundColor: "#F8FAFC",
+    borderRadius: 12,
+    padding: 14,
+    marginTop: 6,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  zoneStat: {
+    flex: 1,
+    alignItems: "center",
+  },
+  zoneStatLabel: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#9CA3AF",
+  },
+  zoneStatValue: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#0F172A",
+    marginTop: 2,
+  },
+  routeBtn: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: AppColors.primary,
-    borderRadius: 0,
-    paddingVertical: 10,
+    backgroundColor: "#0EA5E9",
+    borderRadius: 12,
+    paddingVertical: 13,
+    gap: 8,
+    marginTop: 6,
   },
-  householdButtonText: {
-    color: AppColors.textWhite,
-    fontSize: 14,
+  routeBtnText: {
+    fontSize: 15,
     fontWeight: "700",
+    color: "#FFFFFF",
   },
-  sectionTitle: {
-    color: AppColors.textPrimary,
-    fontSize: 22,
-    fontWeight: "700",
-  },
+
+  /* Quick Actions Grid */
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
     rowGap: 12,
   },
-  activityList: {
-    backgroundColor: AppColors.bgCard,
+  card: {
+    width: "48%",
+    minHeight: 110,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 14,
+    padding: 14,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
     borderWidth: 1,
-    borderColor: AppColors.border,
-    borderRadius: 0,
-    overflow: "hidden",
+    borderColor: "#E2E8F0",
   },
+  cardIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: "#F1F5F9",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cardLabel: {
+    color: "#111827",
+    fontSize: 13,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+
   bottomSpacer: {
     height: 24,
   },
