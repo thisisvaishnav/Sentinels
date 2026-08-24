@@ -23,11 +23,8 @@ export const PriorityTasksSection: React.FC<PriorityTasksSectionProps> = ({ task
         params: { category: 'Needs Verification' },
       });
     } else if (item.id === 'p4') {
-      // Anomaly Alerts / Urgent -> Priority Tasks filtered by Urgent
-      router.push({
-        pathname: '/(enumerator)/priority-tasks',
-        params: { category: 'Urgent' },
-      });
+      // Anomaly Alerts -> Dedicated Anomaly Detection Screen
+      router.push('/(enumerator)/anomalies' as any);
     } else {
       // High-Priority Households -> Priority Tasks filtered by High Priority
       router.push({
