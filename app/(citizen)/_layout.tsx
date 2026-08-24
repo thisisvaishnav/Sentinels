@@ -9,11 +9,14 @@ export default function CitizenRootLayout() {
         <Stack.Screen name="dashboard" />
         <Stack.Screen name="progress" />
         <Stack.Screen name="schemes" />
+        <Stack.Screen name="scheme-detail" />
         <Stack.Screen name="support" />
         <Stack.Screen name="household" />
         <Stack.Screen name="report-need" />
         <Stack.Screen name="scheme-application" />
         <Stack.Screen name="notifications" />
+        <Stack.Screen name="discuss-problem" />
+        <Stack.Screen name="profile" />
       </Stack>
       <CitizenDrawer />
     </CitizenDrawerProvider>

@@ -205,6 +205,7 @@ export default function CitizenSchemesScreen() {
                 benefitAmount={scheme.benefitAmount}
                 status={scheme.status}
                 eligible={scheme.eligible}
+                onPress={() => router.push({ pathname: '/(citizen)/scheme-detail', params: { schemeId: scheme.id } })}
               />
             ))
           )}
