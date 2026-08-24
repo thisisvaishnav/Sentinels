@@ -1,7 +1,9 @@
-import { AppColors } from "@/constants/colors";
-import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { CITIZEN_THEME } from '@/src/features/enumeration/theme';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+const T = CITIZEN_THEME;
 
 type FAQItem = {
   question: string;
@@ -24,9 +26,9 @@ function FAQEntry({ question, answer }: FAQItem) {
       >
         <Text style={styles.question}>{question}</Text>
         <Ionicons
-          name={isOpen ? "chevron-up" : "chevron-down"}
+          name={isOpen ? 'chevron-up' : 'chevron-down'}
           size={16}
-          color={AppColors.textMuted}
+          color={T.colors.textMuted}
         />
       </TouchableOpacity>
       {isOpen && (
@@ -50,28 +52,28 @@ export default function FAQAccordion({ items }: FAQAccordionProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: T.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.border,
-    borderRadius: 0,
-    overflow: "hidden",
+    borderColor: T.colors.border,
+    borderRadius: T.borderRadius.lg,
+    overflow: 'hidden',
   },
   entry: {
     borderBottomWidth: 1,
-    borderBottomColor: AppColors.border,
+    borderBottomColor: T.colors.border,
   },
   questionRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 14,
     gap: 10,
   },
   question: {
     flex: 1,
     fontSize: 14,
-    fontWeight: "600",
-    color: AppColors.textPrimary,
+    fontWeight: '600',
+    color: T.colors.textPrimary,
   },
   answerWrap: {
     paddingHorizontal: 14,
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
   },
   answer: {
     fontSize: 13,
-    color: AppColors.textSecondary,
+    color: T.colors.textSecondary,
     lineHeight: 20,
   },
 });

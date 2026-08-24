@@ -2,22 +2,17 @@ import { getCitizenHouseholdStatus, signOut } from "@/src/features/auth/authServ
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCitizenDrawer } from "@/src/contexts/CitizenDrawerContext";
+import { Ionicons } from "@expo/vector-icons";
 
 import { EnumeratorHeader } from "@/src/features/enumeration/components/EnumeratorHeader";
 import { WelcomeSection } from "@/src/features/enumeration/components/WelcomeSection";
-import { ProgressSection } from "@/src/features/enumeration/components/ProgressSection";
-import { PriorityTasksSection } from "@/src/features/enumeration/components/PriorityTasksSection";
-import { AssignedZoneSection } from "@/src/features/enumeration/components/AssignedZoneSection";
 import { QuickActionsSection } from "@/src/features/enumeration/components/QuickActionsSection";
 import { CITIZEN_THEME } from "@/src/features/enumeration/theme";
 import {
   EnumeratorProfile,
-  TodayProgress,
-  PriorityTaskMetric,
-  AssignedZoneInfo,
   QuickActionItem,
 } from "@/src/features/enumeration/types";
 
@@ -48,27 +43,65 @@ type HouseholdProfile = {
   longitude: number;
 };
 
-const citizenProgress: TodayProgress = {
-  totalAssigned: 14,
-  completed: 5,
-  remaining: 7,
-  coveragePercentage: 36,
-};
-
-const citizenPriorityTasks: PriorityTaskMetric[] = [
-  { id: "c1", title: "High-Priority House...", count: 8, unit: "urgent surveys", iconName: "home", color: "#DC2626", badgeBg: "#FEE2E2" },
-  { id: "c2", title: "Blind-Spot Areas", count: 3, unit: "unmapped clusters", iconName: "wifi", color: "#D97706", badgeBg: "#FEF3C7" },
-  { id: "c3", title: "Unverified Entries", count: 5, unit: "pending review", iconName: "alert-circle", color: "#2563EB", badgeBg: "#DBEAFE" },
-];
-
 const citizenQuickActions: QuickActionItem[] = [
   { id: "household", label: "View Household", iconName: "account-outline", color: "#0EA5E9", route: "/(citizen)/household" },
-  { id: "counted", label: "Was I Counted?", iconName: "check-circle-outline", color: "#059669" },
-  { id: "missing", label: "Report Missing", iconName: "alert-circle-outline", color: "#DC2626" },
-  { id: "support", label: "Report a Need", iconName: "headset-outline", color: "#D97706", route: "/(citizen)/support" },
   { id: "schemes", label: "Find Schemes", iconName: "brightness-percent", color: "#7C3AED", route: "/(citizen)/schemes" },
   { id: "track", label: "Track Requests", iconName: "chart-line", color: "#0284C7", route: "/(citizen)/household" },
+  { id: "support", label: "Get Help", iconName: "headset-outline", color: "#D97706", route: "/(citizen)/support" },
 ];
+
+/* -------------------------------------------------------------------------- */
+/*                          Household Summary Card                             */
+/* -------------------------------------------------------------------------- */
+
+function HouseholdSummaryCard({ profile }: { profile: HouseholdProfile }) {
+  const facilitiesCount = [
+    profile.has_electricity,
+    profile.has_running_water,
+    profile.has_indoor_toilet,
+    profile.has_lpg,
+    profile.has_internet,
+  ].filter(Boolean).length;
+
+  return (
+    <View style={styles.summaryCard}>
+      <View style={styles.summaryHeader}>
+        <View style={styles.summaryIconWrap}>
+          <Ionicons name="home" size={20} color={CITIZEN_THEME.colors.accent} />
+        </View>
+        <Text style={styles.summaryTitle}>Your Household</Text>
+      </View>
+
+      <View style={styles.summaryGrid}>
+        <View style={styles.summaryItem}>
+          <Text style={styles.summaryValue}>{profile.total_members}</Text>
+          <Text style={styles.summaryLabel}>Members</Text>
+        </View>
+        <View style={styles.summaryDivider} />
+        <View style={styles.summaryItem}>
+          <Text style={styles.summaryValue}>{facilitiesCount}/5</Text>
+          <Text style={styles.summaryLabel}>Facilities</Text>
+        </View>
+        <View style={styles.summaryDivider} />
+        <View style={styles.summaryItem}>
+          <Text style={styles.summaryValue}>{profile.ward}</Text>
+          <Text style={styles.summaryLabel}>Ward</Text>
+        </View>
+      </View>
+
+      <View style={styles.summaryAddress}>
+        <Ionicons name="location-outline" size={14} color={CITIZEN_THEME.colors.textMuted} />
+        <Text style={styles.summaryAddressText} numberOfLines={1}>
+          {profile.house_no}, {profile.locality}, {profile.district} - {profile.pincode}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                              Main Screen                                    */
+/* -------------------------------------------------------------------------- */
 
 export default function CitizenDashboard() {
   const router = useRouter();
@@ -145,15 +178,7 @@ export default function CitizenDashboard() {
       ? `${householdProfile.locality} · Ward ${householdProfile.ward}`
       : "No location set",
     isOnline: true,
-    unreadNotificationsCount: 3,
-  };
-
-  const citizenZone: AssignedZoneInfo = {
-    zoneName: `Zone ${householdProfile?.locality ?? "A-12"} · Ward ${householdProfile?.ward ?? "12"}`,
-    subArea: householdProfile?.locality ?? "Shiv Nagar",
-    totalHouseholds: householdProfile?.total_members ?? 14,
-    completedHouseholds: 5,
-    coveragePercentage: 36,
+    unreadNotificationsCount: 0,
   };
 
   return (
@@ -171,23 +196,9 @@ export default function CitizenDashboard() {
           onZonePress={() => {}}
         />
 
-        <ProgressSection progress={citizenProgress} theme={CITIZEN_THEME} />
-
-        <PriorityTasksSection
-          tasks={citizenPriorityTasks}
-          theme={CITIZEN_THEME}
-          onTaskPress={(task) => {
-            if (task.id === "c1") router.push("/(citizen)/household" as any);
-          }}
-          onViewAll={() => {}}
-        />
-
-        <AssignedZoneSection
-          zone={citizenZone}
-          theme={CITIZEN_THEME}
-          onCardPress={() => {}}
-          onViewRoute={() => {}}
-        />
+        {householdProfile && (
+          <HouseholdSummaryCard profile={householdProfile} />
+        )}
 
         <QuickActionsSection
           actions={citizenQuickActions}
@@ -214,5 +225,72 @@ const styles = StyleSheet.create({
   },
   bottomSpacer: {
     height: 32,
+  },
+
+  /* Household Summary Card */
+  summaryCard: {
+    backgroundColor: CITIZEN_THEME.colors.cardBackground,
+    borderRadius: CITIZEN_THEME.borderRadius.xl,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: CITIZEN_THEME.colors.border,
+    gap: 14,
+  },
+  summaryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  summaryIconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: CITIZEN_THEME.borderRadius.sm,
+    backgroundColor: CITIZEN_THEME.colors.accentSubtle,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  summaryTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: CITIZEN_THEME.colors.textPrimary,
+  },
+  summaryGrid: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    backgroundColor: CITIZEN_THEME.colors.subtleBackground,
+    borderRadius: CITIZEN_THEME.borderRadius.md,
+    padding: 14,
+  },
+  summaryItem: {
+    alignItems: 'center',
+    gap: 4,
+  },
+  summaryValue: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: CITIZEN_THEME.colors.accent,
+  },
+  summaryLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: CITIZEN_THEME.colors.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 0.3,
+  },
+  summaryDivider: {
+    width: 1,
+    height: 30,
+    backgroundColor: CITIZEN_THEME.colors.border,
+  },
+  summaryAddress: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  summaryAddressText: {
+    flex: 1,
+    fontSize: 12,
+    color: CITIZEN_THEME.colors.textSecondary,
   },
 });
