@@ -11,6 +11,12 @@ export default function EnumeratorLayout() {
       <Stack.Screen name="priority-tasks" />
       <Stack.Screen name="assigned-zone" />
       <Stack.Screen name="notifications" />
+      <Stack.Screen name="verification" />
+      <Stack.Screen name="anomalies" />
+      <Stack.Screen name="blind-spots" />
+      <Stack.Screen name="daily-progress" />
+      <Stack.Screen name="sync" />
+      <Stack.Screen name="escalations" />
       <Stack.Screen name="profile" />
     </Stack>
   );

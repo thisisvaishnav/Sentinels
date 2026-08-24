@@ -4,6 +4,7 @@ import { useAdminDrawer } from '@/src/contexts/AdminDrawerContext';
 
 const ADMIN_MENU_ITEMS: DrawerMenuItem[] = [
   { id: 'dashboard', label: 'Dashboard', route: '/(admin)/dashboard', iconName: 'view-dashboard-outline' },
+  { id: 'supervisor-escalations', label: 'Supervisor Escalations', route: '/(admin)/supervisor-escalations', iconName: 'shield-alert-outline' },
   { id: 'surveys', label: 'Surveys', route: '/(admin)/survey-management', iconName: 'clipboard-text-outline' },
   { id: 'enumerators', label: 'Enumerators', route: '/(admin)/field-enumerators', iconName: 'account-group-outline' },
   { id: 'citizen-reports', label: 'Citizen Reports', route: '/(admin)/citizen-reports', iconName: 'bullhorn-outline' },

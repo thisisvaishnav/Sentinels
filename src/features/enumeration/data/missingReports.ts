@@ -6,6 +6,7 @@
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { enqueueSyncItem } from './syncQueue';
 import { MissingHouseholdReport, MissingReportsMetrics } from '../types/missingReportTypes';
 import { addEnumeratorActivity } from './activity';
 
@@ -136,6 +137,12 @@ export async function saveOrUpdateMissingReport(
   }
 
   await saveMissingReports(reports);
+
+  try {
+    await enqueueSyncItem('missing_report', 'create', targetReport.reportId, targetReport);
+  } catch {
+    // Ignore sync queue error
+  }
 
   if (isSubmit) {
     try {

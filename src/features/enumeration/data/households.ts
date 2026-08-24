@@ -431,6 +431,8 @@ export async function loadEnumeratorHouseholds(): Promise<ZoneHouseholdItem[]> {
   return INITIAL_ENUMERATOR_HOUSEHOLDS;
 }
 
+import { enqueueSyncItem } from './syncQueue';
+
 export async function saveEnumeratorHouseholds(households: ZoneHouseholdItem[]): Promise<void> {
   try {
     await AsyncStorage.setItem(HOUSEHOLDS_STORAGE_KEY, JSON.stringify(households));
@@ -445,18 +447,28 @@ export async function updateHouseholdStatusInStore(
   priority?: ZoneHouseholdItem['priority']
 ): Promise<ZoneHouseholdItem[]> {
   const current = await loadEnumeratorHouseholds();
+  let targetHousehold: ZoneHouseholdItem | undefined;
   const updated = current.map((h) => {
     if (h.householdId === householdId || h.id === householdId) {
-      return {
+      targetHousehold = {
         ...h,
         status: newStatus,
         priority: priority ?? h.priority,
         lastVisit: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
+      return targetHousehold;
     }
     return h;
   });
   await saveEnumeratorHouseholds(updated);
+
+  if (targetHousehold) {
+    try {
+      await enqueueSyncItem('household', 'update', householdId, targetHousehold);
+    } catch {
+      // Ignore sync queue error
+    }
+  }
   return updated;
 }
 
@@ -466,11 +478,12 @@ export async function updateHouseholdVerificationStatusInStore(
   reason?: string
 ): Promise<ZoneHouseholdItem[]> {
   const current = await loadEnumeratorHouseholds();
+  let targetHousehold: ZoneHouseholdItem | undefined;
   const updated = current.map((h) => {
     if (h.householdId === householdId || h.id === householdId) {
       const isVerified = verificationStatus === 'Verified';
       const isNeeds = verificationStatus === 'Needs Verification';
-      return {
+      targetHousehold = {
         ...h,
         verificationStatus: verificationStatus,
         status: isVerified ? 'Completed' : isNeeds ? 'Needs Verification' : h.status,
@@ -478,10 +491,24 @@ export async function updateHouseholdVerificationStatusInStore(
         verifiedBy: 'ENUM001',
         verificationReason: reason ?? h.verificationReason,
       };
+      return targetHousehold;
     }
     return h;
   });
   await saveEnumeratorHouseholds(updated);
+
+  if (targetHousehold) {
+    try {
+      await enqueueSyncItem('verification', 'update', householdId, {
+        householdId,
+        verificationStatus,
+        reason,
+        verifiedAt: targetHousehold.verifiedAt,
+      });
+    } catch {
+      // Ignore sync queue error
+    }
+  }
   if (verificationStatus === 'Verified') {
     try {
       const targetHH = updated.find((h) => h.householdId === householdId || h.id === householdId);

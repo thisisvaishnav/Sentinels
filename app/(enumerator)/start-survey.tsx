@@ -18,6 +18,7 @@ import {
   loadEnumeratorHouseholds,
   updateHouseholdStatusInStore,
 } from '@/src/features/enumeration/data/households';
+import { enqueueSyncItem } from '@/src/features/enumeration/data/syncQueue';
 import { addEnumeratorActivity } from '@/src/features/enumeration/data/activity';
 import {
   AssignedHouseholdSummary,
@@ -360,6 +361,7 @@ export default function StartSurveyScreen() {
     try {
       await AsyncStorage.setItem(`@lokvision_survey_${activeHousehold.householdId}`, JSON.stringify(payload));
       await updateHouseholdStatusInStore(activeHousehold.householdId, 'In Progress');
+      await enqueueSyncItem('survey', 'update', activeHousehold.householdId, payload);
       await addEnumeratorActivity(
         'survey_started',
         'Survey Started',

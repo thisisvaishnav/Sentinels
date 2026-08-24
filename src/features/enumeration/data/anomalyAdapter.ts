@@ -45,12 +45,15 @@ export async function saveReviewedAnomalyIds(reviewedIds: string[]): Promise<voi
   }
 }
 
+import { AnomalyEscalation } from '../types/anomalyTypes';
+
 /**
  * Deterministically analyze current local household dataset and produce typed HouseholdAnomaly[].
  */
 export function detectHouseholdAnomalies(
   households: ZoneHouseholdItem[],
-  reviewedIds: string[] = []
+  reviewedIds: string[] = [],
+  escalations: AnomalyEscalation[] = []
 ): HouseholdAnomaly[] {
   const anomalies: HouseholdAnomaly[] = [];
 
@@ -264,7 +267,13 @@ export function detectHouseholdAnomalies(
     }
   });
 
-  return anomalies;
+  // Attach active escalation matching anomalyId
+  const result = anomalies.map((item) => {
+    const esc = escalations.find((e) => e.anomalyId === item.id);
+    return esc ? { ...item, escalation: esc } : item;
+  });
+
+  return result;
 }
 
 /**
@@ -277,6 +286,7 @@ export function getAnomalySummaryMetrics(anomalies: HouseholdAnomaly[]): Anomaly
   const mediumCount = anomalies.filter((a) => a.severity === 'medium').length;
   const lowCount = anomalies.filter((a) => a.severity === 'low').length;
   const needsReviewCount = anomalies.filter((a) => !a.reviewed).length;
+  const escalatedCount = anomalies.filter((a) => !!a.escalation).length;
 
   const affectedHouseholdSet = new Set(anomalies.map((a) => a.householdId));
   const affectedHouseholdsCount = affectedHouseholdSet.size;
@@ -288,6 +298,7 @@ export function getAnomalySummaryMetrics(anomalies: HouseholdAnomaly[]): Anomaly
     mediumCount,
     lowCount,
     needsReviewCount,
+    escalatedCount,
     affectedHouseholdsCount,
   };
 }
@@ -315,6 +326,7 @@ export function filterAndSortAnomalies(
     else if (category === 'GPS') matchesCategory = a.type === 'gps-mismatch';
     else if (category === 'Incomplete') matchesCategory = a.type === 'incomplete-record';
     else if (category === 'Verification') matchesCategory = a.type === 'verification-required';
+    else if (category === 'Escalated') matchesCategory = !!a.escalation;
 
     if (!matchesCategory) return false;
 
