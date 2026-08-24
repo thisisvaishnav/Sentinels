@@ -1,4 +1,7 @@
+import { AppColors } from "@/constants/colors";
 import { getCitizenHouseholdStatus, signOut } from "@/src/features/auth/authService";
+import ActivityItem from "@/src/components/citizen/ActivityItem";
+import QuickActionCard from "@/src/components/citizen/QuickActionCard";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
@@ -51,7 +54,6 @@ export default function CitizenDashboard() {
       await signOut();
       router.replace("/onboarding");
     } catch {
-      // signOut already cleaned up locally even if the server call failed
       router.replace("/onboarding");
     }
   };
@@ -60,37 +62,29 @@ export default function CitizenDashboard() {
     const performAccessChecks = async () => {
       try {
         const token = await SecureStore.getItemAsync("citizen_token");
-        
-        // Guard 1: Must be logged in
+
         if (!token) {
-          console.log("❌ No citizen JWT found. Redirecting to login...");
           router.replace({ pathname: "/(auth)/login", params: { role: "citizen" } });
           return;
         }
 
-        // Guard 2: Must have completed household profile
         const status = await getCitizenHouseholdStatus();
         if (!status.completed) {
-          console.log("⚠️ Household form not completed. Redirecting to form...");
-          router.replace("/(citizen)/household");
+          router.replace("/(citizen)/(tabs)/household");
           return;
         }
 
         setHouseholdStatus(status.completed ? "Verified" : "Pending");
 
-        // Fetch household profile data for dashboard preview
         if (status.completed) {
           try {
-            const profileResponse = await fetch(
-              `${API_URL}/api/household/me`,
-              {
-                method: "GET",
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  "Content-Type": "application/json",
-                },
-              }
-            );
+            const profileResponse = await fetch(`${API_URL}/api/household/me`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            });
             if (profileResponse.ok) {
               const profileResult = await profileResponse.json();
               setHouseholdProfile(profileResult.household ?? null);
@@ -100,12 +94,9 @@ export default function CitizenDashboard() {
           }
         }
 
-        // Both checks passed
         setCheckingStatus(false);
-        console.log("✅ Authenticated & household profile completed.");
       } catch (error) {
-        console.error("❌ Access check failed:", error);
-        // Fallback to onboarding or login on persistent network/auth failures
+        console.error("Access check failed:", error);
         router.replace({ pathname: "/(auth)/login", params: { role: "citizen" } });
       }
     };
@@ -115,8 +106,8 @@ export default function CitizenDashboard() {
 
   if (checkingStatus) {
     return (
-      <SafeAreaView style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <ActivityIndicator size="large" color="#0F172A" />
+      <SafeAreaView style={[styles.container, { justifyContent: "center", alignItems: "center" }]}>
+        <ActivityIndicator size="large" color={AppColors.primary} />
       </SafeAreaView>
     );
   }
@@ -128,19 +119,24 @@ export default function CitizenDashboard() {
           <Text style={styles.brand}>Hello, Citizen</Text>
           <Text style={styles.headerSub}>Welcome to your central civic hub.</Text>
         </View>
-        <TouchableOpacity onPress={handleSignOut} style={styles.signOutBtn}>
-          <Ionicons name="log-out-outline" size={20} color="#111111" />
-        </TouchableOpacity>
+        <View style={styles.headerRight}>
+          <TouchableOpacity
+            onPress={() => router.push('/(citizen)/notifications')}
+            style={styles.headerIconBtn}
+          >
+            <Ionicons name="notifications-outline" size={20} color={AppColors.textPrimary} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleSignOut} style={styles.signOutBtn}>
+            <Ionicons name="log-out-outline" size={20} color={AppColors.textPrimary} />
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <ScrollView
-        contentContainerStyle={styles.body}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
         <View style={styles.householdPanel}>
           <View style={styles.householdTopRow}>
             <View style={styles.householdIconBox}>
-              <Ionicons name="home-outline" size={20} color="#FFFFFF" />
+              <Ionicons name="home-outline" size={20} color={AppColors.textWhite} />
             </View>
             <View style={styles.householdCopy}>
               <Text style={styles.householdPanelTitle}>My Household</Text>
@@ -156,7 +152,7 @@ export default function CitizenDashboard() {
               <Ionicons
                 name={householdProfile ? "checkmark-circle" : "time-outline"}
                 size={12}
-                color="#FFFFFF"
+                color={AppColors.textWhite}
               />
               <Text style={styles.badgeText}>{householdStatus}</Text>
             </View>
@@ -165,19 +161,19 @@ export default function CitizenDashboard() {
           {householdProfile && (
             <View style={styles.householdSummary}>
               <View style={styles.summaryRow}>
-                <Ionicons name="location-outline" size={14} color="#6B7280" />
+                <Ionicons name="location-outline" size={14} color={AppColors.textMuted} />
                 <Text style={styles.summaryText}>
                   {householdProfile.house_no}, {householdProfile.locality}, {householdProfile.ward}
                 </Text>
               </View>
               <View style={styles.summaryRow}>
-                <Ionicons name="people-outline" size={14} color="#6B7280" />
+                <Ionicons name="people-outline" size={14} color={AppColors.textMuted} />
                 <Text style={styles.summaryText}>
                   {householdProfile.male_members} Male · {householdProfile.female_members} Female · {householdProfile.children_count} Children
                 </Text>
               </View>
               <View style={styles.summaryRow}>
-                <Ionicons name="call-outline" size={14} color="#6B7280" />
+                <Ionicons name="call-outline" size={14} color={AppColors.textMuted} />
                 <Text style={styles.summaryText}>
                   {householdProfile.head_mobile_number}
                 </Text>
@@ -188,7 +184,7 @@ export default function CitizenDashboard() {
           <TouchableOpacity
             style={styles.householdButton}
             activeOpacity={0.8}
-            onPress={() => router.push("/(citizen)/household")}
+            onPress={() => router.push("/(citizen)/(tabs)/household")}
           >
             <Text style={styles.householdButtonText}>
               {householdProfile ? "View Details" : "Register Now"}
@@ -198,33 +194,33 @@ export default function CitizenDashboard() {
 
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.grid}>
-          <ActionCard
+          <QuickActionCard
             icon="person-add-outline"
             label={householdProfile ? "View Household" : "Register Household"}
-            onPress={() => router.push("/(citizen)/household")}
+            onPress={() => router.push("/(citizen)/(tabs)/household")}
           />
-          <ActionCard
+          <QuickActionCard
             icon="checkmark-done-outline"
             label="Was I Counted?"
           />
-          <ActionCard
+          <QuickActionCard
             icon="alert-circle-outline"
             label="Report Missing Household"
           />
-          <ActionCard
+          <QuickActionCard
             icon="headset-outline"
             label="Report a Need"
-            onPress={() => router.push("/(citizen)/support")}
+            onPress={() => router.push("/(citizen)/report-need")}
           />
-          <ActionCard
+          <QuickActionCard
             icon="business-outline"
             label="Find Government Schemes"
-            onPress={() => router.push("/(citizen)/schemes")}
+            onPress={() => router.push("/(citizen)/(tabs)/schemes")}
           />
-          <ActionCard
+          <QuickActionCard
             icon="trending-up-outline"
             label="Track My Requests"
-            onPress={() => router.push("/(citizen)/household")}
+            onPress={() => router.push("/(citizen)/(tabs)/household")}
           />
         </View>
 
@@ -253,52 +249,10 @@ export default function CitizenDashboard() {
   );
 }
 
-function ActionCard({
-  icon,
-  label,
-  onPress,
-}: {
-  icon: React.ComponentProps<typeof Ionicons>["name"];
-  label: string;
-  onPress?: () => void;
-}) {
-  return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
-      <View style={styles.cardIcon}>
-        <Ionicons name={icon} size={22} color="#1E293B" />
-      </View>
-      <Text style={styles.cardLabel}>{label}</Text>
-    </TouchableOpacity>
-  );
-}
-
-function ActivityItem({
-  title,
-  text,
-  time,
-}: {
-  title: string;
-  text: string;
-  time: string;
-}) {
-  return (
-    <View style={styles.activityItem}>
-      <View style={styles.activityIconWrap}>
-        <Ionicons name="checkmark-circle-outline" size={18} color="#1E293B" />
-      </View>
-      <View style={styles.activityCopy}>
-        <Text style={styles.activityTitle}>{title}</Text>
-        <Text style={styles.activityText}>{text}</Text>
-        <Text style={styles.activityTime}>{time}</Text>
-      </View>
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: AppColors.bgMain,
     marginTop: -30,
   },
   header: {
@@ -308,18 +262,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: "#E5E7EB",
+    borderBottomColor: AppColors.border,
   },
   headerLeft: {
     gap: 2,
   },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  headerIconBtn: {
+    padding: 6,
+  },
   brand: {
-    color: "#1E293B",
+    color: AppColors.textPrimary,
     fontSize: 40,
     fontWeight: "700",
   },
   headerSub: {
-    color: "#4B5563",
+    color: AppColors.textSecondary,
     fontSize: 15,
   },
   signOutBtn: {
@@ -330,9 +292,9 @@ const styles = StyleSheet.create({
     gap: 18,
   },
   householdPanel: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: AppColors.bgCard,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: AppColors.border,
     borderRadius: 0,
     padding: 16,
     gap: 14,
@@ -346,7 +308,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 0,
-    backgroundColor: "#1E293B",
+    backgroundColor: AppColors.primary,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -354,13 +316,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   householdPanelTitle: {
-    color: "#111827",
+    color: AppColors.textPrimary,
     fontSize: 30,
     fontWeight: "700",
   },
   householdId: {
     marginTop: 3,
-    color: "#6B7280",
+    color: AppColors.textMuted,
     fontSize: 11,
     fontWeight: "600",
   },
@@ -369,7 +331,7 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 2,
     borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
+    borderTopColor: AppColors.border,
   },
   summaryRow: {
     flexDirection: "row",
@@ -377,7 +339,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   summaryText: {
-    color: "#374151",
+    color: AppColors.textSecondary,
     fontSize: 12,
     fontWeight: "500",
     flex: 1,
@@ -385,17 +347,17 @@ const styles = StyleSheet.create({
   badge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#0C79B4",
+    backgroundColor: AppColors.blue,
     borderRadius: 0,
     paddingHorizontal: 8,
     paddingVertical: 4,
     gap: 5,
   },
   badgeVerified: {
-    backgroundColor: "#059669",
+    backgroundColor: AppColors.success,
   },
   badgeText: {
-    color: "#FFFFFF",
+    color: AppColors.textWhite,
     fontSize: 11,
     fontWeight: "700",
   },
@@ -403,17 +365,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#1E293B",
+    backgroundColor: AppColors.primary,
     borderRadius: 0,
     paddingVertical: 10,
   },
   householdButtonText: {
-    color: "#FFFFFF",
+    color: AppColors.textWhite,
     fontSize: 14,
     fontWeight: "700",
   },
   sectionTitle: {
-    color: "#1F2937",
+    color: AppColors.textPrimary,
     fontSize: 22,
     fontWeight: "700",
   },
@@ -423,73 +385,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     rowGap: 12,
   },
-  card: {
-    width: "48%",
-    minHeight: 146,
-    backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: "#D1D5DB",
-    borderRadius: 0,
-    padding: 14,
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 12,
-  },
-  cardIcon: {
-    width: 46,
-    height: 46,
-    borderRadius: 0,
-    backgroundColor: "#EFF2F5",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cardLabel: {
-    color: "#111827",
-    fontSize: 14,
-    fontWeight: "600",
-    textAlign: "center",
-  },
   activityList: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: AppColors.bgCard,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: AppColors.border,
     borderRadius: 0,
     overflow: "hidden",
-  },
-  activityItem: {
-    flexDirection: "row",
-    gap: 10,
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E5E7EB",
-  },
-  activityIconWrap: {
-    width: 30,
-    height: 30,
-    borderRadius: 0,
-    backgroundColor: "#F1F5F9",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  activityCopy: {
-    flex: 1,
-    gap: 2,
-  },
-  activityTitle: {
-    fontSize: 13,
-    color: "#111827",
-    fontWeight: "700",
-  },
-  activityText: {
-    fontSize: 13,
-    color: "#374151",
-    lineHeight: 18,
-  },
-  activityTime: {
-    marginTop: 2,
-    fontSize: 11,
-    color: "#6B7280",
-    letterSpacing: 0.3,
   },
   bottomSpacer: {
     height: 24,
