@@ -4,6 +4,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ENUMERATOR_THEME } from '../../theme';
 import { HouseholdProfile, HouseType, Ownership } from '../../types';
 
+import { VoiceInputButton } from '../voice/VoiceInputButton';
+
 interface Props {
   data: HouseholdProfile;
   onChange: (updated: Partial<HouseholdProfile>) => void;
@@ -37,15 +39,22 @@ export function HouseholdProfileCard({ data, onChange, errors }: Props) {
       {/* Full Address */}
       <View style={styles.fieldGroup}>
         <Text style={styles.label}>House No & Street Address *</Text>
-        <TextInput
-          style={[styles.input, styles.multilineInput, errors?.fullAddress && styles.inputError]}
-          placeholder="House/Plot No, Street, Landmark"
-          placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-          multiline
-          numberOfLines={2}
-          value={data.fullAddress}
-          onChangeText={(val) => onChange({ fullAddress: val })}
-        />
+        <View style={styles.inputWithVoiceRow}>
+          <TextInput
+            style={[styles.input, styles.multilineInput, styles.flexInput, errors?.fullAddress && styles.inputError]}
+            placeholder="House/Plot No, Street, Landmark"
+            placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
+            multiline
+            numberOfLines={2}
+            value={data.fullAddress}
+            onChangeText={(val) => onChange({ fullAddress: val })}
+          />
+          <VoiceInputButton
+            currentValue={data.fullAddress}
+            onResult={(val) => onChange({ fullAddress: val })}
+            fieldLabel="Street Address"
+          />
+        </View>
         {errors?.fullAddress ? <Text style={styles.errorText}>{errors.fullAddress}</Text> : null}
       </View>
 
@@ -72,24 +81,40 @@ export function HouseholdProfileCard({ data, onChange, errors }: Props) {
       <View style={styles.rowGrid}>
         <View style={[styles.fieldGroup, { flex: 1 }]}>
           <Text style={styles.label}>Locality</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Shastri Nagar"
-            placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-            value={data.locality}
-            onChangeText={(val) => onChange({ locality: val })}
-          />
+          <View style={styles.inputWithVoiceRow}>
+            <TextInput
+              style={[styles.input, styles.flexInput]}
+              placeholder="Shastri Nagar"
+              placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
+              value={data.locality}
+              onChangeText={(val) => onChange({ locality: val })}
+            />
+            <VoiceInputButton
+              currentValue={data.locality}
+              onResult={(val) => onChange({ locality: val })}
+              fieldLabel="Locality"
+              size="sm"
+            />
+          </View>
         </View>
 
         <View style={[styles.fieldGroup, { flex: 1 }]}>
           <Text style={styles.label}>Ward / Sub-Area</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Ward 12"
-            placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-            value={data.ward}
-            onChangeText={(val) => onChange({ ward: val })}
-          />
+          <View style={styles.inputWithVoiceRow}>
+            <TextInput
+              style={[styles.input, styles.flexInput]}
+              placeholder="Ward 12"
+              placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
+              value={data.ward}
+              onChangeText={(val) => onChange({ ward: val })}
+            />
+            <VoiceInputButton
+              currentValue={data.ward}
+              onResult={(val) => onChange({ ward: val })}
+              fieldLabel="Ward"
+              size="sm"
+            />
+          </View>
         </View>
       </View>
 
@@ -158,6 +183,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: ENUMERATOR_THEME.colors.border,
     gap: 14,
+  },
+  inputWithVoiceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  flexInput: {
+    flex: 1,
   },
   cardHeaderRow: {
     flexDirection: 'row',

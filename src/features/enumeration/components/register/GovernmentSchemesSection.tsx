@@ -4,6 +4,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ENUMERATOR_THEME } from '../../theme';
 import { SchemeCategory, SchemeChoice, SchemeItem } from '../../types';
 
+import { VoiceInputButton } from '../voice/VoiceInputButton';
+
 interface Props {
   schemeItems: SchemeItem[];
   onChange: (updatedItems: SchemeItem[]) => void;
@@ -112,13 +114,21 @@ export function GovernmentSchemesSection({ schemeItems, onChange }: Props) {
               {isReceiving && (
                 <View style={styles.schemeNameWrap}>
                   <Text style={styles.inputLabel}>Scheme Name (Optional)</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="e.g. PM Awas Yojana / Ayushman Bharat"
-                    placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-                    value={item.schemeName || ''}
-                    onChangeText={(val) => handleSchemeNameChange(category, val)}
-                  />
+                  <View style={styles.inputWithVoiceRow}>
+                    <TextInput
+                      style={[styles.input, styles.flexInput]}
+                      placeholder="e.g. PM Awas Yojana / Ayushman Bharat"
+                      placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
+                      value={item.schemeName || ''}
+                      onChangeText={(val) => handleSchemeNameChange(category, val)}
+                    />
+                    <VoiceInputButton
+                      currentValue={item.schemeName || ''}
+                      onResult={(val) => handleSchemeNameChange(category, val)}
+                      fieldLabel="Scheme Name"
+                      size="sm"
+                    />
+                  </View>
                 </View>
               )}
             </View>
@@ -216,6 +226,14 @@ const styles = StyleSheet.create({
   schemeNameWrap: {
     gap: 4,
     marginTop: 2,
+  },
+  inputWithVoiceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  flexInput: {
+    flex: 1,
   },
   inputLabel: {
     fontSize: 11,

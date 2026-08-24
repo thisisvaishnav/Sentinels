@@ -19,6 +19,8 @@ import {
   RelationshipRole,
 } from '../../types';
 
+import { VoiceInputButton } from '../voice/VoiceInputButton';
+
 interface Props {
   visible: boolean;
   editingMember: FamilyMember | null;
@@ -121,13 +123,21 @@ export function FamilyMemberModal({ visible, editingMember, onClose, onSave }: P
             {/* Full Name */}
             <View style={styles.fieldGroup}>
               <Text style={styles.label}>Full Name *</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Member full name"
-                placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-                value={name}
-                onChangeText={setName}
-              />
+              <View style={styles.inputWithVoiceRow}>
+                <TextInput
+                  style={[styles.input, styles.flexInput]}
+                  placeholder="Member full name"
+                  placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
+                  value={name}
+                  onChangeText={setName}
+                />
+                <VoiceInputButton
+                  currentValue={name}
+                  onResult={setName}
+                  fieldLabel="Member Full Name"
+                  size="sm"
+                />
+              </View>
             </View>
 
             {/* Age */}
@@ -273,6 +283,14 @@ const styles = StyleSheet.create({
   fieldGroup: {
     gap: 6,
     marginBottom: 14,
+  },
+  inputWithVoiceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  flexInput: {
+    flex: 1,
   },
   label: {
     fontSize: 12,

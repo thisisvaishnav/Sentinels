@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ENUMERATOR_THEME } from '../../theme';
 
+import { VoiceInputButton } from '../voice/VoiceInputButton';
+
 interface Props {
   remarks: string;
   onChange: (text: string) => void;
@@ -16,15 +18,22 @@ export function EnumeratorRemarksCard({ remarks, onChange }: Props) {
         <Text style={styles.cardTitle}>Enumerator Remarks</Text>
       </View>
 
-      <TextInput
-        style={styles.multilineInput}
-        placeholder="Add any important household observations..."
-        placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-        multiline
-        numberOfLines={3}
-        value={remarks}
-        onChangeText={onChange}
-      />
+      <View style={styles.inputWithVoiceRow}>
+        <TextInput
+          style={[styles.multilineInput, styles.flexInput]}
+          placeholder="Add any important household observations..."
+          placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
+          multiline
+          numberOfLines={3}
+          value={remarks}
+          onChangeText={onChange}
+        />
+        <VoiceInputButton
+          currentValue={remarks}
+          onResult={onChange}
+          fieldLabel="Remarks"
+        />
+      </View>
     </View>
   );
 }
@@ -37,6 +46,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: ENUMERATOR_THEME.colors.border,
     gap: 12,
+  },
+  inputWithVoiceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  flexInput: {
+    flex: 1,
   },
   cardHeaderRow: {
     flexDirection: 'row',

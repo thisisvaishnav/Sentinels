@@ -4,6 +4,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ENUMERATOR_THEME } from '../../theme';
 import { Gender, HeadOfHousehold } from '../../types';
 
+import { VoiceInputButton } from '../voice/VoiceInputButton';
+
 interface Props {
   data: HeadOfHousehold;
   onChange: (updated: Partial<HeadOfHousehold>) => void;
@@ -37,13 +39,20 @@ export function HeadOfHouseholdCard({ data, onChange, errors }: Props) {
       {/* Full Name */}
       <View style={styles.fieldGroup}>
         <Text style={styles.label}>Full Name *</Text>
-        <TextInput
-          style={[styles.input, errors?.name && styles.inputError]}
-          placeholder="e.g. Rajesh Kumar Sharma"
-          placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-          value={data.name}
-          onChangeText={(val) => onChange({ name: val })}
-        />
+        <View style={styles.inputWithVoiceRow}>
+          <TextInput
+            style={[styles.input, styles.flexInput, errors?.name && styles.inputError]}
+            placeholder="e.g. Rajesh Kumar Sharma"
+            placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
+            value={data.name}
+            onChangeText={(val) => onChange({ name: val })}
+          />
+          <VoiceInputButton
+            currentValue={data.name}
+            onResult={(val) => onChange({ name: val })}
+            fieldLabel="Full Name"
+          />
+        </View>
         {errors?.name ? <Text style={styles.errorText}>{errors.name}</Text> : null}
       </View>
 
@@ -104,13 +113,20 @@ export function HeadOfHouseholdCard({ data, onChange, errors }: Props) {
       {/* Role / Relationship */}
       <View style={styles.fieldGroup}>
         <Text style={styles.label}>Household Role</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Head of Household"
-          placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
-          value={data.role}
-          onChangeText={(val) => onChange({ role: val })}
-        />
+        <View style={styles.inputWithVoiceRow}>
+          <TextInput
+            style={[styles.input, styles.flexInput]}
+            placeholder="Head of Household"
+            placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
+            value={data.role}
+            onChangeText={(val) => onChange({ role: val })}
+          />
+          <VoiceInputButton
+            currentValue={data.role || ''}
+            onResult={(val) => onChange({ role: val })}
+            fieldLabel="Household Role"
+          />
+        </View>
       </View>
     </View>
   );
@@ -124,6 +140,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: ENUMERATOR_THEME.colors.border,
     gap: 14,
+  },
+  inputWithVoiceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  flexInput: {
+    flex: 1,
   },
   cardHeaderRow: {
     flexDirection: 'row',
