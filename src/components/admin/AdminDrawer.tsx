@@ -7,11 +7,13 @@ import {
   Modal,
   ScrollView,
   TouchableWithoutFeedback,
+  Alert,
 } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
 import { useAdminDrawer } from '@/src/contexts/AdminDrawerContext';
 import { COLORS } from '@/constants/adminTheme';
+import { signOut } from '@/src/features/auth/authService';
 
 interface AdminDrawerMenuItem {
   id: string;
@@ -125,7 +127,36 @@ export default function AdminDrawer({ profile }: AdminDrawerProps) {
                 </TouchableOpacity>
               );
             })}
-          </ScrollView>
+          </ScrollView>        {/* Sign Out */}
+          <TouchableOpacity
+            style={styles.logoutBtn}
+            onPress={() => {
+              Alert.alert(
+                'Sign Out',
+                'Are you sure you want to sign out?',
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  {
+                    text: 'Sign Out',
+                    style: 'destructive',
+                    onPress: async () => {
+                      close();
+                      try {
+                        await signOut();
+                      } catch {
+                        // Ignore sign out errors
+                      }
+                      router.replace('/(auth)/login');
+                    },
+                  },
+                ],
+              );
+            }}
+            activeOpacity={0.7}
+          >
+            <MaterialCommunityIcons name="logout" size={22} color={COLORS.danger} />
+            <Text style={styles.logoutText}>Sign Out</Text>
+          </TouchableOpacity>
 
           {/* Footer Info */}
           <View style={styles.drawerFooter}>
@@ -251,6 +282,22 @@ const styles = StyleSheet.create({
     height: 6,
     borderRadius: 3,
     backgroundColor: COLORS.accent,
+  },
+  logoutBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    gap: 12,
+    backgroundColor: COLORS.dangerSoft,
+    borderWidth: 1,
+    borderColor: COLORS.danger,
+  },
+  logoutText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.danger,
   },
   drawerFooter: {
     paddingTop: 12,

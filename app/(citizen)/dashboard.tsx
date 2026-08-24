@@ -65,7 +65,7 @@ const citizenQuickActions: QuickActionItem[] = [
   { id: "household", label: "View Household", iconName: "account-outline", color: "#0EA5E9", route: "/(citizen)/household" },
   { id: "counted", label: "Was I Counted?", iconName: "check-circle-outline", color: "#059669" },
   { id: "missing", label: "Report Missing", iconName: "alert-circle-outline", color: "#DC2626" },
-  { id: "support", label: "Report a Need", iconName: "headset-outline", color: "#D97706", route: "/(citizen)/support" },
+  { id: "discuss", label: "Discuss Problem", iconName: "chat-outline", color: "#D97706", route: "/(citizen)/discuss-problem" },
   { id: "schemes", label: "Find Schemes", iconName: "brightness-percent", color: "#7C3AED", route: "/(citizen)/schemes" },
   { id: "track", label: "Track Requests", iconName: "chart-line", color: "#0284C7", route: "/(citizen)/household" },
 ];
@@ -167,7 +167,7 @@ export default function CitizenDashboard() {
         <WelcomeSection
           profile={citizenProfile}
           theme={CITIZEN_THEME}
-          onProfilePress={() => {}}
+          onProfilePress={() => router.push('/(citizen)/profile')}
           onZonePress={() => {}}
         />
 

@@ -31,6 +31,7 @@ interface SideDrawerProps {
   profile: DrawerUserProfile;
   branding?: string;
   version?: string;
+  onLogout?: () => void;
 }
 
 export function SideDrawer({
@@ -40,6 +41,7 @@ export function SideDrawer({
   profile,
   branding = 'DRISHTI',
   version = 'v1.0',
+  onLogout,
 }: SideDrawerProps) {
   const router = useRouter();
   const currentPath = usePathname();
@@ -119,6 +121,18 @@ export function SideDrawer({
               );
             })}
           </ScrollView>
+
+          {/* Sign Out */}
+          {onLogout && (
+            <TouchableOpacity
+              style={styles.logoutBtn}
+              onPress={onLogout}
+              activeOpacity={0.7}
+            >
+              <MaterialCommunityIcons name="logout" size={22} color="#DC2626" />
+              <Text style={styles.logoutText}>Sign Out</Text>
+            </TouchableOpacity>
+          )}
 
           {/* Footer Info */}
           <View style={styles.drawerFooter}>
@@ -244,6 +258,22 @@ const styles = StyleSheet.create({
     height: 6,
     borderRadius: 3,
     backgroundColor: '#0284C7',
+  },
+  logoutBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    gap: 12,
+    backgroundColor: '#FEF2F2',
+    borderWidth: 1,
+    borderColor: '#FECACA',
+  },
+  logoutText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#DC2626',
   },
   drawerFooter: {
     paddingTop: 12,
