@@ -42,7 +42,7 @@ export const INITIAL_NOTIFICATIONS_SEED: EnumeratorNotification[] = [
     read: false,
     priority: 'high',
     householdId: 'LV-UP-000127',
-    actionRoute: '/(enumerator)/priority-tasks?category=Urgent',
+    actionRoute: '/(enumerator)/anomalies',
     actionLabel: 'Review',
   },
   {
