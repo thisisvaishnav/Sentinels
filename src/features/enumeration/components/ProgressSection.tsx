@@ -1,18 +1,39 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { TodayProgress } from '../types';
 import { ENUMERATOR_THEME } from '../theme';
 
 interface ProgressSectionProps {
   progress: TodayProgress;
+  onPressDetails?: () => void;
 }
 
-export const ProgressSection: React.FC<ProgressSectionProps> = ({ progress }) => {
+export const ProgressSection: React.FC<ProgressSectionProps> = ({ progress, onPressDetails }) => {
+  const router = useRouter();
+
+  const handlePress = () => {
+    if (onPressDetails) {
+      onPressDetails();
+    } else {
+      router.push('/(enumerator)/daily-progress');
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={handlePress}
+      activeOpacity={0.8}
+      accessibilityLabel="View Daily Progress Details"
+    >
       <View style={styles.headerRow}>
         <Text style={styles.sectionTitle}>Today{"'"}s Progress</Text>
-        <Text style={styles.percentBadge}>{progress.coveragePercentage}% Covered</Text>
+        <View style={styles.badgeRow}>
+          <Text style={styles.percentBadge}>{progress.coveragePercentage}% Covered</Text>
+          <Ionicons name="chevron-forward" size={16} color={ENUMERATOR_THEME.colors.accent} />
+        </View>
       </View>
 
       {/* Progress Bar */}
@@ -41,7 +62,7 @@ export const ProgressSection: React.FC<ProgressSectionProps> = ({ progress }) =>
           <Text style={[styles.metricValue, { color: ENUMERATOR_THEME.colors.danger }]}>{progress.remaining}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -58,6 +79,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  badgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   sectionTitle: {
     fontSize: 16,

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { ENUMERATOR_THEME } from '../../theme';
 
 interface FieldPerformanceCardProps {
@@ -12,6 +13,7 @@ export const FieldPerformanceCard: React.FC<FieldPerformanceCardProps> = ({
   dailyTarget = 25,
   completedToday = 0,
 }) => {
+  const router = useRouter();
   const remaining = Math.max(0, dailyTarget - completedToday);
   const progressPercent = Math.min(100, Math.round((completedToday / dailyTarget) * 100));
 
@@ -60,6 +62,17 @@ export const FieldPerformanceCard: React.FC<FieldPerformanceCardProps> = ({
           </Text>
         </View>
       </View>
+
+      {/* View Daily Progress Link */}
+      <TouchableOpacity
+        style={styles.viewProgressBtn}
+        onPress={() => router.push('/(enumerator)/daily-progress')}
+        activeOpacity={0.75}
+        accessibilityLabel="View full daily progress"
+      >
+        <Text style={styles.viewProgressText}>View Daily Progress & Activity</Text>
+        <Ionicons name="chevron-forward" size={14} color={ENUMERATOR_THEME.colors.accent} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -153,5 +166,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '800',
     color: ENUMERATOR_THEME.colors.textPrimary,
+  },
+  viewProgressBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
+    borderWidth: 1,
+    borderColor: ENUMERATOR_THEME.colors.accentLight,
+    marginTop: 4,
+  },
+  viewProgressText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: ENUMERATOR_THEME.colors.accent,
   },
 });

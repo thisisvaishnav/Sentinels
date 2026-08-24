@@ -7,6 +7,7 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MissingHouseholdReport, MissingReportsMetrics } from '../types/missingReportTypes';
+import { addEnumeratorActivity } from './activity';
 
 export const MISSING_REPORTS_STORAGE_KEY = '@lokvision_missing_reports';
 
@@ -135,6 +136,21 @@ export async function saveOrUpdateMissingReport(
   }
 
   await saveMissingReports(reports);
+
+  if (isSubmit) {
+    try {
+      await addEnumeratorActivity(
+        'missing',
+        'Missing Household Reported',
+        `Reported missing household (${targetReport.headName || targetReport.reportId}) near ${targetReport.address || 'assigned zone'}.`,
+        targetReport.householdId,
+        targetReport.reportId
+      );
+    } catch {
+      // Ignore activity log error
+    }
+  }
+
   return targetReport;
 }
 

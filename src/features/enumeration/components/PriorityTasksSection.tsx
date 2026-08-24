@@ -17,11 +17,8 @@ export const PriorityTasksSection: React.FC<PriorityTasksSectionProps> = ({ task
       // Blind Spot Areas -> Blind Spot Detection Control Center
       router.push('/(enumerator)/blind-spots');
     } else if (item.id === 'p3') {
-      // Unverified Households -> Priority Tasks filtered by Needs Verification
-      router.push({
-        pathname: '/(enumerator)/priority-tasks',
-        params: { category: 'Needs Verification' },
-      });
+      // Unverified Households -> Dedicated Pending Verification Screen
+      router.push('/(enumerator)/verification' as any);
     } else if (item.id === 'p4') {
       // Anomaly Alerts -> Dedicated Anomaly Detection Screen
       router.push('/(enumerator)/anomalies' as any);

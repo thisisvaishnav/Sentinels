@@ -28,6 +28,7 @@ interface DrawerMenuItem {
 
 const MENU_ITEMS: DrawerMenuItem[] = [
   { id: 'dashboard', label: 'Dashboard', route: '/(enumerator)/dashboard', iconName: 'view-dashboard-outline' },
+  { id: 'daily-progress', label: 'Daily Progress', route: '/(enumerator)/daily-progress', iconName: 'chart-line' },
   { id: 'start-survey', label: 'Start Survey', route: '/(enumerator)/start-survey', iconName: 'clipboard-text-outline' },
   { id: 'register-household', label: 'Register Household', route: '/(enumerator)/register-household', iconName: 'home-plus-outline' },
   { id: 'report-missing', label: 'Report Missing Household', route: '/(enumerator)/report-missing', iconName: 'alert-decagram-outline' },
@@ -35,6 +36,7 @@ const MENU_ITEMS: DrawerMenuItem[] = [
   { id: 'priority-tasks', label: 'Priority Tasks', route: '/(enumerator)/priority-tasks', iconName: 'shield-alert-outline' },
   { id: 'blind-spots', label: 'Blind Spot Areas', route: '/(enumerator)/blind-spots', iconName: 'radar' },
   { id: 'anomalies', label: 'Anomaly Detection', route: '/(enumerator)/anomalies', iconName: 'alert-octagon-outline' },
+  { id: 'verification', label: 'Pending Verification', route: '/(enumerator)/verification', iconName: 'clipboard-check-outline' },
   { id: 'assigned-zone', label: 'Assigned Zone', route: '/(enumerator)/assigned-zone', iconName: 'map-marker-path' },
   { id: 'notifications', label: 'Notifications', route: '/(enumerator)/notifications', iconName: 'bell-outline' },
   { id: 'profile', label: 'Profile / Settings', route: '/(enumerator)/profile', iconName: 'account-cog-outline' },

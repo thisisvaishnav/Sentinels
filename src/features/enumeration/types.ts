@@ -46,12 +46,44 @@ export interface SyncStatusInfo {
   isSyncing: boolean;
 }
 
+export type EnumeratorActivityType =
+  | 'registered'
+  | 'verified'
+  | 'survey_started'
+  | 'survey_completed'
+  | 'verification_completed'
+  | 'missing'
+  | 'anomaly_reviewed'
+  | 'sync';
+
 export interface EnumeratorActivity {
   id: string;
   title: string;
   detail: string;
   timestamp: string;
-  type: 'registered' | 'verified' | 'missing' | 'sync';
+  type: EnumeratorActivityType;
+  householdId?: string;
+  areaId?: string;
+  dateStr?: string;
+}
+
+export interface EnumeratorActivityLog {
+  id: string;
+  type: EnumeratorActivityType;
+  title: string;
+  description?: string;
+  householdId?: string;
+  areaId?: string;
+  timestamp: string; // ISO String
+}
+
+export interface WorkBreakdownMetrics {
+  householdsRegistered: number;
+  surveysStarted: number;
+  surveysCompleted: number;
+  verificationsCompleted: number;
+  missingReports: number;
+  anomaliesReviewed: number;
 }
 
 // ==========================================
@@ -284,6 +316,11 @@ export interface ZoneHouseholdItem {
   ownership?: 'Owned' | 'Rented' | 'Other';
   needs?: HouseholdNeed[];
   verificationStatus?: 'Verified' | 'Pending' | 'Needs Verification' | 'Not Verified';
+  verifiedAt?: string;
+  verifiedBy?: string;
+  verificationReason?: string;
+  idType?: IdentityType;
+  idLast4Digits?: string;
 }
 
 export interface ZoneActivityItem {

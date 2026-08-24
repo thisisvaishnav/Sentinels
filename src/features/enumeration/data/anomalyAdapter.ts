@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ZoneHouseholdItem } from '../types';
+import { addEnumeratorActivity } from './activity';
 import {
   AnomalyFilterCategory,
   AnomalySeverity,
@@ -32,6 +33,13 @@ export async function loadReviewedAnomalyIds(): Promise<string[]> {
 export async function saveReviewedAnomalyIds(reviewedIds: string[]): Promise<void> {
   try {
     await AsyncStorage.setItem(REVIEWED_ANOMALIES_STORAGE_KEY, JSON.stringify(reviewedIds));
+    if (reviewedIds.length > 0) {
+      await addEnumeratorActivity(
+        'anomaly_reviewed',
+        'Density Anomaly Reviewed',
+        `Reviewed and acknowledged density anomaly alert #${reviewedIds[reviewedIds.length - 1]}.`
+      );
+    }
   } catch {
     // Ignore storage save errors
   }

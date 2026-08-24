@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { loadEnumeratorHouseholds } from '@/src/features/enumeration/data/households';
+import { addEnumeratorActivity } from '@/src/features/enumeration/data/activity';
 import {
   FamilyMember,
   GpsLocationData,
@@ -299,6 +300,12 @@ export default function RegisterHouseholdScreen() {
 
     try {
       await AsyncStorage.removeItem(DRAFT_STORAGE_KEY);
+      await addEnumeratorActivity(
+        'registered',
+        'New Household Registered',
+        `Registered ${headOfHousehold.name} household (${householdProfile.fullAddress || householdProfile.locality || 'assigned zone'}).`,
+        householdId
+      );
     } catch {
       // Ignore cleanup error
     }

@@ -18,6 +18,7 @@ import {
   loadEnumeratorHouseholds,
   updateHouseholdStatusInStore,
 } from '@/src/features/enumeration/data/households';
+import { addEnumeratorActivity } from '@/src/features/enumeration/data/activity';
 import {
   AssignedHouseholdSummary,
   BasicFacilitiesData,
@@ -359,6 +360,12 @@ export default function StartSurveyScreen() {
     try {
       await AsyncStorage.setItem(`@lokvision_survey_${activeHousehold.householdId}`, JSON.stringify(payload));
       await updateHouseholdStatusInStore(activeHousehold.householdId, 'In Progress');
+      await addEnumeratorActivity(
+        'survey_started',
+        'Survey Started',
+        `Saved progress for ${activeHousehold.headName} household (${activeHousehold.householdId}).`,
+        activeHousehold.householdId
+      );
 
       // Update local households status to In Progress
       setHouseholds((prev) =>
@@ -383,6 +390,12 @@ export default function StartSurveyScreen() {
           try {
             await AsyncStorage.removeItem(`@lokvision_survey_${activeHousehold.householdId}`);
             await updateHouseholdStatusInStore(activeHousehold.householdId, 'Completed');
+            await addEnumeratorActivity(
+              'survey_completed',
+              'Survey Completed',
+              `Completed field survey for ${headName} household (${familyMembers.length + 1} members).`,
+              activeHousehold.householdId
+            );
           } catch {
             // Ignore cleanup error
           }

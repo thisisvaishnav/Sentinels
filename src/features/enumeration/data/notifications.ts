@@ -66,7 +66,7 @@ export const INITIAL_NOTIFICATIONS_SEED: EnumeratorNotification[] = [
     read: false,
     priority: 'high',
     householdId: 'LV-UP-000131',
-    actionRoute: '/(enumerator)/priority-tasks?category=Needs%20Verification',
+    actionRoute: '/(enumerator)/verification',
     actionLabel: 'Verify Household',
   },
   {
