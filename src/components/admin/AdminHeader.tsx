@@ -1,20 +1,20 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { COLORS } from '@/constants/adminTheme';
 import { useAdminDrawer } from '@/src/contexts/AdminDrawerContext';
 
 interface AdminHeaderProps {
   userName?: string;
-  enumeratorId?: string;
+  adminId?: string;
   notificationCount?: number;
   onLogout?: () => void;
 }
 
 export default function AdminHeader({
-  userName = 'Sarah Jenkins',
-  enumeratorId = 'EN-4029',
+  userName = 'Admin User',
+  adminId = 'ADM-001',
   notificationCount = 3,
   onLogout,
 }: AdminHeaderProps) {
@@ -22,36 +22,36 @@ export default function AdminHeader({
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
-      {/* Left: hamburger + logo */}
-      <View style={styles.leftRow}>
-        <TouchableOpacity style={styles.iconBtn} activeOpacity={0.6} onPress={toggle}>
-          <Ionicons name="menu" size={24} color={COLORS.textPrimary} />
+    <View style={styles.header}>
+      <View style={styles.headerLeft}>
+        {/* Hamburger Menu Button */}
+        <TouchableOpacity style={styles.menuBtn} onPress={toggle} activeOpacity={0.7}>
+          <Ionicons name="menu-outline" size={24} color={COLORS.textPrimary} />
         </TouchableOpacity>
 
-        <View style={styles.logoWrap}>
-          <Ionicons name="business" size={20} color={COLORS.accent} />
+        <View style={styles.brandIconBox}>
+          <MaterialCommunityIcons name="satellite-variant" size={22} color={COLORS.accent} />
         </View>
-
-        <View style={styles.titleBlock}>
-          <Text style={styles.title}>Lokvision</Text>
-          <Text style={styles.subtitle}>{userName} · {enumeratorId}</Text>
+        <View>
+          <Text style={styles.brandName}>DRISHTI</Text>
+          <Text style={styles.roleSub}>{userName} · {adminId}</Text>
         </View>
       </View>
 
-      {/* Right: online badge + bell + logout */}
-      <View style={styles.rightRow}>
-        <View style={styles.onlineBadge}>
-          <View style={styles.onlineDot} />
-          <Text style={styles.onlineText}>Online</Text>
+      <View style={styles.headerRight}>
+        {/* Status Indicator */}
+        <View style={styles.statusPill}>
+          <View style={styles.statusDot} />
+          <Text style={styles.statusText}>Online</Text>
         </View>
 
+        {/* Notification Bell */}
         <TouchableOpacity
           style={styles.iconBtn}
-          activeOpacity={0.6}
           onPress={() => router.push('/(admin)/notifications')}
+          activeOpacity={0.7}
         >
-          <Ionicons name="notifications-outline" size={22} color={COLORS.textPrimary} />
+          <Ionicons name="notifications-outline" size={22} color={COLORS.textMuted} />
           {notificationCount > 0 && (
             <View style={styles.badge}>
               <Text style={styles.badgeText}>{notificationCount}</Text>
@@ -59,8 +59,9 @@ export default function AdminHeader({
           )}
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconBtn} activeOpacity={0.6} onPress={onLogout}>
-          <Ionicons name="log-out-outline" size={22} color={COLORS.textPrimary} />
+        {/* Logout */}
+        <TouchableOpacity style={styles.iconBtn} onPress={onLogout} activeOpacity={0.7}>
+          <MaterialCommunityIcons name="logout" size={20} color={COLORS.textMuted} />
         </TouchableOpacity>
       </View>
     </View>
@@ -68,26 +69,30 @@ export default function AdminHeader({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 12,
-    paddingVertical: 12,
+  header: {
+    height: 66,
     backgroundColor: COLORS.surface,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
-  },
-  leftRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'space-between',
+    paddingHorizontal: 14,
   },
-  iconBtn: {
-    padding: 6,
-    position: 'relative',
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
-  logoWrap: {
+  menuBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: COLORS.surfaceAlt,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  brandIconBox: {
     width: 36,
     height: 36,
     borderRadius: 10,
@@ -95,59 +100,65 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  titleBlock: {
-    gap: 1,
-  },
-  title: {
-    fontSize: 16,
+  brandName: {
+    fontSize: 18,
     fontWeight: '800',
     color: COLORS.textPrimary,
+    letterSpacing: 0.2,
   },
-  subtitle: {
+  roleSub: {
     fontSize: 11,
+    color: COLORS.textMuted,
     fontWeight: '500',
-    color: COLORS.textSecondary,
   },
-  rightRow: {
+  headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
   },
-  onlineBadge: {
+  statusPill: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.successSoft,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
     borderRadius: 20,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
     gap: 5,
   },
-  onlineDot: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
     backgroundColor: COLORS.success,
   },
-  onlineText: {
-    fontSize: 12,
-    fontWeight: '600',
+  statusText: {
+    fontSize: 11,
+    fontWeight: '700',
     color: COLORS.success,
+  },
+  iconBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: COLORS.surfaceAlt,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
   },
   badge: {
     position: 'absolute',
-    top: 2,
-    right: 2,
-    minWidth: 18,
-    height: 18,
-    borderRadius: 9,
+    top: 4,
+    right: 4,
     backgroundColor: COLORS.danger,
+    borderRadius: 8,
+    width: 14,
+    height: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 4,
   },
   badgeText: {
-    fontSize: 10,
-    fontWeight: '700',
     color: COLORS.textOnPrimary,
+    fontSize: 9,
+    fontWeight: '800',
   },
 });
