@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import {
   getDerivedZoneMetrics,
   loadEnumeratorHouseholds,
@@ -10,7 +11,7 @@ import {
   mockRecentActivities,
   mockSyncStatus,
 } from '@/src/features/enumeration/data/households';
-import { AssignedZoneInfo, TodayProgress, ZoneHouseholdItem } from '@/src/features/enumeration/types';
+import { AssignedZoneInfo, PriorityTaskMetric, TodayProgress, ZoneHouseholdItem } from '@/src/features/enumeration/types';
 
 import { AssignedZoneSection } from '@/src/features/enumeration/components/AssignedZoneSection';
 import { EnumeratorDrawer } from '@/src/features/enumeration/components/EnumeratorDrawer';
@@ -24,6 +25,7 @@ import { WelcomeSection } from '@/src/features/enumeration/components/WelcomeSec
 import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 export default function EnumeratorDashboard() {
+  const router = useRouter();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [households, setHouseholds] = useState<ZoneHouseholdItem[]>([]);
 
@@ -52,17 +54,38 @@ export default function EnumeratorDashboard() {
     coveragePercentage: metrics.overallCoveragePercent,
   };
 
+  const handleTaskPress = (task: PriorityTaskMetric) => {
+    if (task.id === 'p2') {
+      router.push('/(enumerator)/blind-spots');
+    } else if (task.id === 'p3') {
+      router.push({ pathname: '/(enumerator)/priority-tasks', params: { category: 'Needs Verification' } });
+    } else if (task.id === 'p4') {
+      router.push({ pathname: '/(enumerator)/priority-tasks', params: { category: 'Urgent' } });
+    } else {
+      router.push({ pathname: '/(enumerator)/priority-tasks', params: { category: 'High Priority' } });
+    }
+  };
+
+  const handleActionPress = (act: { id: string; label: string; route?: string }) => {
+    const routeMap: Record<string, string> = {
+      survey: '/(enumerator)/start-survey',
+      register: '/(enumerator)/register-household',
+      missing: '/(enumerator)/report-missing',
+      map: '/(enumerator)/gis-map',
+    };
+    const route = act.route || routeMap[act.id] || '/(enumerator)/dashboard';
+    router.push(route as any);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={ENUMERATOR_THEME.colors.background} />
 
-      {/* 1. Header with Hamburger Menu Button */}
       <EnumeratorHeader
         profile={mockEnumeratorProfile}
         onOpenDrawer={() => setDrawerVisible(true)}
       />
 
-      {/* Navigation Drawer Modal */}
       <EnumeratorDrawer
         visible={drawerVisible}
         onClose={() => setDrawerVisible(false)}
@@ -73,25 +96,30 @@ export default function EnumeratorDashboard() {
         contentContainerStyle={styles.body}
         showsVerticalScrollIndicator={false}
       >
-        {/* 2. Welcome Section */}
-        <WelcomeSection profile={mockEnumeratorProfile} />
+        <WelcomeSection
+          profile={mockEnumeratorProfile}
+          onProfilePress={() => router.push('/(enumerator)/profile')}
+          onZonePress={() => router.push('/(enumerator)/assigned-zone')}
+        />
 
-        {/* 3. Today's Progress */}
         <ProgressSection progress={todayProgress} />
 
-        {/* 4. Priority Tasks */}
-        <PriorityTasksSection tasks={mockPriorityTasks} />
+        <PriorityTasksSection
+          tasks={mockPriorityTasks}
+          onTaskPress={handleTaskPress}
+          onViewAll={() => router.push('/(enumerator)/priority-tasks')}
+        />
 
-        {/* 5. Assigned Zone */}
-        <AssignedZoneSection zone={assignedZoneInfo} />
+        <AssignedZoneSection
+          zone={assignedZoneInfo}
+          onCardPress={() => router.push('/(enumerator)/assigned-zone')}
+          onViewRoute={() => router.push('/(enumerator)/gis-map')}
+        />
 
-        {/* 6. Quick Actions */}
-        <QuickActionsSection actions={mockQuickActions} />
+        <QuickActionsSection actions={mockQuickActions} onActionPress={handleActionPress} />
 
-        {/* 7. Sync Status */}
         <SyncStatusSection syncInfo={mockSyncStatus} />
 
-        {/* 8. Recent Activity */}
         <RecentActivitySection activities={mockRecentActivities} />
 
         <View style={styles.bottomSpacer} />

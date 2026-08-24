@@ -1,44 +1,45 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TodayProgress } from '../types';
-import { ENUMERATOR_THEME } from '../theme';
+import { ENUMERATOR_THEME, Theme } from '../theme';
 
 interface ProgressSectionProps {
   progress: TodayProgress;
+  theme?: Theme;
 }
 
-export const ProgressSection: React.FC<ProgressSectionProps> = ({ progress }) => {
+export const ProgressSection: React.FC<ProgressSectionProps> = ({ progress, theme = ENUMERATOR_THEME }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.cardBackground, borderColor: theme.colors.border }]}>
       <View style={styles.headerRow}>
-        <Text style={styles.sectionTitle}>Today{"'"}s Progress</Text>
-        <Text style={styles.percentBadge}>{progress.coveragePercentage}% Covered</Text>
+        <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Today{"'"}s Progress</Text>
+        <Text style={[styles.percentBadge, { color: theme.colors.accent }]}>{progress.coveragePercentage}% Covered</Text>
       </View>
 
       {/* Progress Bar */}
-      <View style={styles.track}>
-        <View style={[styles.fill, { width: `${progress.coveragePercentage}%` }]} />
+      <View style={[styles.track, { backgroundColor: theme.colors.subtleBackground }]}>
+        <View style={[styles.fill, { width: `${progress.coveragePercentage}%`, backgroundColor: theme.colors.accent }]} />
       </View>
 
       {/* Metrics Row */}
       <View style={styles.metricsRow}>
         <View style={styles.metricItem}>
-          <Text style={styles.metricLabel}>Assigned</Text>
-          <Text style={styles.metricValue}>{progress.totalAssigned}</Text>
+          <Text style={[styles.metricLabel, { color: theme.colors.textMuted }]}>Assigned</Text>
+          <Text style={[styles.metricValue, { color: theme.colors.textPrimary }]}>{progress.totalAssigned}</Text>
         </View>
 
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />
 
         <View style={styles.metricItem}>
-          <Text style={styles.metricLabel}>Completed</Text>
-          <Text style={[styles.metricValue, { color: ENUMERATOR_THEME.colors.success }]}>{progress.completed}</Text>
+          <Text style={[styles.metricLabel, { color: theme.colors.textMuted }]}>Completed</Text>
+          <Text style={[styles.metricValue, { color: theme.colors.success }]}>{progress.completed}</Text>
         </View>
 
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />
 
         <View style={styles.metricItem}>
-          <Text style={styles.metricLabel}>Remaining</Text>
-          <Text style={[styles.metricValue, { color: ENUMERATOR_THEME.colors.danger }]}>{progress.remaining}</Text>
+          <Text style={[styles.metricLabel, { color: theme.colors.textMuted }]}>Remaining</Text>
+          <Text style={[styles.metricValue, { color: theme.colors.danger }]}>{progress.remaining}</Text>
         </View>
       </View>
     </View>
@@ -47,12 +48,10 @@ export const ProgressSection: React.FC<ProgressSectionProps> = ({ progress }) =>
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
-    borderRadius: ENUMERATOR_THEME.borderRadius.xl,
+    borderRadius: 16,
     padding: 18,
     gap: 14,
     borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.border,
   },
   headerRow: {
     flexDirection: 'row',
@@ -62,22 +61,18 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   percentBadge: {
     fontSize: 13,
     fontWeight: '700',
-    color: ENUMERATOR_THEME.colors.accent,
   },
   track: {
     height: 10,
-    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderRadius: 5,
     overflow: 'hidden',
   },
   fill: {
     height: '100%',
-    backgroundColor: ENUMERATOR_THEME.colors.accent,
     borderRadius: 5,
   },
   metricsRow: {
@@ -92,18 +87,15 @@ const styles = StyleSheet.create({
   },
   metricLabel: {
     fontSize: 11,
-    color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: '500',
     textTransform: 'uppercase',
   },
   metricValue: {
     fontSize: 20,
     fontWeight: '800',
-    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   divider: {
     width: 1,
     height: 28,
-    backgroundColor: ENUMERATOR_THEME.colors.border,
   },
 });

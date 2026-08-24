@@ -1,51 +1,28 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import { PriorityTaskMetric } from '../types';
-import { ENUMERATOR_THEME } from '../theme';
+import { ENUMERATOR_THEME, Theme } from '../theme';
 
 interface PriorityTasksSectionProps {
   tasks: PriorityTaskMetric[];
+  theme?: Theme;
+  onTaskPress?: (task: PriorityTaskMetric) => void;
+  onViewAll?: () => void;
 }
 
-export const PriorityTasksSection: React.FC<PriorityTasksSectionProps> = ({ tasks }) => {
-  const router = useRouter();
-
-  const handleTaskPress = (item: PriorityTaskMetric) => {
-    if (item.id === 'p2') {
-      // Blind Spot Areas -> Blind Spot Detection Control Center
-      router.push('/(enumerator)/blind-spots');
-    } else if (item.id === 'p3') {
-      // Unverified Households -> Priority Tasks filtered by Needs Verification
-      router.push({
-        pathname: '/(enumerator)/priority-tasks',
-        params: { category: 'Needs Verification' },
-      });
-    } else if (item.id === 'p4') {
-      // Anomaly Alerts / Urgent -> Priority Tasks filtered by Urgent
-      router.push({
-        pathname: '/(enumerator)/priority-tasks',
-        params: { category: 'Urgent' },
-      });
-    } else {
-      // High-Priority Households -> Priority Tasks filtered by High Priority
-      router.push({
-        pathname: '/(enumerator)/priority-tasks',
-        params: { category: 'High Priority' },
-      });
-    }
-  };
-
+export const PriorityTasksSection: React.FC<PriorityTasksSectionProps> = ({
+  tasks,
+  theme = ENUMERATOR_THEME,
+  onTaskPress,
+  onViewAll,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
-        <Text style={styles.sectionTitle}>Priority Tasks</Text>
-        <TouchableOpacity
-          onPress={() => router.push('/(enumerator)/priority-tasks')}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.viewAllText}>View All →</Text>
+        <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Priority Tasks</Text>
+        <TouchableOpacity onPress={onViewAll} activeOpacity={0.8}>
+          <Text style={[styles.viewAllText, { color: theme.colors.accent }]}>View All →</Text>
         </TouchableOpacity>
       </View>
 
@@ -57,8 +34,8 @@ export const PriorityTasksSection: React.FC<PriorityTasksSectionProps> = ({ task
         {tasks.map((item) => (
           <TouchableOpacity
             key={item.id}
-            style={styles.card}
-            onPress={() => handleTaskPress(item)}
+            style={[styles.card, { backgroundColor: theme.colors.cardBackground, borderColor: theme.colors.border }]}
+            onPress={() => onTaskPress?.(item)}
             activeOpacity={0.8}
           >
             <View style={styles.cardHeader}>
@@ -72,8 +49,8 @@ export const PriorityTasksSection: React.FC<PriorityTasksSectionProps> = ({ task
               <Text style={[styles.countText, { color: item.color }]}>{item.count}</Text>
             </View>
 
-            <Text style={styles.cardTitle} numberOfLines={1}>{item.title}</Text>
-            <Text style={styles.unitText} numberOfLines={1}>{item.unit}</Text>
+            <Text style={[styles.cardTitle, { color: theme.colors.textPrimary }]} numberOfLines={1}>{item.title}</Text>
+            <Text style={[styles.unitText, { color: theme.colors.textMuted }]} numberOfLines={1}>{item.unit}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -93,12 +70,10 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   viewAllText: {
     fontSize: 12,
     fontWeight: '700',
-    color: ENUMERATOR_THEME.colors.accent,
   },
   scrollContent: {
     gap: 12,
@@ -106,11 +81,9 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 165,
-    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
-    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
+    borderRadius: 12,
     padding: 14,
     borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.border,
     gap: 6,
   },
   cardHeader: {
@@ -121,7 +94,7 @@ const styles = StyleSheet.create({
   iconWrap: {
     width: 34,
     height: 34,
-    borderRadius: ENUMERATOR_THEME.borderRadius.sm,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -132,11 +105,9 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: ENUMERATOR_THEME.colors.textPrimary,
     marginTop: 4,
   },
   unitText: {
     fontSize: 11,
-    color: ENUMERATOR_THEME.colors.textMuted,
   },
 });
