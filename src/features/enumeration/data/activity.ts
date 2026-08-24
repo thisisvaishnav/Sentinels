@@ -175,10 +175,11 @@ export function isYesterdayLocalDay(dateStr: string): boolean {
 }
 
 /**
- * Filter activities for Today vs Earlier
+ * Group activities by timeframe branches: Today, Yesterday, Earlier
  */
-export function filterTodayActivities(activities: EnumeratorActivityLog[]) {
+export function groupActivitiesByTimeframe(activities: EnumeratorActivityLog[]) {
   const today: EnumeratorActivityLog[] = [];
+  const yesterday: EnumeratorActivityLog[] = [];
   const earlier: EnumeratorActivityLog[] = [];
 
   const now = new Date();
@@ -186,12 +187,54 @@ export function filterTodayActivities(activities: EnumeratorActivityLog[]) {
   activities.forEach((act) => {
     if (isSameLocalDay(act.timestamp, now)) {
       today.push(act);
+    } else if (isYesterdayLocalDay(act.timestamp)) {
+      yesterday.push(act);
     } else {
       earlier.push(act);
     }
   });
 
-  return { today, earlier };
+  return { today, yesterday, earlier };
+}
+
+/**
+ * Filter activities for Today vs Earlier (with yesterday branch included in earlier for backward compatibility)
+ */
+export function filterTodayActivities(activities: EnumeratorActivityLog[]) {
+  const { today, yesterday, earlier: older } = groupActivitiesByTimeframe(activities);
+  return { today, earlier: [...yesterday, ...older] };
+}
+
+/**
+ * Filter activities by type branch
+ */
+export function filterActivitiesByType(
+  activities: EnumeratorActivityLog[],
+  type: EnumeratorActivityType
+): EnumeratorActivityLog[] {
+  return activities.filter((act) => act.type === type);
+}
+
+/**
+ * Group activities by activity type branches
+ */
+export function groupActivitiesByType(activities: EnumeratorActivityLog[]): Record<EnumeratorActivityType, EnumeratorActivityLog[]> {
+  const initial: Record<EnumeratorActivityType, EnumeratorActivityLog[]> = {
+    registered: [],
+    survey_started: [],
+    survey_completed: [],
+    verification_completed: [],
+    missing: [],
+    anomaly_reviewed: [],
+    sync: [],
+  };
+
+  return activities.reduce((acc, act) => {
+    if (acc[act.type]) {
+      acc[act.type].push(act);
+    }
+    return acc;
+  }, initial);
 }
 
 /**

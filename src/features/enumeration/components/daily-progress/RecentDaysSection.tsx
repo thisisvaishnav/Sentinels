@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { EnumeratorActivityLog } from '../../types';
 import { ENUMERATOR_THEME } from '../../theme';
-import { isSameLocalDay, isYesterdayLocalDay } from '../../data/activity';
+import { groupActivitiesByTimeframe } from '../../data/activity';
 
 interface RecentDaysSectionProps {
   activities: EnumeratorActivityLog[];
@@ -11,20 +11,15 @@ interface RecentDaysSectionProps {
 
 export const RecentDaysSection: React.FC<RecentDaysSectionProps> = ({ activities }) => {
   const now = new Date();
+  const { today, yesterday, earlier } = groupActivitiesByTimeframe(activities);
 
-  const todayCount = activities.filter((act) => isSameLocalDay(act.timestamp, now)).length;
-  const yesterdayCount = activities.filter((act) => isYesterdayLocalDay(act.timestamp)).length;
-  const previousCount = activities.filter(
-    (act) => !isSameLocalDay(act.timestamp, now) && !isYesterdayLocalDay(act.timestamp)
-  ).length;
+  const todayCount = today.length;
+  const yesterdayCount = yesterday.length;
+  const previousCount = earlier.length;
 
-  const todayCompleted = activities.filter(
-    (act) => isSameLocalDay(act.timestamp, now) && act.type === 'survey_completed'
-  ).length;
-
-  const yesterdayCompleted = activities.filter(
-    (act) => isYesterdayLocalDay(act.timestamp) && act.type === 'survey_completed'
-  ).length;
+  const todayCompleted = today.filter((act) => act.type === 'survey_completed').length;
+  const yesterdayCompleted = yesterday.filter((act) => act.type === 'survey_completed').length;
+  const earlierCompleted = earlier.filter((act) => act.type === 'survey_completed').length;
 
   const days = [
     {
@@ -48,7 +43,7 @@ export const RecentDaysSection: React.FC<RecentDaysSectionProps> = ({ activities
       title: 'Earlier',
       dateLabel: 'Prior Field Work',
       totalEvents: previousCount,
-      surveysCompleted: Math.max(0, activities.length - todayCount - yesterdayCount - 2),
+      surveysCompleted: earlierCompleted,
       badgeColor: '#94A3B8',
     },
   ];
