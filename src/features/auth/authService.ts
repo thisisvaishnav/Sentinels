@@ -98,6 +98,7 @@ export async function loginWithRole(role: Role, data: LoginData) {
   if (role === 'citizen') {
     const d = data as CitizenLoginData;
     const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001';
+    console.log('[CitizenLogin] API URL:', apiUrl);
 
     const response = await fetch(`${apiUrl}/api/auth/citizen/login`, {
       method: 'POST',
