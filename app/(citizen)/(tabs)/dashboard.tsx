@@ -177,7 +177,7 @@ export default function CitizenDashboard() {
           tasks={citizenPriorityTasks}
           theme={CITIZEN_THEME}
           onTaskPress={(task) => {
-            if (task.id === "c1") router.push("/(citizen)/household");
+            if (task.id === "c1") router.push("/(citizen)/household" as any);
           }}
           onViewAll={() => {}}
         />
