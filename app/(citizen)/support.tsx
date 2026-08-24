@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 
@@ -25,24 +27,34 @@ const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001';
 
 const FAQ_ITEMS = [
   {
+    question: 'How do I register my household?',
+    answer:
+      'Go to the Home tab and tap "View Household". If you haven\'t registered yet, you\'ll see a registration form. Fill in your details, capture GPS location, and submit.',
+  },
+  {
     question: 'How do I update my household information?',
     answer:
-      'You can update your household information by navigating to the Home tab and tapping \'View Details\' on your household card. From there, you can edit your profile and submit changes for verification.',
+      'Currently, you can request updates by contacting our support team. We are working on a self-service edit feature coming soon.',
   },
   {
-    question: 'How long does scheme approval take?',
+    question: 'What documents do I need?',
     answer:
-      'Scheme approval times vary by category. Most applications are processed within 7-15 working days. You can track your application status from the Progress tab.',
+      'Keep your Aadhaar card, ration card, and bank passbook handy. These help verify your household details and scheme eligibility.',
   },
   {
-    question: 'What documents are required for scheme application?',
+    question: 'How do I apply for government schemes?',
     answer:
-      'Commonly required documents include Aadhaar card, income certificate, caste certificate (if applicable), and bank passbook. Specific requirements vary by scheme.',
+      'Navigate to the "Find Schemes" section from the dashboard. Browse available schemes, check eligibility, and apply directly through the app.',
   },
   {
-    question: 'How do I contact a enumerator in my area?',
+    question: 'How do I track my application status?',
     answer:
-      'You can reach your local enumerator through the support helpline or by raising a support ticket. The system will connect you with the nearest available enumerator.',
+      'Use the "Track Requests" option on your dashboard to view the real-time status of your scheme applications and household registration.',
+  },
+  {
+    question: 'Who is my local enumerator?',
+    answer:
+      'Your local enumerator is assigned to your ward area. You can reach them through the helpline or they may visit your household during survey rounds.',
   },
 ];
 
@@ -63,6 +75,33 @@ function SectionHeader({ title, subtitle, iconName }: { title: string; subtitle:
         </View>
       </View>
     </View>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                              Contact Card                                   */
+/* -------------------------------------------------------------------------- */
+
+function ContactCard({ icon, iconColor, iconBg, title, subtitle, onPress }: {
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  iconColor: string;
+  iconBg: string;
+  title: string;
+  subtitle: string;
+  onPress?: () => void;
+}) {
+  const Wrapper = onPress ? TouchableOpacity : View;
+  return (
+    <Wrapper style={s.contactCard} onPress={onPress} activeOpacity={0.7}>
+      <View style={[s.contactIconWrap, { backgroundColor: iconBg }]}>
+        <MaterialCommunityIcons name={icon} size={20} color={iconColor} />
+      </View>
+      <View style={s.contactTextWrap}>
+        <Text style={s.contactTitle}>{title}</Text>
+        <Text style={s.contactSub}>{subtitle}</Text>
+      </View>
+      {onPress && <Ionicons name="chevron-forward" size={18} color={T.colors.textMuted} />}
+    </Wrapper>
   );
 }
 
@@ -148,33 +187,85 @@ export default function CitizenSupportScreen() {
           />
         </View>
 
-        {/* Urgent Card */}
-        <View style={s.urgentCard}>
-          <View style={s.urgentIcon}>
-            <Ionicons name="call-outline" size={20} color={T.colors.danger} />
-          </View>
-          <View style={s.urgentCopy}>
-            <Text style={s.urgentTitle}>Urgent Assistance</Text>
-            <Text style={s.urgentText}>
-              For emergencies, call our 24/7 helpline
-            </Text>
-            <Text style={s.urgentNumber}>1800-XXX-XXXX</Text>
-          </View>
+        {/* Emergency Helplines */}
+        <View style={s.helplineSection}>
+          <Text style={s.helplineSectionTitle}>Emergency Helplines</Text>
+
+          <ContactCard
+            icon="phone"
+            iconColor={T.colors.danger}
+            iconBg={T.colors.dangerBg}
+            title="Emergency Services"
+            subtitle="112 (Police / Fire / Ambulance)"
+            onPress={() => Linking.openURL('tel:112')}
+          />
+
+          <ContactCard
+            icon="phone"
+            iconColor={T.colors.warning}
+            iconBg={T.colors.warningBg}
+            title="Women Helpline"
+            subtitle="181 (24/7 Women in Distress)"
+            onPress={() => Linking.openURL('tel:181')}
+          />
+
+          <ContactCard
+            icon="phone"
+            iconColor={T.colors.success}
+            iconBg={T.colors.successBg}
+            title="Lokvision Citizen Support"
+            subtitle="1800-180-5678 (Toll Free)"
+            onPress={() => Linking.openURL('tel:18001805678')}
+          />
         </View>
 
-        {/* GIS Tools */}
-        <SupportSection title="GIS Tools" icon="map-outline">
+        {/* Quick Actions */}
+        <View style={s.quickSection}>
+          <Text style={s.helplineSectionTitle}>Quick Help</Text>
+
+          <ContactCard
+            icon="file-document-outline"
+            iconColor={T.colors.accent}
+            iconBg={T.colors.accentSubtle}
+            title="Report an Issue"
+            subtitle="Something wrong with your household data?"
+            onPress={() => {}}
+          />
+
+          <ContactCard
+            icon="email-outline"
+            iconColor={T.colors.accent}
+            iconBg={T.colors.accentSubtle}
+            title="Email Support"
+            subtitle="support@lokvision.gov.in"
+            onPress={() => Linking.openURL('mailto:support@lokvision.gov.in')}
+          />
+
+          <ContactCard
+            icon="map-marker-radius-outline"
+            iconColor={T.colors.accent}
+            iconBg={T.colors.accentSubtle}
+            title="Find Nearest Office"
+            subtitle="Locate district welfare office"
+            onPress={() => {}}
+          />
+        </View>
+
+        {/* About Section */}
+        <SupportSection title="About Lokvision" icon="information-circle-outline">
           <Text style={s.sectionContent}>
-            Access mapping tools to locate nearby government offices, health centers, and
-            educational institutions in your area.
+            Lokvision is a citizen-centric platform for household registration, welfare scheme
+            discovery, and community development planning. Your data helps improve public
+            services in your area.
           </Text>
         </SupportSection>
 
-        {/* Survey Protocols */}
-        <SupportSection title="Survey Protocols" icon="clipboard-outline">
+        {/* Data Privacy */}
+        <SupportSection title="Data Privacy & Security" icon="shield-checkmark-outline">
           <Text style={s.sectionContent}>
-            Learn about ongoing community surveys, how to participate, and what data is
-            being collected for village development planning.
+            Your household data is encrypted and stored securely. It is only used for
+            government welfare purposes and is never shared with third parties without
+            your consent.
           </Text>
         </SupportSection>
 
@@ -246,7 +337,7 @@ const s = StyleSheet.create({
     backgroundColor: T.colors.inputBackground,
     borderWidth: 1,
     borderColor: T.colors.borderSubtle,
-    borderRadius: T.borderRadius.sm,
+    borderRadius: T.borderRadius.md,
     paddingHorizontal: 12,
     gap: 8,
   },
@@ -257,43 +348,52 @@ const s = StyleSheet.create({
     color: T.colors.textPrimary,
   },
 
-  /* Urgent Card */
-  urgentCard: {
+  /* Helpline Section */
+  helplineSection: {
+    gap: 10,
+  },
+  helplineSectionTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: T.colors.textPrimary,
+    marginBottom: 2,
+  },
+
+  /* Contact Card */
+  contactCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
-    backgroundColor: T.colors.dangerBg,
-    borderWidth: 1,
-    borderColor: T.colors.dangerBorder,
+    gap: 12,
+    backgroundColor: T.colors.cardBackground,
     borderRadius: T.borderRadius.lg,
-    padding: 16,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: T.colors.border,
   },
-  urgentIcon: {
+  contactIconWrap: {
     width: 40,
     height: 40,
     borderRadius: T.borderRadius.sm,
-    backgroundColor: T.colors.cardBackground,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  urgentCopy: {
+  contactTextWrap: {
     flex: 1,
   },
-  urgentTitle: {
-    fontSize: 15,
+  contactTitle: {
+    fontSize: 14,
     fontWeight: '700',
-    color: T.colors.dangerText,
+    color: T.colors.textPrimary,
   },
-  urgentText: {
+  contactSub: {
     fontSize: 12,
-    color: T.colors.dangerText,
-    marginTop: 2,
+    color: T.colors.textSecondary,
+    marginTop: 1,
   },
-  urgentNumber: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: T.colors.danger,
-    marginTop: 4,
+
+  /* Quick Section */
+  quickSection: {
+    gap: 10,
   },
 
   /* Section Content */

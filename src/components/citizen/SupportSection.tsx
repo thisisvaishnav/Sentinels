@@ -1,11 +1,13 @@
-import { AppColors } from "@/constants/colors";
-import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { CITIZEN_THEME } from '@/src/features/enumeration/theme';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+const T = CITIZEN_THEME;
 
 type SupportSectionProps = {
   title: string;
-  icon: React.ComponentProps<typeof Ionicons>["name"];
+  icon: React.ComponentProps<typeof Ionicons>['name'];
   children: React.ReactNode;
   defaultOpen?: boolean;
 };
@@ -27,14 +29,14 @@ export default function SupportSection({
       >
         <View style={styles.headerLeft}>
           <View style={styles.iconWrap}>
-            <Ionicons name={icon} size={18} color={AppColors.blue} />
+            <Ionicons name={icon} size={18} color={T.colors.accent} />
           </View>
           <Text style={styles.title}>{title}</Text>
         </View>
         <Ionicons
-          name={isOpen ? "chevron-up" : "chevron-down"}
+          name={isOpen ? 'chevron-up' : 'chevron-down'}
           size={18}
-          color={AppColors.textMuted}
+          color={T.colors.textMuted}
         />
       </TouchableOpacity>
       {isOpen && <View style={styles.content}>{children}</View>}
@@ -44,40 +46,40 @@ export default function SupportSection({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: T.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.border,
-    borderRadius: 0,
-    overflow: "hidden",
+    borderColor: T.colors.border,
+    borderRadius: T.borderRadius.lg,
+    overflow: 'hidden',
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 14,
   },
   headerLeft: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
   },
   iconWrap: {
     width: 32,
     height: 32,
-    borderRadius: 0,
-    backgroundColor: AppColors.bgHighlight,
-    alignItems: "center",
-    justifyContent: "center",
+    borderRadius: T.borderRadius.sm,
+    backgroundColor: T.colors.accentSubtle,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     fontSize: 15,
-    fontWeight: "700",
-    color: AppColors.textPrimary,
+    fontWeight: '700',
+    color: T.colors.textPrimary,
   },
   content: {
     padding: 14,
     paddingTop: 0,
     borderTopWidth: 1,
-    borderTopColor: AppColors.border,
+    borderTopColor: T.colors.border,
   },
 });
