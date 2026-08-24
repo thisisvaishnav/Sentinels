@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { ZoneHouseholdItem } from '../../types';
 import { ENUMERATOR_THEME } from '../../theme';
 
@@ -13,6 +14,7 @@ export const GISNextHouseholdCard: React.FC<GISNextHouseholdCardProps> = ({
   household,
   onOpenHousehold,
 }) => {
+  const router = useRouter();
   if (!household) {
     return (
       <View style={styles.card}>
@@ -49,14 +51,25 @@ export const GISNextHouseholdCard: React.FC<GISNextHouseholdCardProps> = ({
         </View>
       </View>
 
-      <TouchableOpacity
-        style={styles.actionBtn}
-        onPress={() => onOpenHousehold(household)}
-        activeOpacity={0.8}
-      >
-        <Ionicons name="open-outline" size={16} color={ENUMERATOR_THEME.colors.textWhite} />
-        <Text style={styles.actionBtnText}>Open Household</Text>
-      </TouchableOpacity>
+      <View style={styles.actionRow}>
+        <TouchableOpacity
+          style={styles.actionBtn}
+          onPress={() => onOpenHousehold(household)}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="open-outline" size={16} color={ENUMERATOR_THEME.colors.textWhite} />
+          <Text style={styles.actionBtnText}>Open Household</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.planRouteBtn}
+          onPress={() => router.push('/(enumerator)/route-planning')}
+          activeOpacity={0.8}
+        >
+          <MaterialCommunityIcons name="routes" size={16} color={ENUMERATOR_THEME.colors.accent} />
+          <Text style={styles.planRouteBtnText}>Plan Route</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -137,7 +150,13 @@ const styles = StyleSheet.create({
     color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: '500',
   },
+  actionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
   actionBtn: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -148,6 +167,23 @@ const styles = StyleSheet.create({
   },
   actionBtnText: {
     color: ENUMERATOR_THEME.colors.textWhite,
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  planRouteBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
+    borderWidth: 1,
+    borderColor: ENUMERATOR_THEME.colors.accentLight,
+    paddingVertical: 10,
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
+    gap: 6,
+  },
+  planRouteBtnText: {
+    color: ENUMERATOR_THEME.colors.accent,
     fontSize: 13,
     fontWeight: '700',
   },

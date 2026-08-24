@@ -64,10 +64,14 @@ export function ZoneOverviewCard({
           <Text style={styles.mapBtnText}>Open Field Map</Text>
         </TouchableOpacity>
 
-        <View style={styles.routeBtnDisabled}>
-          <MaterialCommunityIcons name="routes" size={16} color={ENUMERATOR_THEME.colors.textMuted} />
-          <Text style={styles.routeBtnTextDisabled}>Plan Route (Soon)</Text>
-        </View>
+        <TouchableOpacity
+          style={styles.routeBtn}
+          onPress={() => router.push('/(enumerator)/route-planning')}
+          activeOpacity={0.8}
+        >
+          <MaterialCommunityIcons name="routes" size={18} color={ENUMERATOR_THEME.colors.accent} />
+          <Text style={styles.routeBtnText}>Plan Route</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -169,22 +173,21 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: ENUMERATOR_THEME.colors.textWhite,
   },
-  routeBtnDisabled: {
+  routeBtn: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
     borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.border,
+    borderColor: ENUMERATOR_THEME.colors.accentLight,
     height: 44,
     borderRadius: ENUMERATOR_THEME.borderRadius.lg,
     gap: 6,
-    opacity: 0.7,
   },
-  routeBtnTextDisabled: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: ENUMERATOR_THEME.colors.textMuted,
+  routeBtnText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: ENUMERATOR_THEME.colors.accent,
   },
 });

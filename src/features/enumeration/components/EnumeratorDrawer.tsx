@@ -29,6 +29,7 @@ interface DrawerMenuItem {
 const MENU_ITEMS: DrawerMenuItem[] = [
   { id: 'dashboard', label: 'Dashboard', route: '/(enumerator)/dashboard', iconName: 'view-dashboard-outline' },
   { id: 'daily-progress', label: 'Daily Progress', route: '/(enumerator)/daily-progress', iconName: 'chart-line' },
+  { id: 'route-planning', label: 'Plan Route', route: '/(enumerator)/route-planning', iconName: 'routes' },
   { id: 'start-survey', label: 'Start Survey', route: '/(enumerator)/start-survey', iconName: 'clipboard-text-outline' },
   { id: 'register-household', label: 'Register Household', route: '/(enumerator)/register-household', iconName: 'home-plus-outline' },
   { id: 'report-missing', label: 'Report Missing Household', route: '/(enumerator)/report-missing', iconName: 'alert-decagram-outline' },
