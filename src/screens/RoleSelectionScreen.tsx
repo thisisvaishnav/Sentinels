@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { AppColors, AppRadius } from "../../constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 export type Role = "citizen" | "enumerator" | "admin";
 
@@ -24,13 +24,13 @@ interface RoleCardProps {
 const RoleCard = ({ role, title, description, onPress }: RoleCardProps) => {
   const getIcon = () => {
     if (role === "citizen") {
-      return <Ionicons name="person" size={36} color={AppColors.textWhite} />;
+      return <Ionicons name="person" size={36} color={ENUMERATOR_THEME.colors.textWhite} />;
     }
     return (
       <MaterialCommunityIcons
         name="file-document-edit"
         size={36}
-        color={AppColors.textWhite}
+        color={ENUMERATOR_THEME.colors.textWhite}
       />
     );
   };
@@ -48,7 +48,7 @@ const RoleCard = ({ role, title, description, onPress }: RoleCardProps) => {
         <Text style={styles.roleDescription}>{description}</Text>
       </View>
 
-      <Ionicons name="chevron-forward" size={22} color={AppColors.textMuted} />
+      <Ionicons name="chevron-forward" size={22} color={ENUMERATOR_THEME.colors.textMuted} />
     </TouchableOpacity>
   );
 };
@@ -76,7 +76,7 @@ const CompactRoleCard = ({
         <MaterialCommunityIcons
           name="shield-account"
           size={22}
-          color={AppColors.textMuted}
+          color={ENUMERATOR_THEME.colors.textMuted}
         />
       </View>
 
@@ -175,7 +175,7 @@ export default function RoleSelectionScreen({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: AppColors.bgMain,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
     marginTop: -30,
   },
 
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     fontSize: 38,
     lineHeight: 44,
     fontWeight: "800",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     textAlign: "center",
     letterSpacing: -1.2,
   },
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 28,
     fontWeight: "500",
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     textAlign: "center",
   },
 
@@ -221,15 +221,15 @@ const styles = StyleSheet.create({
 
   roleCard: {
     minHeight: 110,
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 2,
-    borderColor: AppColors.primary,
-    borderRadius: AppRadius.xl,
+    borderColor: ENUMERATOR_THEME.colors.primary,
+    borderRadius: ENUMERATOR_THEME.borderRadius.xl,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 18,
-    shadowColor: AppColors.primary,
+    shadowColor: ENUMERATOR_THEME.colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.12,
     shadowRadius: 8,
@@ -239,8 +239,8 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 72,
     height: 72,
-    borderRadius: AppRadius.xl,
-    backgroundColor: AppColors.primary,
+    borderRadius: ENUMERATOR_THEME.borderRadius.xl,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 18,
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 30,
     fontWeight: "700",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginBottom: 6,
   },
 
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
     fontWeight: "400",
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
 
   /* ── Divider ── */
@@ -277,24 +277,24 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: AppColors.border,
+    backgroundColor: ENUMERATOR_THEME.colors.border,
   },
 
   dividerText: {
     marginHorizontal: 14,
     fontSize: 14,
     fontWeight: "500",
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     textTransform: "lowercase",
   },
 
   /* ── Compact admin card ── */
 
   compactCard: {
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.border,
-    borderRadius: AppRadius.lg,
+    borderColor: ENUMERATOR_THEME.colors.border,
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
@@ -305,8 +305,8 @@ const styles = StyleSheet.create({
   compactIconContainer: {
     width: 42,
     height: 42,
-    borderRadius: AppRadius.lg,
-    backgroundColor: AppColors.bgSubtle,
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 14,
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 24,
     fontWeight: "600",
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginBottom: 2,
   },
 
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 18,
     fontWeight: "400",
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
   },
 
   /* ── Help ── */
@@ -342,6 +342,6 @@ const styles = StyleSheet.create({
   helpText: {
     fontSize: 18,
     fontWeight: "600",
-    color: AppColors.primary,
+    color: ENUMERATOR_THEME.colors.primary,
   },
 });

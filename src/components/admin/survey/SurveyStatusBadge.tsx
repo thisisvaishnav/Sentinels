@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { SurveyStatus } from '@/src/types/admin';
 
 interface SurveyStatusBadgeProps {
@@ -11,9 +11,9 @@ const STATUS_CONFIG: Record<
   SurveyStatus,
   { label: string; bg: string; color: string; dot: string }
 > = {
-  completed: { label: 'Completed', bg: COLORS.successSoft, color: COLORS.success, dot: COLORS.success },
-  in_progress: { label: 'In Progress', bg: COLORS.accentSoft, color: COLORS.accent, dot: COLORS.accent },
-  pending: { label: 'Pending', bg: COLORS.warningSoft, color: COLORS.warning, dot: COLORS.warning },
+  completed: { label: 'Completed', bg: ENUMERATOR_THEME.colors.successBg, color: ENUMERATOR_THEME.colors.success, dot: ENUMERATOR_THEME.colors.success },
+  in_progress: { label: 'In Progress', bg: ENUMERATOR_THEME.colors.accentSoft, color: ENUMERATOR_THEME.colors.accent, dot: ENUMERATOR_THEME.colors.accent },
+  pending: { label: 'Pending', bg: ENUMERATOR_THEME.colors.warningBg, color: ENUMERATOR_THEME.colors.warning, dot: ENUMERATOR_THEME.colors.warning },
 };
 
 export default function SurveyStatusBadge({ status }: SurveyStatusBadgeProps) {

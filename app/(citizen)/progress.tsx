@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import CitizenLayout from "@/src/components/citizen/CitizenLayout";
 import SegmentedControl from "@/src/components/citizen/SegmentedControl";
 import { Ionicons } from "@expo/vector-icons";
@@ -69,17 +69,17 @@ export default function ProgressScreen() {
           <Text style={styles.searchLabel}>Search by Mobile or Household ID</Text>
           <View style={styles.searchRow}>
             <View style={styles.searchInputWrap}>
-              <Ionicons name="search-outline" size={18} color={AppColors.textMuted} />
+              <Ionicons name="search-outline" size={18} color={ENUMERATOR_THEME.colors.textMuted} />
               <TextInput
                 style={styles.searchInput}
                 placeholder="Enter mobile number or household ID"
-                placeholderTextColor={AppColors.textMuted}
+                placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
               />
             </View>
             <TouchableOpacity style={styles.searchBtn} activeOpacity={0.8}>
-              <Ionicons name="search" size={18} color={AppColors.textWhite} />
+              <Ionicons name="search" size={18} color={ENUMERATOR_THEME.colors.textWhite} />
             </TouchableOpacity>
           </View>
         </View>
@@ -99,7 +99,7 @@ export default function ProgressScreen() {
           </Text>
           {filteredRequests.length === 0 ? (
             <View style={styles.emptyState}>
-              <Ionicons name="folder-open-outline" size={40} color={AppColors.textMuted} />
+              <Ionicons name="folder-open-outline" size={40} color={ENUMERATOR_THEME.colors.textMuted} />
               <Text style={styles.emptyText}>No requests match your search</Text>
             </View>
           ) : (
@@ -110,7 +110,7 @@ export default function ProgressScreen() {
                     <Ionicons
                       name={req.status === "Completed" ? "checkmark-circle-outline" : "time-outline"}
                       size={18}
-                      color={req.status === "Completed" ? AppColors.success : AppColors.warning}
+                      color={req.status === "Completed" ? ENUMERATOR_THEME.colors.success : ENUMERATOR_THEME.colors.warning}
                     />
                   </View>
                   <View style={styles.requestCopy}>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   searchLabel: {
     fontSize: 14,
     fontWeight: "600",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   searchRow: {
     flexDirection: "row",
@@ -166,10 +166,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: AppColors.bgInput,
+    backgroundColor: ENUMERATOR_THEME.colors.inputBackground,
     borderWidth: 1,
-    borderColor: AppColors.borderInput,
-    borderRadius: 0,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
     paddingHorizontal: 12,
     gap: 8,
   },
@@ -177,13 +177,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     fontSize: 14,
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   searchBtn: {
     width: 44,
     height: 44,
-    borderRadius: 0,
-    backgroundColor: AppColors.primary,
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -193,35 +193,35 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   resultsSection: {
     gap: 12,
   },
   resultCount: {
     fontSize: 13,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: "500",
   },
   emptyState: {
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 40,
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.border,
-    borderRadius: 0,
+    borderColor: ENUMERATOR_THEME.colors.border,
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
     gap: 12,
   },
   emptyText: {
     fontSize: 14,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
   },
   requestCard: {
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.border,
-    borderRadius: 0,
+    borderColor: ENUMERATOR_THEME.colors.border,
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
     padding: 14,
     gap: 10,
   },
@@ -233,8 +233,8 @@ const styles = StyleSheet.create({
   requestIconWrap: {
     width: 32,
     height: 32,
-    borderRadius: 0,
-    backgroundColor: AppColors.bgSubtle,
+    borderRadius: ENUMERATOR_THEME.borderRadius.sm,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -244,37 +244,37 @@ const styles = StyleSheet.create({
   requestTitle: {
     fontSize: 14,
     fontWeight: "700",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   requestDate: {
     fontSize: 11,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     marginTop: 1,
   },
   statusBadge: {
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 0,
+    borderRadius: ENUMERATOR_THEME.borderRadius.full,
   },
   statusPending: {
-    backgroundColor: AppColors.warningBg,
+    backgroundColor: ENUMERATOR_THEME.colors.warningBg,
   },
   statusCompleted: {
-    backgroundColor: AppColors.successBg,
+    backgroundColor: ENUMERATOR_THEME.colors.successBg,
   },
   statusText: {
     fontSize: 11,
     fontWeight: "700",
   },
   statusTextPending: {
-    color: AppColors.warningText,
+    color: ENUMERATOR_THEME.colors.warningText,
   },
   statusTextCompleted: {
-    color: AppColors.successText,
+    color: ENUMERATOR_THEME.colors.successText,
   },
   requestDesc: {
     fontSize: 13,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     lineHeight: 18,
   },
   bottomSpacer: {

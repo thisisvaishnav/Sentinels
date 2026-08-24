@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface SurveyFiltersProps {
   zones: string[];
@@ -78,20 +78,20 @@ const styles = StyleSheet.create({
   filterLabel: {
     fontSize: 10,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginBottom: 4,
   },
   selectBox: {
     height: 36,
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     borderRadius: 6,
     paddingHorizontal: 8,
     justifyContent: 'center',
   },
   selectText: {
     fontSize: 11,
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
 });

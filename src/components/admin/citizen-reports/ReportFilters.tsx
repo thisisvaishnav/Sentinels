@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import FilterPickerModal from './FilterPickerModal';
 
 interface FilterState {
@@ -149,7 +149,7 @@ function FilterButton({
       <Ionicons
         name="chevron-down"
         size={12}
-        color={filtered ? COLORS.accent : COLORS.textMuted}
+        color={filtered ? ENUMERATOR_THEME.colors.accent : ENUMERATOR_THEME.colors.textMuted}
       />
     </TouchableOpacity>
   );
@@ -168,22 +168,22 @@ const styles = StyleSheet.create({
     gap: 4,
     height: 32,
     paddingHorizontal: 10,
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     borderRadius: 6,
   },
   filterBtnActive: {
-    backgroundColor: COLORS.accentSoft,
-    borderColor: COLORS.accent,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
+    borderColor: ENUMERATOR_THEME.colors.accent,
   },
   filterLabel: {
     fontSize: 11,
     fontWeight: '500',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   filterLabelActive: {
-    color: COLORS.accent,
+    color: ENUMERATOR_THEME.colors.accent,
     fontWeight: '600',
   },
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface StatCardProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -17,7 +17,7 @@ export default function StatCard({ icon, label, value, variant = 'default', prog
   return (
     <View style={[styles.card, isDanger && styles.cardDanger]}>
       <View style={[styles.iconWrap, isDanger ? styles.iconDanger : styles.iconDefault]}>
-        <Ionicons name={icon} size={20} color={isDanger ? COLORS.danger : COLORS.accent} />
+        <Ionicons name={icon} size={20} color={isDanger ? ENUMERATOR_THEME.colors.danger : ENUMERATOR_THEME.colors.accent} />
       </View>
 
       <Text style={styles.value}>{value}</Text>
@@ -35,18 +35,18 @@ export default function StatCard({ icon, label, value, variant = 'default', prog
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 14,
     padding: 16,
     alignItems: 'center',
     gap: 4,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     minWidth: '45%',
   },
   cardDanger: {
-    borderColor: COLORS.dangerLight,
-    backgroundColor: COLORS.dangerSoft,
+    borderColor: ENUMERATOR_THEME.colors.dangerBorder,
+    backgroundColor: ENUMERATOR_THEME.colors.dangerBg,
   },
   iconWrap: {
     width: 40,
@@ -57,33 +57,33 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   iconDefault: {
-    backgroundColor: COLORS.accentSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
   },
   iconDanger: {
-    backgroundColor: COLORS.dangerSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.dangerBg,
   },
   value: {
     fontSize: 20,
     fontWeight: '800',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   label: {
     fontSize: 12,
     fontWeight: '500',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     textAlign: 'center',
   },
   progressTrack: {
     width: '100%',
     height: 6,
     borderRadius: 3,
-    backgroundColor: COLORS.border,
+    backgroundColor: ENUMERATOR_THEME.colors.border,
     marginTop: 6,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
     borderRadius: 3,
-    backgroundColor: COLORS.danger,
+    backgroundColor: ENUMERATOR_THEME.colors.danger,
   },
 });

@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -27,14 +27,14 @@ export default function SupportSection({
       >
         <View style={styles.headerLeft}>
           <View style={styles.iconWrap}>
-            <Ionicons name={icon} size={18} color={AppColors.blue} />
+            <Ionicons name={icon} size={18} color={ENUMERATOR_THEME.colors.accent} />
           </View>
           <Text style={styles.title}>{title}</Text>
         </View>
         <Ionicons
           name={isOpen ? "chevron-up" : "chevron-down"}
           size={18}
-          color={AppColors.textMuted}
+          color={ENUMERATOR_THEME.colors.textMuted}
         />
       </TouchableOpacity>
       {isOpen && <View style={styles.content}>{children}</View>}
@@ -44,9 +44,9 @@ export default function SupportSection({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     borderRadius: 0,
     overflow: "hidden",
   },
@@ -65,19 +65,19 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 0,
-    backgroundColor: AppColors.bgHighlight,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
     alignItems: "center",
     justifyContent: "center",
   },
   title: {
     fontSize: 15,
     fontWeight: "700",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   content: {
     padding: 14,
     paddingTop: 0,
     borderTopWidth: 1,
-    borderTopColor: AppColors.border,
+    borderTopColor: ENUMERATOR_THEME.colors.border,
   },
 });

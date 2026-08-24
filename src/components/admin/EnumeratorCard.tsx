@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 export interface Enumerator {
   id: string;
@@ -19,9 +19,9 @@ interface EnumeratorCardProps {
 }
 
 const STATUS_CONFIG = {
-  active: { label: 'Active', bg: COLORS.successSoft, color: COLORS.success },
-  inactive: { label: 'Inactive', bg: COLORS.inactiveLight, color: COLORS.inactive },
-  'on-break': { label: 'On Break', bg: COLORS.warningSoft, color: COLORS.warning },
+  active: { label: 'Active', bg: ENUMERATOR_THEME.colors.successBg, color: ENUMERATOR_THEME.colors.success },
+  inactive: { label: 'Inactive', bg: ENUMERATOR_THEME.colors.inactiveLight, color: ENUMERATOR_THEME.colors.inactive },
+  'on-break': { label: 'On Break', bg: ENUMERATOR_THEME.colors.warningBg, color: ENUMERATOR_THEME.colors.warning },
 };
 
 function getInitials(name: string): string {
@@ -75,14 +75,14 @@ export default function EnumeratorCard({ enumerator, onViewPress, onMapPress }: 
             activeOpacity={0.6}
             onPress={() => onViewPress?.(enumerator)}
           >
-            <Ionicons name="eye-outline" size={18} color={COLORS.accent} />
+            <Ionicons name="eye-outline" size={18} color={ENUMERATOR_THEME.colors.accent} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.actionBtn}
             activeOpacity={0.6}
             onPress={() => onMapPress?.(enumerator)}
           >
-            <Ionicons name="map-outline" size={18} color={COLORS.primary} />
+            <Ionicons name="map-outline" size={18} color={ENUMERATOR_THEME.colors.primary} />
           </TouchableOpacity>
         </View>
       </View>
@@ -92,11 +92,11 @@ export default function EnumeratorCard({ enumerator, onViewPress, onMapPress }: 
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
   },
   topRow: {
     flexDirection: 'row',
@@ -107,14 +107,14 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.primarySoft,
+    backgroundColor: ENUMERATOR_THEME.colors.primarySoft,
     alignItems: 'center',
     justifyContent: 'center',
   },
   avatarText: {
     fontSize: 14,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: ENUMERATOR_THEME.colors.primary,
   },
   nameBlock: {
     flex: 1,
@@ -122,11 +122,11 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   empId: {
     fontSize: 11,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginTop: 1,
   },
   pill: {
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: COLORS.divider,
+    backgroundColor: ENUMERATOR_THEME.colors.divider,
     marginVertical: 10,
   },
   statsRow: {
@@ -153,14 +153,14 @@ const styles = StyleSheet.create({
   statLabel: {
     fontSize: 10,
     fontWeight: '500',
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 0.3,
   },
   statValue: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginTop: 1,
   },
   actions: {
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 8,
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     alignItems: 'center',
     justifyContent: 'center',
   },

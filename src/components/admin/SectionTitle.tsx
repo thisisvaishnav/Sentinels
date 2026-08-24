@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface SectionTitleProps {
   title: string;
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 11,
     fontWeight: '800',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     letterSpacing: 1.2,
     textTransform: 'uppercase',
   },

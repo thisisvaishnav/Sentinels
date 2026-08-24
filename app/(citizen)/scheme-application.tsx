@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import CitizenLayout from "@/src/components/citizen/CitizenLayout";
 import DocumentUpload from "@/src/components/citizen/DocumentUpload";
 import React, { useState } from "react";
@@ -46,7 +46,7 @@ export default function SchemeApplicationScreen() {
             <TextInput
               style={styles.input}
               placeholder="Enter your full name"
-              placeholderTextColor={AppColors.textMuted}
+              placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
               value={formData.fullName}
               onChangeText={(v) => updateField("fullName", v)}
             />
@@ -58,7 +58,7 @@ export default function SchemeApplicationScreen() {
               <TextInput
                 style={styles.input}
                 placeholder="Age"
-                placeholderTextColor={AppColors.textMuted}
+                placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
                 keyboardType="numeric"
                 value={formData.age}
                 onChangeText={(v) => updateField("age", v)}
@@ -69,7 +69,7 @@ export default function SchemeApplicationScreen() {
               <TextInput
                 style={styles.input}
                 placeholder="Male / Female"
-                placeholderTextColor={AppColors.textMuted}
+                placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
                 value={formData.gender}
                 onChangeText={(v) => updateField("gender", v)}
               />
@@ -81,7 +81,7 @@ export default function SchemeApplicationScreen() {
             <TextInput
               style={styles.input}
               placeholder="Enter 10-digit mobile number"
-              placeholderTextColor={AppColors.textMuted}
+              placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
               keyboardType="phone-pad"
               maxLength={10}
               value={formData.mobile}
@@ -94,7 +94,7 @@ export default function SchemeApplicationScreen() {
             <TextInput
               style={styles.input}
               placeholder="Enter 12-digit Aadhaar number"
-              placeholderTextColor={AppColors.textMuted}
+              placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
               keyboardType="numeric"
               maxLength={12}
               value={formData.aadhaar}
@@ -144,21 +144,21 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   schemeInfo: {
-    backgroundColor: AppColors.bgHighlight,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
     borderWidth: 1,
-    borderColor: AppColors.blue,
+    borderColor: ENUMERATOR_THEME.colors.accent,
     borderRadius: 0,
     padding: 14,
   },
   schemeLabel: {
     fontSize: 12,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: "500",
   },
   schemeName: {
     fontSize: 16,
     fontWeight: "700",
-    color: AppColors.blue,
+    color: ENUMERATOR_THEME.colors.accent,
     marginTop: 2,
   },
   section: {
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   field: {
     gap: 6,
@@ -175,17 +175,17 @@ const styles = StyleSheet.create({
   fieldLabel: {
     fontSize: 14,
     fontWeight: "600",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   input: {
-    backgroundColor: AppColors.bgInput,
+    backgroundColor: ENUMERATOR_THEME.colors.inputBackground,
     borderWidth: 1,
-    borderColor: AppColors.borderInput,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
     borderRadius: 0,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 14,
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   row: {
     flexDirection: "row",
@@ -201,37 +201,37 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 0,
     borderWidth: 2,
-    borderColor: AppColors.borderInput,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 1,
   },
   checkboxChecked: {
-    backgroundColor: AppColors.primary,
-    borderColor: AppColors.primary,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
+    borderColor: ENUMERATOR_THEME.colors.primary,
   },
   checkmark: {
-    color: AppColors.textWhite,
+    color: ENUMERATOR_THEME.colors.textWhite,
     fontSize: 12,
     fontWeight: "700",
   },
   declarationText: {
     flex: 1,
     fontSize: 13,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     lineHeight: 18,
   },
   submitBtn: {
-    backgroundColor: AppColors.primary,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     borderRadius: 0,
     paddingVertical: 14,
     alignItems: "center",
   },
   submitBtnDisabled: {
-    backgroundColor: AppColors.borderInput,
+    backgroundColor: ENUMERATOR_THEME.colors.borderSubtle,
   },
   submitText: {
-    color: AppColors.textWhite,
+    color: ENUMERATOR_THEME.colors.textWhite,
     fontSize: 16,
     fontWeight: "700",
   },

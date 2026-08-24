@@ -8,7 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import AdminLayout from '@/src/components/admin/AdminLayout';
 import {
   AdminNotification,
@@ -167,7 +167,7 @@ export default function AdminNotificationsScreen() {
                 <MaterialCommunityIcons
                   name="email-open-outline"
                   size={18}
-                  color={COLORS.accent}
+                  color={ENUMERATOR_THEME.colors.accent}
                 />
               </TouchableOpacity>
             )}
@@ -183,9 +183,9 @@ export default function AdminNotificationsScreen() {
           <View style={styles.summaryRow}>
             <View style={styles.summaryCard}>
               <View style={styles.summaryIconWrap}>
-                <MaterialCommunityIcons name="bell-ring-outline" size={18} color={COLORS.accent} />
+                <MaterialCommunityIcons name="bell-ring-outline" size={18} color={ENUMERATOR_THEME.colors.accent} />
               </View>
-              <Text style={[styles.summaryCount, { color: COLORS.accent }]}>{totalCount}</Text>
+              <Text style={[styles.summaryCount, { color: ENUMERATOR_THEME.colors.accent }]}>{totalCount}</Text>
               <Text style={styles.summaryLabel}>Total</Text>
             </View>
 
@@ -254,7 +254,7 @@ export default function AdminNotificationsScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
   },
   header: {
     flexDirection: 'row',
@@ -262,9 +262,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
   },
   titleWrap: {
     flex: 1,
@@ -277,24 +277,24 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '800',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   unreadBadge: {
-    backgroundColor: COLORS.accentSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
     paddingHorizontal: 7,
     paddingVertical: 2,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: COLORS.accent,
+    borderColor: ENUMERATOR_THEME.colors.accent,
   },
   unreadBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: COLORS.accent,
+    color: ENUMERATOR_THEME.colors.accent,
   },
   subtitle: {
     fontSize: 11,
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: '500',
   },
   actionsRow: {
@@ -306,11 +306,11 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: COLORS.background,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
   },
   scrollContent: {
     flex: 1,
@@ -326,11 +326,11 @@ const styles = StyleSheet.create({
   },
   summaryCard: {
     flex: 1,
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 10,
     padding: 12,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     alignItems: 'center',
     gap: 6,
   },
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 8,
-    backgroundColor: COLORS.accentSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
   summaryLabel: {
     fontSize: 12,
     fontWeight: '800',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   chipScroll: {
     paddingHorizontal: 16,
@@ -359,28 +359,28 @@ const styles = StyleSheet.create({
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     gap: 6,
   },
   chipSelected: {
-    backgroundColor: COLORS.accent,
-    borderColor: COLORS.accent,
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
+    borderColor: ENUMERATOR_THEME.colors.accent,
   },
   chipText: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   chipTextSelected: {
-    color: COLORS.textOnPrimary,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
   chipBadge: {
-    backgroundColor: COLORS.background,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 10,
@@ -393,10 +393,10 @@ const styles = StyleSheet.create({
   chipBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   chipBadgeTextSelected: {
-    color: COLORS.textOnPrimary,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
   bottomSpacer: {
     height: 24,

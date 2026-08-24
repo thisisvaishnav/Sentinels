@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { EnumeratorRosterItem } from '@/src/types/admin';
 import StatusBadge from './StatusBadge';
 
@@ -13,7 +13,7 @@ interface EnumeratorRowProps {
 export default function EnumeratorRow({ enumerator, onPress }: EnumeratorRowProps) {
   return (
     <Pressable
-      style={({ pressed }) => [styles.row, pressed && { backgroundColor: COLORS.surfaceAlt }]}
+      style={({ pressed }) => [styles.row, pressed && { backgroundColor: ENUMERATOR_THEME.colors.subtleBackground }]}
       onPress={() => onPress?.(enumerator)}
     >
       {/* Avatar */}
@@ -42,7 +42,7 @@ export default function EnumeratorRow({ enumerator, onPress }: EnumeratorRowProp
       <Ionicons
         name="chevron-forward"
         size={18}
-        color={COLORS.textMuted}
+        color={ENUMERATOR_THEME.colors.textMuted}
         style={styles.chevron}
       />
     </Pressable>
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   avatarText: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: ENUMERATOR_THEME.colors.primary,
   },
   info: {
     flex: 1,
@@ -82,11 +82,11 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   meta: {
     fontSize: 10,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginTop: 1,
   },
   chevron: {

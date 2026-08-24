@@ -20,6 +20,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { z } from "zod";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 const API_URL =
   process.env.EXPO_PUBLIC_API_URL || "http://localhost:5001";
@@ -203,7 +204,7 @@ function InputField({
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor="#8A929D"
+        placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
         keyboardType={keyboardType}
         editable={editable}
         style={[
@@ -254,7 +255,7 @@ function FacilityCheckbox({
           <Ionicons
             name="checkmark"
             size={16}
-            color="#FFFFFF"
+            color={ENUMERATOR_THEME.colors.cardBackground}
           />
         )}
       </View>
@@ -262,7 +263,7 @@ function FacilityCheckbox({
       <Ionicons
         name={icon}
         size={23}
-        color="#747C87"
+        color={ENUMERATOR_THEME.colors.textMuted}
         style={styles.facilityIcon}
       />
 
@@ -319,7 +320,7 @@ function GenderPicker({
           <Ionicons
             name="chevron-down"
             size={20}
-            color="#66717D"
+            color={ENUMERATOR_THEME.colors.textMuted}
           />
         </Pressable>
 
@@ -358,7 +359,7 @@ function GenderPicker({
                   <Ionicons
                     name="checkmark"
                     size={22}
-                    color="#172A3A"
+                    color={ENUMERATOR_THEME.colors.primary}
                   />
                 )}
               </Pressable>
@@ -630,7 +631,7 @@ export default function HouseholdScreen() {
           {
             text: "Continue",
             onPress: () => {
-              router.replace("/(citizen)/(tabs)/dashboard");
+              router.replace("/(citizen)/dashboard");
             },
           },
         ]
@@ -657,7 +658,7 @@ export default function HouseholdScreen() {
     loadingProfile ? (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.centeredState}>
-          <ActivityIndicator size="large" color="#172A3A" />
+          <ActivityIndicator size="large" color={ENUMERATOR_THEME.colors.primary} />
         </View>
       </SafeAreaView>
     ) : existingProfile ? (
@@ -670,7 +671,7 @@ export default function HouseholdScreen() {
             <Ionicons
               name="arrow-back-outline"
               size={24}
-              color="#172A3A"
+              color={ENUMERATOR_THEME.colors.primary}
             />
           </Pressable>
 
@@ -678,12 +679,12 @@ export default function HouseholdScreen() {
 
           <Pressable
             style={styles.headerButton}
-            onPress={() => router.replace("/(citizen)/(tabs)/dashboard")}
+            onPress={() => router.replace("/(citizen)/dashboard")}
           >
             <Ionicons
               name="home-outline"
               size={22}
-              color="#172A3A"
+              color={ENUMERATOR_THEME.colors.primary}
             />
           </Pressable>
         </View>
@@ -785,7 +786,7 @@ export default function HouseholdScreen() {
             <Ionicons
               name="menu-outline"
               size={27}
-              color="#172A3A"
+              color={ENUMERATOR_THEME.colors.primary}
             />
           </Pressable>
 
@@ -797,7 +798,7 @@ export default function HouseholdScreen() {
             <Ionicons
               name="refresh-outline"
               size={23}
-              color="#172A3A"
+              color={ENUMERATOR_THEME.colors.primary}
             />
           </Pressable>
         </View>
@@ -1160,7 +1161,7 @@ export default function HouseholdScreen() {
               <Ionicons
                 name="location-outline"
                 size={54}
-                color="#B8BEC6"
+                color={ENUMERATOR_THEME.colors.textMuted}
               />
 
               <Text style={styles.locationDescription}>
@@ -1177,7 +1178,7 @@ export default function HouseholdScreen() {
                 disabled={locationLoading}
               >
                 {locationLoading ? (
-                  <ActivityIndicator color="#172A3A" />
+                  <ActivityIndicator color={ENUMERATOR_THEME.colors.primary} />
                 ) : (
                   <>
                     <Ionicons
@@ -1187,7 +1188,7 @@ export default function HouseholdScreen() {
                           : "locate-outline"
                       }
                       size={22}
-                      color="#172A3A"
+                      color={ENUMERATOR_THEME.colors.primary}
                     />
 
                     <Text style={styles.locationButtonText}>
@@ -1238,7 +1239,7 @@ export default function HouseholdScreen() {
             disabled={loading}
           >
             {loading ? (
-              <ActivityIndicator color="#FFFFFF" />
+              <ActivityIndicator color={ENUMERATOR_THEME.colors.cardBackground} />
             ) : (
               <>
                 <Text style={styles.submitText}>
@@ -1248,7 +1249,7 @@ export default function HouseholdScreen() {
                 <Ionicons
                   name="cloud-upload-outline"
                   size={21}
-                  color="#FFFFFF"
+                  color={ENUMERATOR_THEME.colors.cardBackground}
                 />
               </>
             )}
@@ -1267,13 +1268,13 @@ export default function HouseholdScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#F1F4F6",
+    backgroundColor: ENUMERATOR_THEME.colors.background,
     marginTop: -30,
   },
 
   container: {
     flex: 1,
-    backgroundColor: "#F1F4F6",
+    backgroundColor: ENUMERATOR_THEME.colors.background,
   },
 
   centeredState: {
@@ -1284,9 +1285,9 @@ const styles = StyleSheet.create({
 
   header: {
     height: 56,
-    backgroundColor: "#F8FAFB",
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderBottomWidth: 1,
-    borderBottomColor: "#D8DDE2",
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -1301,7 +1302,7 @@ const styles = StyleSheet.create({
   },
 
   headerTitle: {
-    color: "#172A3A",
+    color: ENUMERATOR_THEME.colors.primary,
     fontSize: 14,
     fontWeight: "700",
   },
@@ -1315,10 +1316,10 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: "#D0D5DB",
-    borderRadius: 0,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
     padding: 14,
     marginBottom: 14,
   },
@@ -1326,7 +1327,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 17,
     fontWeight: "700",
-    color: "#252A2F",
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginBottom: 10,
   },
 
@@ -1347,7 +1348,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 11,
     fontWeight: "500",
-    color: "#17191C",
+    color: ENUMERATOR_THEME.colors.textPrimary,
     letterSpacing: 0.3,
     marginBottom: 4,
   },
@@ -1355,24 +1356,25 @@ const styles = StyleSheet.create({
   input: {
     height: 44,
     borderWidth: 1.5,
-    borderColor: "#AEB5BE",
-    backgroundColor: "#FFFFFF",
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     paddingHorizontal: 11,
     fontSize: 15,
-    color: "#20252A",
+    color: ENUMERATOR_THEME.colors.textPrimary,
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
   },
 
   disabledInput: {
-    backgroundColor: "#F1F3F5",
-    color: "#59636E",
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
+    color: ENUMERATOR_THEME.colors.textMuted,
   },
 
   inputError: {
-    borderColor: "#C62828",
+    borderColor: ENUMERATOR_THEME.colors.danger,
   },
 
   errorText: {
-    color: "#C62828",
+    color: ENUMERATOR_THEME.colors.danger,
     fontSize: 10,
     marginTop: 3,
   },
@@ -1385,26 +1387,27 @@ const styles = StyleSheet.create({
 
   selectText: {
     fontSize: 15,
-    color: "#20252A",
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
 
   placeholderText: {
-    color: "#7D8792",
+    color: ENUMERATOR_THEME.colors.textMuted,
   },
 
   checkbox: {
     width: 17,
     height: 17,
     borderWidth: 1.5,
-    borderColor: "#9BA3AD",
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 14,
+    borderRadius: 4,
   },
 
   checkboxActive: {
-    backgroundColor: "#172A3A",
-    borderColor: "#172A3A",
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
+    borderColor: ENUMERATOR_THEME.colors.primary,
   },
 
   facilityRow: {
@@ -1420,11 +1423,11 @@ const styles = StyleSheet.create({
   facilityText: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#272C31",
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
 
   locationBox: {
-    backgroundColor: "#EEF0F2",
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     minHeight: 180,
     alignItems: "center",
     justifyContent: "center",
@@ -1433,7 +1436,7 @@ const styles = StyleSheet.create({
 
   locationDescription: {
     textAlign: "center",
-    color: "#424950",
+    color: ENUMERATOR_THEME.colors.textSecondary,
     fontSize: 13,
     lineHeight: 19,
     marginTop: 5,
@@ -1443,20 +1446,20 @@ const styles = StyleSheet.create({
   locationButton: {
     width: "100%",
     height: 46,
-    backgroundColor: "#57B4F4",
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    borderRadius: 0,
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
   },
 
   locationButtonSuccess: {
-    backgroundColor: "#8BD6A5",
+    backgroundColor: ENUMERATOR_THEME.colors.success,
   },
 
   locationButtonText: {
-    color: "#172A3A",
+    color: ENUMERATOR_THEME.colors.primary,
     fontSize: 12,
     fontWeight: "700",
     letterSpacing: 0.2,
@@ -1466,13 +1469,13 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 10,
     padding: 8,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 0,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
+    borderRadius: ENUMERATOR_THEME.borderRadius.sm,
   },
 
   coordinateText: {
     textAlign: "center",
-    color: "#4A535D",
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontSize: 11,
     marginVertical: 1,
   },
@@ -1485,13 +1488,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingTop: 8,
     paddingBottom: Platform.OS === "ios" ? 8 : 8,
-    backgroundColor: "#F1F4F6",
+    backgroundColor: ENUMERATOR_THEME.colors.background,
   },
 
   submitButton: {
     height: 48,
-    backgroundColor: "#172A3A",
-    borderRadius: 0,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -1503,7 +1506,7 @@ const styles = StyleSheet.create({
   },
 
   submitText: {
-    color: "#FFFFFF",
+    color: ENUMERATOR_THEME.colors.cardBackground,
     fontSize: 13,
     fontWeight: "700",
   },
@@ -1515,9 +1518,9 @@ const styles = StyleSheet.create({
   },
 
   genderModal: {
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
+    borderTopLeftRadius: ENUMERATOR_THEME.borderRadius.xl,
+    borderTopRightRadius: ENUMERATOR_THEME.borderRadius.xl,
     padding: 20,
     paddingBottom: 35,
   },
@@ -1525,7 +1528,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#172A3A",
+    color: ENUMERATOR_THEME.colors.primary,
     marginBottom: 10,
   },
 
@@ -1535,30 +1538,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     borderBottomWidth: 1,
-    borderBottomColor: "#E5E8EB",
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
   },
 
   genderOptionText: {
     fontSize: 15,
-    color: "#252A2F",
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
 
   profileRow: {
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#E5E8EB",
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
     gap: 4,
   },
 
   profileLabel: {
     fontSize: 12,
-    color: "#68717A",
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: "600",
   },
 
   profileValue: {
     fontSize: 15,
-    color: "#1D2329",
+    color: ENUMERATOR_THEME.colors.textPrimary,
     fontWeight: "600",
   },
 });

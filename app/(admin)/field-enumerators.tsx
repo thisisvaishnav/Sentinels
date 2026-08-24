@@ -17,7 +17,7 @@ import SearchFilter from '@/src/components/admin/SearchFilter';
 import EnumeratorCard, { Enumerator } from '@/src/components/admin/EnumeratorCard';
 import ComplaintCard from '@/src/components/admin/ComplaintCard';
 import FAB from '@/src/components/admin/FAB';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 /* ------------------------------------------------------------------ */
 /* Mock data — swap for API calls later                                */
@@ -119,7 +119,7 @@ export default function FieldEnumeratorsScreen() {
         {/* ── Metric cards ─────────────────────────────────────── */}
         <View style={styles.metricsRow}>
           <MetricCard label="Total Enumerators" value={String(totalEnumerators)} />
-          <MetricCard label="Active Now" value={String(activeNow)} accentColor={COLORS.success} />
+          <MetricCard label="Active Now" value={String(activeNow)} accentColor={ENUMERATOR_THEME.colors.success} />
         </View>
 
         {/* ── Live map ─────────────────────────────────────────── */}
@@ -173,7 +173,7 @@ export default function FieldEnumeratorsScreen() {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
   },
   body: {
     paddingHorizontal: 16,
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginBottom: 10,
   },
   stack: {
@@ -199,11 +199,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 28,
     borderRadius: 0,
-    backgroundColor: COLORS.accentSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
   },
   loadMoreText: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.accent,
+    color: ENUMERATOR_THEME.colors.accent,
   },
 });

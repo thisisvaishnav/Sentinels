@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface FormInputProps {
   label: string;
@@ -33,7 +33,7 @@ export default function FormInput({
       <TextInput
         style={[styles.input, error ? styles.inputError : null]}
         placeholder={placeholder}
-        placeholderTextColor={COLORS.textMuted}
+        placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
         value={value}
         onChangeText={onChangeText}
         keyboardType={keyboardType}
@@ -47,33 +47,33 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 10.5,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginBottom: 5,
   },
   required: {
-    color: COLORS.danger,
+    color: ENUMERATOR_THEME.colors.danger,
   },
   optional: {
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: '500',
   },
   input: {
     height: 38,
     backgroundColor: '#F7F8FC',
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     borderRadius: 4,
     paddingHorizontal: 10,
     fontSize: 12.5,
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     paddingVertical: 0,
   },
   inputError: {
-    borderColor: COLORS.danger,
+    borderColor: ENUMERATOR_THEME.colors.danger,
   },
   error: {
     fontSize: 9.5,
-    color: COLORS.danger,
+    color: ENUMERATOR_THEME.colors.danger,
     marginTop: 3,
   },
 });

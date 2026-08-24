@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { EnumeratorResponseItem } from '@/src/types/admin';
 
 interface EnumeratorResponseProps {
@@ -26,9 +26,9 @@ const styles = StyleSheet.create({
     maxWidth: '80%',
   },
   bubble: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -36,11 +36,11 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 12,
     lineHeight: 17,
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   attribution: {
     fontSize: 9,
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     marginTop: 4,
   },
 });

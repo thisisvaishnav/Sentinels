@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import ReportStatCard from './ReportStatCard';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface ReportStatsProps {
   total: number;
@@ -19,20 +19,20 @@ export default function ReportStats({
   return (
     <View>
       <View style={styles.row}>
-        <ReportStatCard label="Total Reports" value={total} accentColor={COLORS.primary} />
+        <ReportStatCard label="Total Reports" value={total} accentColor={ENUMERATOR_THEME.colors.primary} />
         <ReportStatCard
           label="Pending Verification"
           value={pendingVerification}
-          accentColor={COLORS.warning}
+          accentColor={ENUMERATOR_THEME.colors.warning}
         />
       </View>
       <View style={styles.row}>
         <ReportStatCard
           label="Under Investigation"
           value={underInvestigation}
-          accentColor={COLORS.info}
+          accentColor={ENUMERATOR_THEME.colors.info}
         />
-        <ReportStatCard label="Resolved" value={resolved} accentColor={COLORS.success} />
+        <ReportStatCard label="Resolved" value={resolved} accentColor={ENUMERATOR_THEME.colors.success} />
       </View>
     </View>
   );

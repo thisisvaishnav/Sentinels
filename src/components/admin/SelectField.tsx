@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface SelectFieldProps {
   label: string;
@@ -36,7 +36,7 @@ export default function SelectField({
         >
           {value || placeholder}
         </Text>
-        <Ionicons name="chevron-down" size={16} color={COLORS.textMuted} />
+        <Ionicons name="chevron-down" size={16} color={ENUMERATOR_THEME.colors.textMuted} />
       </Pressable>
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
@@ -47,17 +47,17 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 10.5,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginBottom: 5,
   },
   required: {
-    color: COLORS.danger,
+    color: ENUMERATOR_THEME.colors.danger,
   },
   container: {
     height: 38,
     backgroundColor: '#F7F8FC',
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     borderRadius: 4,
     paddingHorizontal: 10,
     flexDirection: 'row',
@@ -65,19 +65,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   containerError: {
-    borderColor: COLORS.danger,
+    borderColor: ENUMERATOR_THEME.colors.danger,
   },
   text: {
     fontSize: 12.5,
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     flex: 1,
   },
   placeholder: {
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
   },
   error: {
     fontSize: 9.5,
-    color: COLORS.danger,
+    color: ENUMERATOR_THEME.colors.danger,
     marginTop: 3,
   },
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { ReportPriority } from '@/src/types/admin';
 import { priorityLabels } from '@/src/data/citizenReportMockData';
 
@@ -12,10 +12,10 @@ const PRIORITY_CONFIG: Record<
   ReportPriority,
   { bg: string; color: string }
 > = {
-  low: { bg: COLORS.inactiveLight, color: COLORS.inactive },
-  medium: { bg: COLORS.accentSoft, color: COLORS.accent },
-  high: { bg: COLORS.warningSoft, color: COLORS.warning },
-  critical: { bg: COLORS.dangerSoft, color: COLORS.danger },
+  low: { bg: ENUMERATOR_THEME.colors.inactiveLight, color: ENUMERATOR_THEME.colors.inactive },
+  medium: { bg: ENUMERATOR_THEME.colors.accentSoft, color: ENUMERATOR_THEME.colors.accent },
+  high: { bg: ENUMERATOR_THEME.colors.warningBg, color: ENUMERATOR_THEME.colors.warning },
+  critical: { bg: ENUMERATOR_THEME.colors.dangerBg, color: ENUMERATOR_THEME.colors.danger },
 };
 
 export default function ReportPriorityBadge({ priority }: ReportPriorityBadgeProps) {

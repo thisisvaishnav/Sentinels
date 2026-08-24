@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -24,7 +24,7 @@ export default function DocumentUpload({
       >
         {fileName ? (
           <View style={styles.fileRow}>
-            <Ionicons name="document-text-outline" size={20} color={AppColors.blue} />
+            <Ionicons name="document-text-outline" size={20} color={ENUMERATOR_THEME.colors.accent} />
             <View style={styles.fileCopy}>
               <Text style={styles.fileName}>{fileName}</Text>
               <Text style={styles.fileHint}>Tap to change</Text>
@@ -32,7 +32,7 @@ export default function DocumentUpload({
           </View>
         ) : (
           <View style={styles.placeholder}>
-            <Ionicons name="cloud-upload-outline" size={28} color={AppColors.textMuted} />
+            <Ionicons name="cloud-upload-outline" size={28} color={ENUMERATOR_THEME.colors.textMuted} />
             <Text style={styles.placeholderText}>Tap to upload document</Text>
             <Text style={styles.placeholderHint}>PDF, JPG, or PNG (max 5MB)</Text>
           </View>
@@ -49,15 +49,15 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: "600",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   uploadZone: {
     borderWidth: 1,
-    borderColor: AppColors.borderInput,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
     borderStyle: "dashed",
     borderRadius: 0,
     padding: 16,
-    backgroundColor: AppColors.bgInput,
+    backgroundColor: ENUMERATOR_THEME.colors.inputBackground,
   },
   placeholder: {
     alignItems: "center",
@@ -66,12 +66,12 @@ const styles = StyleSheet.create({
   },
   placeholderText: {
     fontSize: 13,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: "500",
   },
   placeholderHint: {
     fontSize: 11,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
   },
   fileRow: {
     flexDirection: "row",
@@ -84,11 +84,11 @@ const styles = StyleSheet.create({
   fileName: {
     fontSize: 13,
     fontWeight: "600",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   fileHint: {
     fontSize: 11,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     marginTop: 1,
   },
 });

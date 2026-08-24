@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
@@ -18,7 +18,7 @@ export default function PlaceholderFAB({
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <Ionicons name={icon} size={28} color={AppColors.textWhite} />
+      <Ionicons name={icon} size={28} color={ENUMERATOR_THEME.colors.textWhite} />
     </TouchableOpacity>
   );
 }
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 0,
-    backgroundColor: AppColors.primary,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     alignItems: "center",
     justifyContent: "center",
     elevation: 4,

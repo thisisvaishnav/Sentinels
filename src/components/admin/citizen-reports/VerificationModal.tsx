@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { CitizenReport } from '@/src/types/admin';
 
 interface VerificationModalProps {
@@ -62,7 +62,7 @@ export default function VerificationModal({
           <View style={styles.header}>
             <Text style={styles.heading}>Review Verification</Text>
             <TouchableOpacity onPress={handleClose} style={styles.closeBtn}>
-              <Ionicons name="close" size={20} color={COLORS.textSecondary} />
+              <Ionicons name="close" size={20} color={ENUMERATOR_THEME.colors.textSecondary} />
             </TouchableOpacity>
           </View>
 
@@ -93,7 +93,7 @@ export default function VerificationModal({
                 <View style={styles.section}>
                   <Text style={styles.sectionLabel}>Verification Photo</Text>
                   <View style={styles.imagePlaceholder}>
-                    <Ionicons name="camera" size={24} color={COLORS.accent} />
+                    <Ionicons name="camera" size={24} color={ENUMERATOR_THEME.colors.accent} />
                     <Text style={styles.imagePlaceholderText}>Photo attached</Text>
                   </View>
                 </View>
@@ -105,7 +105,7 @@ export default function VerificationModal({
                 <TextInput
                   style={styles.textInput}
                   placeholder="Add verification notes..."
-                  placeholderTextColor={COLORS.textMuted}
+                  placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
                   value={notes}
                   onChangeText={setNotes}
                   multiline
@@ -121,7 +121,7 @@ export default function VerificationModal({
                   <TextInput
                     style={styles.textInput}
                     placeholder="Provide reason for rejection..."
-                    placeholderTextColor={COLORS.textMuted}
+                    placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
                     value={rejectionReason}
                     onChangeText={setRejectionReason}
                     multiline
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   modal: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 14,
     maxHeight: '80%',
   },
@@ -175,12 +175,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
   },
   heading: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   closeBtn: {
     padding: 4,
@@ -195,12 +195,12 @@ const styles = StyleSheet.create({
   reportTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginBottom: 4,
   },
   reportMeta: {
     fontSize: 12,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   section: {
     marginBottom: 16,
@@ -208,22 +208,22 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginBottom: 8,
   },
   notesBox: {
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderRadius: 8,
     padding: 12,
   },
   notesText: {
     fontSize: 13,
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     lineHeight: 20,
   },
   imagePlaceholder: {
     height: 120,
-    backgroundColor: COLORS.accentSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
@@ -231,17 +231,17 @@ const styles = StyleSheet.create({
   },
   imagePlaceholderText: {
     fontSize: 12,
-    color: COLORS.accent,
+    color: ENUMERATOR_THEME.colors.accent,
     fontWeight: '500',
   },
   textInput: {
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     padding: 12,
     fontSize: 13,
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     minHeight: 80,
   },
   footer: {
@@ -249,49 +249,49 @@ const styles = StyleSheet.create({
     gap: 8,
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border,
+    borderTopColor: ENUMERATOR_THEME.colors.border,
   },
   cancelBtn: {
     flex: 1,
     height: 40,
     borderRadius: 8,
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
   cancelBtnText: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   rejectBtn: {
     flex: 1,
     height: 40,
     borderRadius: 8,
-    backgroundColor: COLORS.dangerSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.dangerBg,
     borderWidth: 1,
-    borderColor: COLORS.danger,
+    borderColor: ENUMERATOR_THEME.colors.danger,
     alignItems: 'center',
     justifyContent: 'center',
   },
   rejectBtnText: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.danger,
+    color: ENUMERATOR_THEME.colors.danger,
   },
   verifyBtn: {
     flex: 1,
     height: 40,
     borderRadius: 8,
-    backgroundColor: COLORS.success,
+    backgroundColor: ENUMERATOR_THEME.colors.success,
     alignItems: 'center',
     justifyContent: 'center',
   },
   verifyBtnText: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.textOnPrimary,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
 });

@@ -14,7 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { registerWithRole } from "@/src/features/auth/authService";
-import { AppColors, AppRadius } from "../../constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 const STATES = [
   "Uttar Pradesh",
@@ -62,7 +62,7 @@ export default function Register() {
         pinCode,
       });
       await AsyncStorage.setItem("hasOnboarded", "true");
-      router.replace("/(citizen)/(tabs)/dashboard");
+      router.replace("/(citizen)/dashboard");
     } catch (error: any) {
       console.error("Register error:", error);
       alert(error?.message ?? "Registration failed. Please try again.");
@@ -87,14 +87,14 @@ export default function Register() {
               style={styles.backButton}
               onPress={() => router.back()}
             >
-              <Ionicons name="arrow-back" size={22} color={AppColors.primary} />
+              <Ionicons name="arrow-back" size={22} color={ENUMERATOR_THEME.colors.primary} />
               <Text style={styles.backText}>Back</Text>
             </TouchableOpacity>
 
             {/* Header */}
             <View style={styles.header}>
               <View style={styles.logo}>
-                <Ionicons name="person-outline" size={34} color={AppColors.textMuted} />
+                <Ionicons name="person-outline" size={34} color={ENUMERATOR_THEME.colors.textMuted} />
               </View>
 
               <Text style={styles.brand}>Lokvision</Text>
@@ -113,7 +113,7 @@ export default function Register() {
               value={fullName}
               onChangeText={setFullName}
               icon={
-                <Ionicons name="person-outline" size={22} color={AppColors.textMuted} />
+                <Ionicons name="person-outline" size={22} color={ENUMERATOR_THEME.colors.textMuted} />
               }
             />
 
@@ -128,7 +128,7 @@ export default function Register() {
                 <Ionicons
                   name="phone-portrait-outline"
                   size={22}
-                  color={AppColors.textMuted}
+                  color={ENUMERATOR_THEME.colors.textMuted}
                 />
               }
             />
@@ -140,12 +140,12 @@ export default function Register() {
                 <Ionicons
                   name="lock-closed-outline"
                   size={22}
-                  color={AppColors.textMuted}
+                  color={ENUMERATOR_THEME.colors.textMuted}
                 />
                 <TextInput
                   style={styles.input}
                   placeholder="Create a secure password"
-                  placeholderTextColor={AppColors.textMuted}
+                  placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={!showPassword}
@@ -157,7 +157,7 @@ export default function Register() {
                   <Ionicons
                     name={showPassword ? "eye-outline" : "eye-off-outline"}
                     size={23}
-                    color={AppColors.textMuted}
+                    color={ENUMERATOR_THEME.colors.textMuted}
                   />
                 </TouchableOpacity>
               </View>
@@ -182,7 +182,7 @@ export default function Register() {
                 <Ionicons
                   name={showStates ? "chevron-up" : "chevron-down"}
                   size={21}
-                  color={AppColors.textMuted}
+                  color={ENUMERATOR_THEME.colors.textMuted}
                 />
               </TouchableOpacity>
               {showStates && (
@@ -211,7 +211,7 @@ export default function Register() {
               onChangeText={setPinCode}
               keyboardType="number-pad"
               icon={
-                <Ionicons name="location-outline" size={22} color={AppColors.textMuted} />
+                <Ionicons name="location-outline" size={22} color={ENUMERATOR_THEME.colors.textMuted} />
               }
             />
 
@@ -228,7 +228,7 @@ export default function Register() {
               <Text style={styles.primaryButtonText}>
                 {isSubmitting ? "Please wait..." : "CREATE ACCOUNT"}
               </Text>
-              <Ionicons name="arrow-forward" size={24} color={AppColors.textWhite} />
+              <Ionicons name="arrow-forward" size={24} color={ENUMERATOR_THEME.colors.textWhite} />
             </TouchableOpacity>
 
             {/* Login */}
@@ -269,7 +269,7 @@ function InputField({
         <TextInput
           style={styles.input}
           placeholder={placeholder}
-          placeholderTextColor={AppColors.textMuted}
+          placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
           value={value}
           onChangeText={onChangeText}
           keyboardType={keyboardType}
@@ -285,7 +285,7 @@ function InputField({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: AppColors.bgMain,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
     marginTop: -30,
   },
 
@@ -302,10 +302,10 @@ const styles = StyleSheet.create({
     width: "92%",
     maxWidth: 540,
     alignSelf: "center",
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.borderInput,
-    borderRadius: AppRadius.lg,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
     paddingHorizontal: 28,
     paddingVertical: 28,
   },
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
 
   backText: {
     fontSize: 16,
-    color: AppColors.primary,
+    color: ENUMERATOR_THEME.colors.primary,
   },
 
   header: {
@@ -330,8 +330,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 72,
     height: 72,
-    borderRadius: AppRadius.xl,
-    backgroundColor: AppColors.primary,
+    borderRadius: ENUMERATOR_THEME.borderRadius.xl,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 14,
@@ -340,21 +340,21 @@ const styles = StyleSheet.create({
   brand: {
     fontSize: 25,
     fontWeight: "700",
-    color: AppColors.primary,
+    color: ENUMERATOR_THEME.colors.primary,
     marginBottom: 16,
   },
 
   title: {
     fontSize: 36,
     fontWeight: "700",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     alignSelf: "flex-start",
   },
 
   subtitle: {
     fontSize: 18,
     lineHeight: 27,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginTop: 5,
     alignSelf: "flex-start",
   },
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 15,
     letterSpacing: 1.5,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     fontWeight: "600",
     marginBottom: 8,
   },
@@ -374,8 +374,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     minHeight: 56,
     borderWidth: 1.5,
-    borderColor: AppColors.borderInput,
-    backgroundColor: AppColors.bgInput,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
+    backgroundColor: ENUMERATOR_THEME.colors.inputBackground,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 14,
@@ -384,25 +384,25 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 18,
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginLeft: 10,
   },
 
   dropdownValue: {
     flex: 1,
     fontSize: 18,
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
 
   placeholder: {
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: "500",
   },
 
   dropdown: {
     borderWidth: 1,
-    borderColor: AppColors.borderInput,
-    backgroundColor: AppColors.bgCard,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     marginTop: -12,
     marginBottom: 20,
   },
@@ -411,17 +411,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: AppColors.border,
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
   },
 
   dropdownText: {
     fontSize: 16,
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
 
   primaryButton: {
     height: 58,
-    backgroundColor: AppColors.primary,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
   },
 
   primaryButtonText: {
-    color: AppColors.textWhite,
+    color: ENUMERATOR_THEME.colors.textWhite,
     fontSize: 18,
     fontWeight: "600",
   },
@@ -443,12 +443,12 @@ const styles = StyleSheet.create({
 
   loginText: {
     fontSize: 16,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
 
   loginLink: {
     fontSize: 16,
-    color: AppColors.blue,
+    color: ENUMERATOR_THEME.colors.accent,
     fontWeight: "600",
   },
 });

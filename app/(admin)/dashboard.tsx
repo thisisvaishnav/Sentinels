@@ -12,7 +12,10 @@ import ActionItem from '@/src/components/admin/ActionItem';
 import ZoneProgress from '@/src/components/admin/ZoneProgress';
 import RecentActivityItem from '@/src/components/admin/RecentActivityItem';
 import SectionTitle from '@/src/components/admin/SectionTitle';
-import { COLORS } from '@/constants/adminTheme';
+import ProgressCard from '@/src/components/shared/ProgressCard';
+import PriorityTaskCard from '@/src/components/shared/PriorityTaskCard';
+import WelcomeCard from '@/src/components/shared/WelcomeCard';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 /* ------------------------------------------------------------------ */
 /* Mock data — swap for API calls later                                */
@@ -48,9 +51,36 @@ const ZONES = [
 const ACTIVITIES = [
   { icon: 'person-outline' as const, title: 'Rajesh assigned to Zone 3', timestamp: '12 min ago' },
   { icon: 'document-text-outline' as const, title: 'New report #892 submitted', timestamp: '28 min ago' },
-  { icon: 'alert-circle-outline' as const, title: 'Blind spot detected in Sector 7', timestamp: '1 hr ago', iconColor: COLORS.danger },
-  { icon: 'checkmark-done-outline' as const, title: 'Zone 2 — survey completed', timestamp: '2 hrs ago', iconColor: COLORS.success },
+  { icon: 'alert-circle-outline' as const, title: 'Blind spot detected in Sector 7', timestamp: '1 hr ago', iconColor: ENUMERATOR_THEME.colors.danger },
+  { icon: 'checkmark-done-outline' as const, title: 'Zone 2 — survey completed', timestamp: '2 hrs ago', iconColor: ENUMERATOR_THEME.colors.success },
   { icon: 'sync-outline' as const, title: 'Batch data sync successful', timestamp: '3 hrs ago' },
+];
+
+const PRIORITY_TASKS = [
+  {
+    id: '1',
+    title: 'Pending Verifications',
+    count: 5,
+    icon: 'checkmark-circle-outline' as const,
+    color: ENUMERATOR_THEME.colors.warning,
+    subtitle: 'surveys',
+  },
+  {
+    id: '2',
+    title: 'Active Risks',
+    count: 3,
+    icon: 'warning-outline' as const,
+    color: ENUMERATOR_THEME.colors.danger,
+    subtitle: 'zones',
+  },
+  {
+    id: '3',
+    title: 'New Assignments',
+    count: 2,
+    icon: 'person-add-outline' as const,
+    color: ENUMERATOR_THEME.colors.accent,
+    subtitle: 'enumerators',
+  },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -65,11 +95,26 @@ export default function AdminDashboard() {
         contentContainerStyle={styles.body}
         showsVerticalScrollIndicator={false}
       >
-        {/* Welcome */}
-        <Text style={styles.welcomeTitle}>Welcome, Admin Central</Text>
-        <Text style={styles.welcomeSub}>Here&apos;s your system overview for today</Text>
+        {/* Welcome Card */}
+        <WelcomeCard
+          userName="Admin"
+          zoneInfo="System Overview"
+        />
+
+        {/* Today's Progress */}
+        <ProgressCard
+          title="System Progress"
+          percentage={73}
+          assigned={12450}
+          completed={9089}
+          remaining={3361}
+        />
+
+        {/* Priority Tasks */}
+        <PriorityTaskCard tasks={PRIORITY_TASKS} />
 
         {/* ── Stats grid ──────────────────────────────────────── */}
+        <SectionTitle title="Key Metrics" />
         <View style={styles.statsGrid}>
           {STATS.map((stat, i) => (
             <StatCard key={i} {...stat} />
@@ -99,6 +144,8 @@ export default function AdminDashboard() {
             <RecentActivityItem key={i} {...act} />
           ))}
         </View>
+
+        <View style={styles.bottomSpacer} />
       </ScrollView>
     </AdminLayout>
   );
@@ -111,22 +158,12 @@ export default function AdminDashboard() {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
   },
   body: {
     paddingHorizontal: 16,
     paddingTop: 18,
-  },
-  welcomeTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: COLORS.textPrimary,
-    marginBottom: 2,
-  },
-  welcomeSub: {
-    fontSize: 13,
-    color: COLORS.textSecondary,
-    marginBottom: 18,
+    gap: 20,
   },
   statsGrid: {
     flexDirection: 'row',
@@ -135,5 +172,8 @@ const styles = StyleSheet.create({
   },
   stack: {
     gap: 10,
+  },
+  bottomSpacer: {
+    height: 32,
   },
 });

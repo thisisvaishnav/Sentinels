@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { AppColors } from '@/constants/colors';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { CitizenNotification, CitizenNotificationType } from './citizenNotificationTypes';
 
 interface CitizenNotificationCardProps {
@@ -56,7 +56,7 @@ export const CitizenNotificationCard: React.FC<CitizenNotificationCardProps> = (
         <View style={styles.cardFooter}>
           <View style={styles.actionBtn}>
             <Text style={styles.actionBtnText}>{item.actionLabel}</Text>
-            <Ionicons name="chevron-forward" size={12} color={AppColors.blue} />
+            <Ionicons name="chevron-forward" size={12} color={ENUMERATOR_THEME.colors.accent} />
           </View>
         </View>
       )}
@@ -66,11 +66,11 @@ export const CitizenNotificationCard: React.FC<CitizenNotificationCardProps> = (
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 0,
     padding: 14,
     borderWidth: 1,
-    borderColor: AppColors.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     gap: 8,
   },
   unreadCard: {
@@ -108,21 +108,21 @@ const styles = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: AppColors.blue,
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
   },
   title: {
     fontSize: 14,
     fontWeight: '800',
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   timestamp: {
     fontSize: 10,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: '500',
   },
   message: {
     fontSize: 12,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     lineHeight: 17,
   },
   cardFooter: {
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingTop: 6,
     borderTopWidth: 1,
-    borderTopColor: AppColors.border,
+    borderTopColor: ENUMERATOR_THEME.colors.border,
   },
   actionBtn: {
     flexDirection: 'row',
@@ -141,6 +141,6 @@ const styles = StyleSheet.create({
   actionBtnText: {
     fontSize: 11,
     fontWeight: '800',
-    color: AppColors.blue,
+    color: ENUMERATOR_THEME.colors.accent,
   },
 });

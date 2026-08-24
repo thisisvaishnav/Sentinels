@@ -17,7 +17,7 @@ import SurveyFilters from '@/src/components/admin/survey/SurveyFilters';
 import SurveyTaskCard from '@/src/components/admin/survey/SurveyTaskCard';
 import CreateTaskModal from '@/src/components/admin/survey/CreateTaskModal';
 import ReassignModal from '@/src/components/admin/survey/ReassignModal';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { SurveyTask, SurveyEnumerator } from '@/src/types/admin';
 import {
   surveyStats,
@@ -160,11 +160,11 @@ export default function SurveyManagementScreen() {
         {/* Search + New Task */}
         <View style={styles.searchRow}>
           <View style={styles.searchInput}>
-            <Ionicons name="search-outline" size={16} color={COLORS.textMuted} />
+            <Ionicons name="search-outline" size={16} color={ENUMERATOR_THEME.colors.textMuted} />
             <TextInput
               style={styles.searchTextInput}
               placeholder="Search surveys..."
-              placeholderTextColor={COLORS.textMuted}
+              placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
               value={search}
               onChangeText={setSearch}
             />
@@ -174,7 +174,7 @@ export default function SurveyManagementScreen() {
             activeOpacity={0.6}
             onPress={() => setShowCreateModal(true)}
           >
-            <Ionicons name="add" size={18} color={COLORS.textOnPrimary} />
+            <Ionicons name="add" size={18} color={ENUMERATOR_THEME.colors.textWhite} />
             <Text style={styles.newTaskBtnText}>New Task</Text>
           </TouchableOpacity>
         </View>
@@ -194,7 +194,7 @@ export default function SurveyManagementScreen() {
             ))
           ) : (
             <View style={styles.emptyState}>
-              <Ionicons name="document-text-outline" size={48} color={COLORS.textMuted} />
+              <Ionicons name="document-text-outline" size={48} color={ENUMERATOR_THEME.colors.textMuted} />
               <Text style={styles.emptyTitle}>No surveys found</Text>
               <Text style={styles.emptySubtitle}>
                 Try adjusting your filters or create a new task.
@@ -236,7 +236,7 @@ export default function SurveyManagementScreen() {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
   },
   body: {
     paddingHorizontal: 16,
@@ -245,12 +245,12 @@ const styles = StyleSheet.create({
   pageTitle: {
     fontSize: 20,
     fontWeight: '800',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginBottom: 2,
   },
   pageSubtitle: {
     fontSize: 13,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginBottom: 16,
   },
   statsRow: {
@@ -267,10 +267,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     paddingHorizontal: 10,
     height: 40,
     gap: 6,
@@ -278,14 +278,14 @@ const styles = StyleSheet.create({
   searchTextInput: {
     flex: 1,
     fontSize: 13,
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     paddingVertical: 0,
   },
   newTaskBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: COLORS.accent,
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
     borderRadius: 8,
     paddingHorizontal: 14,
     height: 40,
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
   newTaskBtnText: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.textOnPrimary,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
   taskList: {
     gap: 10,
@@ -306,11 +306,11 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   emptySubtitle: {
     fontSize: 12,
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     textAlign: 'center',
   },
 });

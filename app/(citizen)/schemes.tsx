@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import CitizenLayout from "@/src/components/citizen/CitizenLayout";
 import CategoryTabs from "@/src/components/citizen/CategoryTabs";
 import PlaceholderFAB from "@/src/components/citizen/PlaceholderFAB";
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   resultCount: {
     fontSize: 13,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontWeight: "500",
   },
   schemesList: {

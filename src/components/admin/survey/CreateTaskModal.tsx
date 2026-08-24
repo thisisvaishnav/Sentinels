@@ -9,7 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { SurveyTask } from '@/src/types/admin';
 import FormInput from '@/src/components/admin/FormInput';
 import SelectField from '@/src/components/admin/SelectField';
@@ -91,7 +91,7 @@ export default function CreateTaskModal({
           <View style={styles.header}>
             <Text style={styles.heading}>Create New Survey Task</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-              <Ionicons name="close" size={20} color={COLORS.textSecondary} />
+              <Ionicons name="close" size={20} color={ENUMERATOR_THEME.colors.textSecondary} />
             </TouchableOpacity>
           </View>
 
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modal: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: '85%',
@@ -258,12 +258,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
   },
   heading: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   closeBtn: {
     padding: 4,
@@ -272,10 +272,10 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   pickerList: {
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     marginBottom: 12,
     overflow: 'hidden',
   },
@@ -283,17 +283,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.divider,
+    borderBottomColor: ENUMERATOR_THEME.colors.divider,
   },
   pickerItemActive: {
-    backgroundColor: COLORS.accentSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
   },
   pickerText: {
     fontSize: 12.5,
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   pickerTextActive: {
-    color: COLORS.accent,
+    color: ENUMERATOR_THEME.colors.accent,
     fontWeight: '600',
   },
   row: {
@@ -308,34 +308,34 @@ const styles = StyleSheet.create({
     gap: 10,
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border,
+    borderTopColor: ENUMERATOR_THEME.colors.border,
   },
   cancelBtn: {
     flex: 1,
     height: 40,
     borderRadius: 8,
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
   cancelBtnText: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   createBtn: {
     flex: 1,
     height: 40,
     borderRadius: 8,
-    backgroundColor: COLORS.accent,
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
   },
   createBtnText: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.textOnPrimary,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
 });

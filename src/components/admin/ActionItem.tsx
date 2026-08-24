@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface ActionItemProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -21,7 +21,7 @@ export default function ActionItem({ icon, title, description, variant = 'defaul
       onPress={onPress}
     >
       <View style={[styles.iconWrap, isDanger ? styles.iconDanger : styles.iconDefault]}>
-        <Ionicons name={icon} size={18} color={isDanger ? COLORS.danger : COLORS.accent} />
+        <Ionicons name={icon} size={18} color={isDanger ? ENUMERATOR_THEME.colors.danger : ENUMERATOR_THEME.colors.accent} />
       </View>
 
       <View style={styles.textBlock}>
@@ -29,7 +29,7 @@ export default function ActionItem({ icon, title, description, variant = 'defaul
         {description ? <Text style={styles.description}>{description}</Text> : null}
       </View>
 
-      <Ionicons name="chevron-forward" size={18} color={COLORS.textMuted} />
+      <Ionicons name="chevron-forward" size={18} color={ENUMERATOR_THEME.colors.textMuted} />
     </TouchableOpacity>
   );
 }
@@ -38,16 +38,16 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 12,
     padding: 14,
     gap: 12,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
   },
   rowDanger: {
-    borderColor: COLORS.dangerLight,
-    backgroundColor: COLORS.dangerSoft,
+    borderColor: ENUMERATOR_THEME.colors.dangerBorder,
+    backgroundColor: ENUMERATOR_THEME.colors.dangerBg,
   },
   iconWrap: {
     width: 36,
@@ -57,10 +57,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconDefault: {
-    backgroundColor: COLORS.accentSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
   },
   iconDanger: {
-    backgroundColor: COLORS.dangerSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.dangerBg,
   },
   textBlock: {
     flex: 1,
@@ -68,11 +68,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   description: {
     fontSize: 12,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginTop: 2,
   },
 });

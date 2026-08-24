@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { View, TextInput, Text, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { EnumeratorRosterItem } from '@/src/types/admin';
 import EnumeratorRow from './EnumeratorRow';
 
@@ -35,11 +35,11 @@ export default function EnumeratorRoster({
     <View style={styles.card}>
       {/* Search */}
       <View style={styles.searchWrap}>
-        <Ionicons name="search-outline" size={16} color={COLORS.textMuted} />
+        <Ionicons name="search-outline" size={16} color={ENUMERATOR_THEME.colors.textMuted} />
         <TextInput
           style={styles.searchInput}
           placeholder="Search enumerators by name or ID..."
-          placeholderTextColor={COLORS.textMuted}
+          placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
           value={search}
           onChangeText={setSearch}
         />
@@ -77,10 +77,10 @@ export default function EnumeratorRoster({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     overflow: 'hidden',
   },
   searchWrap: {
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 14,
     marginTop: 12,
     marginBottom: 8,
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderRadius: 4,
     borderWidth: 1,
     borderColor: '#D5D2DF',
@@ -100,16 +100,16 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 12,
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     paddingVertical: 0,
   },
   divider: {
     height: 1,
-    backgroundColor: COLORS.divider,
+    backgroundColor: ENUMERATOR_THEME.colors.divider,
   },
   emptyText: {
     fontSize: 12,
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     textAlign: 'center',
     paddingVertical: 20,
   },
@@ -121,6 +121,6 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: ENUMERATOR_THEME.colors.primary,
   },
 });

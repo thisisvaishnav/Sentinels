@@ -3,21 +3,34 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
-import { useAdminDrawer } from '@/src/contexts/AdminDrawerContext';
 
-export default function AdminHeader() {
-  const { toggle } = useAdminDrawer();
+interface CitizenHeaderProps {
+  onOpenDrawer: () => void;
+  userName?: string;
+}
+
+export default function CitizenHeader({ onOpenDrawer, userName = 'Citizen' }: CitizenHeaderProps) {
   const router = useRouter();
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   return (
     <View style={styles.container}>
       {/* Left: hamburger */}
-      <TouchableOpacity style={styles.iconBtn} activeOpacity={0.6} onPress={toggle}>
+      <TouchableOpacity style={styles.iconBtn} activeOpacity={0.6} onPress={onOpenDrawer}>
         <Ionicons name="menu" size={24} color={ENUMERATOR_THEME.colors.textPrimary} />
       </TouchableOpacity>
 
       {/* Centre: title */}
       <View style={styles.titleRow}>
+        <Ionicons name="shield-checkmark" size={20} color={ENUMERATOR_THEME.colors.accent} />
         <Text style={styles.title}>DRISHTI</Text>
       </View>
 
@@ -26,14 +39,14 @@ export default function AdminHeader() {
         <TouchableOpacity
           style={styles.iconBtn}
           activeOpacity={0.6}
-          onPress={() => router.push('/(admin)/notifications')}
+          onPress={() => router.push('/(citizen)/notifications')}
         >
           <Ionicons name="notifications-outline" size={22} color={ENUMERATOR_THEME.colors.textPrimary} />
           <View style={styles.dot} />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.avatarBtn} activeOpacity={0.6}>
-          <Text style={styles.avatarText}>AP</Text>
+          <Text style={styles.avatarText}>{getInitials(userName)}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -57,7 +70,7 @@ const styles = StyleSheet.create({
   },
   titleRow: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
     gap: 6,
   },
   title: {
@@ -83,8 +96,8 @@ const styles = StyleSheet.create({
   avatarBtn: {
     width: 32,
     height: 32,
-    borderRadius: 6,
-    backgroundColor: ENUMERATOR_THEME.colors.primary,
+    borderRadius: 8,
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
   },

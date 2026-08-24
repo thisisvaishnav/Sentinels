@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -44,21 +44,21 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: AppColors.bgSubtle,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderRadius: 0,
     borderWidth: 1,
-    borderColor: AppColors.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
   },
   activeSegment: {
-    backgroundColor: AppColors.primary,
-    borderColor: AppColors.primary,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
+    borderColor: ENUMERATOR_THEME.colors.primary,
   },
   label: {
     fontSize: 13,
     fontWeight: "600",
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
   },
   activeLabel: {
-    color: AppColors.textWhite,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
 });

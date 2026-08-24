@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Modal, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface ImageViewerModalProps {
   visible: boolean;
@@ -28,11 +28,11 @@ export default function ImageViewerModal({
         <View style={styles.imageContainer}>
           {imageUri ? (
             <View style={styles.imagePlaceholder}>
-              <Ionicons name="camera" size={48} color={COLORS.accent} />
+              <Ionicons name="camera" size={48} color={ENUMERATOR_THEME.colors.accent} />
             </View>
           ) : (
             <View style={styles.noImage}>
-              <Ionicons name="image-outline" size={48} color={COLORS.textMuted} />
+              <Ionicons name="image-outline" size={48} color={ENUMERATOR_THEME.colors.textMuted} />
             </View>
           )}
         </View>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   imagePlaceholder: {
     width: '100%',
     height: '100%',
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   noImage: {
     width: '100%',
     height: '100%',
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',

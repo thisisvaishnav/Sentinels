@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { ReportStatus } from '@/src/types/admin';
 import { statusLabels } from '@/src/data/citizenReportMockData';
 
@@ -12,13 +12,13 @@ const STATUS_CONFIG: Record<
   ReportStatus,
   { bg: string; color: string; dot: string }
 > = {
-  pending_verification: { bg: COLORS.warningSoft, color: COLORS.warning, dot: COLORS.warning },
-  assigned: { bg: COLORS.lightBlue, color: COLORS.reportBlue, dot: COLORS.reportBlue },
-  under_investigation: { bg: COLORS.accentSoft, color: COLORS.accent, dot: COLORS.accent },
-  verified: { bg: COLORS.successSoft, color: COLORS.success, dot: COLORS.success },
-  rejected: { bg: COLORS.dangerSoft, color: COLORS.danger, dot: COLORS.danger },
-  resolved: { bg: COLORS.successSoft, color: COLORS.success, dot: COLORS.success },
-  closed: { bg: COLORS.reportGraySoft, color: COLORS.reportGray, dot: COLORS.reportGray },
+  pending_verification: { bg: ENUMERATOR_THEME.colors.warningBg, color: ENUMERATOR_THEME.colors.warning, dot: ENUMERATOR_THEME.colors.warning },
+  assigned: { bg: ENUMERATOR_THEME.colors.lightBlue, color: ENUMERATOR_THEME.colors.reportBlue, dot: ENUMERATOR_THEME.colors.reportBlue },
+  under_investigation: { bg: ENUMERATOR_THEME.colors.accentSoft, color: ENUMERATOR_THEME.colors.accent, dot: ENUMERATOR_THEME.colors.accent },
+  verified: { bg: ENUMERATOR_THEME.colors.successBg, color: ENUMERATOR_THEME.colors.success, dot: ENUMERATOR_THEME.colors.success },
+  rejected: { bg: ENUMERATOR_THEME.colors.dangerBg, color: ENUMERATOR_THEME.colors.danger, dot: ENUMERATOR_THEME.colors.danger },
+  resolved: { bg: ENUMERATOR_THEME.colors.successBg, color: ENUMERATOR_THEME.colors.success, dot: ENUMERATOR_THEME.colors.success },
+  closed: { bg: ENUMERATOR_THEME.colors.reportGraySoft, color: ENUMERATOR_THEME.colors.reportGray, dot: ENUMERATOR_THEME.colors.reportGray },
 };
 
 export default function ReportStatusBadge({ status }: ReportStatusBadgeProps) {

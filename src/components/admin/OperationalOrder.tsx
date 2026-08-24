@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface OperationalOrderProps {
   title?: string;
@@ -17,7 +17,7 @@ export default function OperationalOrder({
       <View style={styles.accentLine} />
       <View style={styles.content}>
         <View style={styles.header}>
-          <Ionicons name="settings-outline" size={12} color={COLORS.operationalAccent} />
+          <Ionicons name="settings-outline" size={12} color={ENUMERATOR_THEME.colors.operationalAccent} />
           <Text style={styles.title}>{title}</Text>
         </View>
         <Text style={styles.message}>{message}</Text>
@@ -29,14 +29,14 @@ export default function OperationalOrder({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: COLORS.operationalBg,
+    backgroundColor: ENUMERATOR_THEME.colors.operationalBg,
     borderRadius: 6,
     overflow: 'hidden',
     marginTop: 10,
   },
   accentLine: {
     width: 3,
-    backgroundColor: COLORS.operationalAccent,
+    backgroundColor: ENUMERATOR_THEME.colors.operationalAccent,
   },
   content: {
     flex: 1,
@@ -51,12 +51,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 10,
     fontWeight: '700',
-    color: COLORS.operationalAccent,
+    color: ENUMERATOR_THEME.colors.operationalAccent,
     letterSpacing: 0.4,
   },
   message: {
     fontSize: 12,
     lineHeight: 17,
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
 });

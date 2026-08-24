@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { signOut } from '@/src/features/auth/authService';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { useAdminDrawer } from '@/src/contexts/AdminDrawerContext';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -123,7 +123,7 @@ export default function AdminDrawer() {
               <Text style={styles.avatarLargeText}>AP</Text>
             </View>
             <TouchableOpacity style={styles.closeBtn} activeOpacity={0.6} onPress={close}>
-              <Ionicons name="close" size={22} color={COLORS.textSecondary} />
+              <Ionicons name="close" size={22} color={ENUMERATOR_THEME.colors.textSecondary} />
             </TouchableOpacity>
           </View>
           <Text style={styles.drawerTitle}>DRISHTI</Text>
@@ -144,7 +144,7 @@ export default function AdminDrawer() {
                 <Ionicons
                   name={item.icon}
                   size={22}
-                  color={active ? COLORS.accent : COLORS.textSecondary}
+                  color={active ? ENUMERATOR_THEME.colors.accent : ENUMERATOR_THEME.colors.textSecondary}
                 />
                 <Text
                   style={[styles.menuLabel, active && styles.menuLabelActive]}
@@ -166,7 +166,7 @@ export default function AdminDrawer() {
             activeOpacity={0.6}
             onPress={handleLogout}
           >
-            <Ionicons name="log-out-outline" size={20} color={COLORS.danger} />
+            <Ionicons name="log-out-outline" size={20} color={ENUMERATOR_THEME.colors.danger} />
             <Text style={styles.logoutText}>Sign Out</Text>
           </TouchableOpacity>
         </View>
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     bottom: 0,
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     zIndex: 20,
     elevation: 8,
     shadowColor: '#000',
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 24,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
   },
   drawerHeaderTop: {
     flexDirection: 'row',
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: COLORS.primary,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -221,17 +221,17 @@ const styles = StyleSheet.create({
   avatarLargeText: {
     fontSize: 18,
     fontWeight: '700',
-    color: COLORS.textOnPrimary,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
   drawerTitle: {
     fontSize: 20,
     fontWeight: '800',
-    color: COLORS.primary,
+    color: ENUMERATOR_THEME.colors.primary,
     letterSpacing: 0.4,
   },
   drawerSubtitle: {
     fontSize: 13,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginTop: 2,
   },
   menuList: {
@@ -246,25 +246,25 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   menuItemActive: {
-    backgroundColor: COLORS.accentSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
     borderRightWidth: 3,
-    borderRightColor: COLORS.accent,
+    borderRightColor: ENUMERATOR_THEME.colors.accent,
   },
   menuLabel: {
     fontSize: 15,
     fontWeight: '500',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     flex: 1,
   },
   menuLabelActive: {
     fontWeight: '700',
-    color: COLORS.accent,
+    color: ENUMERATOR_THEME.colors.accent,
   },
   comingSoon: {
     fontSize: 10,
     fontWeight: '600',
-    color: COLORS.textMuted,
-    backgroundColor: COLORS.surfaceAlt,
+    color: ENUMERATOR_THEME.colors.textMuted,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
   },
   drawerFooter: {
     borderTopWidth: 1,
-    borderTopColor: COLORS.border,
+    borderTopColor: ENUMERATOR_THEME.colors.border,
     padding: 16,
   },
   logoutBtn: {
@@ -285,6 +285,6 @@ const styles = StyleSheet.create({
   logoutText: {
     fontSize: 15,
     fontWeight: '600',
-    color: COLORS.danger,
+    color: ENUMERATOR_THEME.colors.danger,
   },
 });

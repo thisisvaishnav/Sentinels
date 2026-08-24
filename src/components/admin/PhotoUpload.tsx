@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, Image, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface PhotoUploadProps {
   imageUri: string | null;
@@ -16,7 +16,7 @@ export default function PhotoUpload({ imageUri, onPress }: PhotoUploadProps) {
           {imageUri ? (
             <Image source={{ uri: imageUri }} style={styles.image} />
           ) : (
-            <Ionicons name="camera-outline" size={28} color={COLORS.textMuted} />
+            <Ionicons name="camera-outline" size={28} color={ENUMERATOR_THEME.colors.textMuted} />
           )}
         </View>
         <Text style={styles.uploadLabel}>Upload Photo</Text>
@@ -28,10 +28,10 @@ export default function PhotoUpload({ imageUri, onPress }: PhotoUploadProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     padding: 14,
     marginBottom: 12,
   },
@@ -42,9 +42,9 @@ const styles = StyleSheet.create({
     width: 84,
     height: 84,
     borderRadius: 8,
-    backgroundColor: COLORS.primarySoft,
+    backgroundColor: ENUMERATOR_THEME.colors.primarySoft,
     borderWidth: 1.5,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
@@ -57,11 +57,11 @@ const styles = StyleSheet.create({
   uploadLabel: {
     fontSize: 11.5,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: ENUMERATOR_THEME.colors.primary,
     marginBottom: 2,
   },
   hint: {
     fontSize: 9.5,
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
   },
 });

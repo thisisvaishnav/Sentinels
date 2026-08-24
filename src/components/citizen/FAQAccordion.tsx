@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -26,7 +26,7 @@ function FAQEntry({ question, answer }: FAQItem) {
         <Ionicons
           name={isOpen ? "chevron-up" : "chevron-down"}
           size={16}
-          color={AppColors.textMuted}
+          color={ENUMERATOR_THEME.colors.textMuted}
         />
       </TouchableOpacity>
       {isOpen && (
@@ -50,15 +50,15 @@ export default function FAQAccordion({ items }: FAQAccordionProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     borderRadius: 0,
     overflow: "hidden",
   },
   entry: {
     borderBottomWidth: 1,
-    borderBottomColor: AppColors.border,
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
   },
   questionRow: {
     flexDirection: "row",
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: "600",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   answerWrap: {
     paddingHorizontal: 14,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   answer: {
     fontSize: 13,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     lineHeight: 20,
   },
 });

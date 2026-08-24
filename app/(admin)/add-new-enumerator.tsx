@@ -17,7 +17,7 @@ import FormSection from '@/src/components/admin/FormSection';
 import FormInput from '@/src/components/admin/FormInput';
 import SelectField from '@/src/components/admin/SelectField';
 import EnumeratorCredentialsCard from '@/src/components/admin/EnumeratorCredentialsCard';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 /* ------------------------------------------------------------------ */
 /* Credential generators                                               */
@@ -137,7 +137,7 @@ export default function AddNewEnumeratorScreen() {
       >
         {/* Back navigation */}
         <Pressable style={styles.backRow} onPress={handleBack}>
-          <Ionicons name="arrow-back" size={18} color={COLORS.textPrimary} />
+          <Ionicons name="arrow-back" size={18} color={ENUMERATOR_THEME.colors.textPrimary} />
           <Text style={styles.backTitle}>Add New Enumerator</Text>
         </Pressable>
 
@@ -209,7 +209,7 @@ export default function AddNewEnumeratorScreen() {
           activeOpacity={0.8}
           onPress={handleSubmit}
         >
-          <Ionicons name="checkmark-circle-outline" size={18} color={COLORS.textOnPrimary} />
+          <Ionicons name="checkmark-circle-outline" size={18} color={ENUMERATOR_THEME.colors.textWhite} />
           <Text style={styles.submitBtnText}>Submit</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -236,7 +236,7 @@ export default function AddNewEnumeratorScreen() {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
   },
   body: {
     paddingHorizontal: 18,
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   backTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   submitBtn: {
     flexDirection: 'row',
@@ -262,11 +262,11 @@ const styles = StyleSheet.create({
     marginTop: 24,
     height: 44,
     borderRadius: 4,
-    backgroundColor: COLORS.accent,
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
   },
   submitBtnText: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.textOnPrimary,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
 });

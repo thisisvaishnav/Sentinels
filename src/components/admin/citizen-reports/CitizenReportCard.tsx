@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { CitizenReport } from '@/src/types/admin';
 import { categoryLabels } from '@/src/data/citizenReportMockData';
 import ReportStatusBadge from './ReportStatusBadge';
@@ -121,11 +121,11 @@ export default function CitizenReportCard({
       {/* Info row */}
       <View style={styles.infoRow}>
         <View style={styles.infoItem}>
-          <Ionicons name="person-outline" size={12} color={COLORS.textSecondary} />
+          <Ionicons name="person-outline" size={12} color={ENUMERATOR_THEME.colors.textSecondary} />
           <Text style={styles.infoText}>{report.citizenName}</Text>
         </View>
         <View style={styles.infoItem}>
-          <Ionicons name="location-outline" size={12} color={COLORS.textSecondary} />
+          <Ionicons name="location-outline" size={12} color={ENUMERATOR_THEME.colors.textSecondary} />
           <Text style={styles.infoText} numberOfLines={1}>
             {report.area}
           </Text>
@@ -134,7 +134,7 @@ export default function CitizenReportCard({
 
       <View style={styles.infoRow}>
         <View style={styles.infoItem}>
-          <Ionicons name={getCategoryIcon(report.category)} size={12} color={COLORS.textSecondary} />
+          <Ionicons name={getCategoryIcon(report.category)} size={12} color={ENUMERATOR_THEME.colors.textSecondary} />
           <Text style={styles.infoText}>{categoryLabels[report.category]}</Text>
         </View>
         {report.imageUri && (
@@ -150,10 +150,10 @@ export default function CitizenReportCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     padding: 14,
     gap: 8,
   },
@@ -170,12 +170,12 @@ const styles = StyleSheet.create({
   reportId: {
     fontSize: 11,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   title: {
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   infoRow: {
     flexDirection: 'row',
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 12,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     flex: 1,
   },
   actionsRow: {
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   assignBtn: {
     height: 34,
     borderRadius: 6,
-    backgroundColor: COLORS.primary,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 16,
@@ -211,47 +211,47 @@ const styles = StyleSheet.create({
   assignBtnText: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.textOnPrimary,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
   trackBtn: {
     flex: 1,
     height: 34,
     borderRadius: 6,
-    backgroundColor: COLORS.accentSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
     alignItems: 'center',
     justifyContent: 'center',
   },
   trackBtnText: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.accent,
+    color: ENUMERATOR_THEME.colors.accent,
   },
   updateBtn: {
     flex: 1,
     height: 34,
     borderRadius: 6,
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
   updateBtnText: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   verifyBtn: {
     flex: 1,
     height: 34,
     borderRadius: 6,
-    backgroundColor: COLORS.success,
+    backgroundColor: ENUMERATOR_THEME.colors.success,
     alignItems: 'center',
     justifyContent: 'center',
   },
   verifyBtnText: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.textOnPrimary,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
 });

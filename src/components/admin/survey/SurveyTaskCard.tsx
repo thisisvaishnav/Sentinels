@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { SurveyTask } from '@/src/types/admin';
 import SurveyStatusBadge from './SurveyStatusBadge';
 import ProgressBar from './ProgressBar';
@@ -33,7 +33,7 @@ export default function SurveyTaskCard({
       <View style={styles.header}>
         <SurveyStatusBadge status={survey.status} />
         <TouchableOpacity style={styles.menuBtn} activeOpacity={0.6}>
-          <Ionicons name="ellipsis-vertical" size={16} color={COLORS.textMuted} />
+          <Ionicons name="ellipsis-vertical" size={16} color={ENUMERATOR_THEME.colors.textMuted} />
         </TouchableOpacity>
       </View>
 
@@ -49,7 +49,7 @@ export default function SurveyTaskCard({
           </View>
         ) : (
           <View style={[styles.avatar, styles.avatarEmpty]}>
-            <Ionicons name="person-outline" size={14} color={COLORS.textMuted} />
+            <Ionicons name="person-outline" size={14} color={ENUMERATOR_THEME.colors.textMuted} />
           </View>
         )}
         <Text style={[styles.enumeratorName, !survey.enumeratorName && styles.unassigned]}>
@@ -102,10 +102,10 @@ export default function SurveyTaskCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     padding: 14,
     gap: 8,
   },
@@ -120,11 +120,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   subtitle: {
     fontSize: 12,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   enumeratorRow: {
     flexDirection: 'row',
@@ -136,25 +136,25 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: COLORS.primarySoft,
+    backgroundColor: ENUMERATOR_THEME.colors.primarySoft,
     alignItems: 'center',
     justifyContent: 'center',
   },
   avatarEmpty: {
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
   },
   avatarText: {
     fontSize: 10,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: ENUMERATOR_THEME.colors.primary,
   },
   enumeratorName: {
     fontSize: 12,
     fontWeight: '500',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   unassigned: {
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontStyle: 'italic',
   },
   progressInfo: {
@@ -163,11 +163,11 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontSize: 11,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   dueDate: {
     fontSize: 11,
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
   },
   actions: {
     flexDirection: 'row',
@@ -178,41 +178,41 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 34,
     borderRadius: 6,
-    backgroundColor: COLORS.accentSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
     alignItems: 'center',
     justifyContent: 'center',
   },
   trackBtnText: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.accent,
+    color: ENUMERATOR_THEME.colors.accent,
   },
   reassignBtn: {
     flex: 1,
     height: 34,
     borderRadius: 6,
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
   reassignBtnText: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   assignBtn: {
     flex: 1,
     height: 34,
     borderRadius: 6,
-    backgroundColor: COLORS.primary,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
   assignBtnText: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.textOnPrimary,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface ReportSearchProps {
   value: string;
@@ -11,11 +11,11 @@ interface ReportSearchProps {
 export default function ReportSearch({ value, onChangeText }: ReportSearchProps) {
   return (
     <View style={styles.container}>
-      <Ionicons name="search-outline" size={16} color={COLORS.textMuted} />
+      <Ionicons name="search-outline" size={16} color={ENUMERATOR_THEME.colors.textMuted} />
       <TextInput
         style={styles.input}
         placeholder="Search by report ID, citizen, category, location..."
-        placeholderTextColor={COLORS.textMuted}
+        placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
         value={value}
         onChangeText={onChangeText}
       />
@@ -27,10 +27,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     paddingHorizontal: 10,
     height: 40,
     gap: 6,
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 13,
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     paddingVertical: 0,
   },
 });

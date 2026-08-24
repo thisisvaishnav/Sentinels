@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface FormSectionProps {
   title: string;
@@ -19,10 +19,10 @@ export default function FormSection({ title, children }: FormSectionProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     paddingHorizontal: 14,
     paddingVertical: 14,
     marginBottom: 12,
@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginBottom: 10,
   },
   divider: {
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.divider,
+    borderBottomColor: ENUMERATOR_THEME.colors.divider,
     marginBottom: 12,
   },
   children: {

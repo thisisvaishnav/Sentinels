@@ -8,7 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface EnumeratorCredentialsCardProps {
   visible: boolean;
@@ -37,7 +37,7 @@ export default function EnumeratorCredentialsCard({
         <View style={styles.card}>
           {/* Success icon */}
           <View style={styles.iconCircle}>
-            <Ionicons name="checkmark" size={32} color={COLORS.textOnPrimary} />
+            <Ionicons name="checkmark" size={32} color={ENUMERATOR_THEME.colors.textWhite} />
           </View>
 
           <Text style={styles.heading}>Enumerator Created Successfully</Text>
@@ -63,7 +63,7 @@ export default function EnumeratorCredentialsCard({
 
           {/* Warning */}
           <View style={styles.warningRow}>
-            <Ionicons name="warning-outline" size={14} color={COLORS.warning} />
+            <Ionicons name="warning-outline" size={14} color={ENUMERATOR_THEME.colors.warning} />
             <Text style={styles.warningText}>
               Share these credentials securely with the enumerator.
             </Text>
@@ -95,18 +95,18 @@ const styles = StyleSheet.create({
   card: {
     width: '100%',
     maxWidth: 360,
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 14,
     padding: 24,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
   },
   iconCircle: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: COLORS.success,
+    backgroundColor: ENUMERATOR_THEME.colors.success,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
@@ -114,27 +114,27 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginBottom: 4,
   },
   subheading: {
     fontSize: 12,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginBottom: 20,
   },
   credentialBox: {
     width: '100%',
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderRadius: 4,
     padding: 12,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
   },
   credentialLabel: {
     fontSize: 10,
     fontWeight: '600',
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 0.3,
     marginBottom: 4,
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   credentialValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: ENUMERATOR_THEME.colors.primary,
     letterSpacing: 1,
   },
   warningRow: {
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   },
   warningText: {
     fontSize: 11,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     flex: 1,
   },
   buttonRow: {
@@ -167,28 +167,28 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     borderRadius: 4,
-    backgroundColor: COLORS.accent,
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
   },
   doneBtnText: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.textOnPrimary,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
   addAnotherBtn: {
     flex: 1,
     height: 40,
     borderRadius: 4,
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
   addAnotherBtnText: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.accent,
+    color: ENUMERATOR_THEME.colors.accent,
   },
 });

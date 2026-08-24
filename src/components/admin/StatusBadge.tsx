@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { EnumeratorStatus } from '@/src/types/admin';
 
 interface StatusBadgeProps {
@@ -11,12 +11,12 @@ const STATUS_CONFIG: Record<
   EnumeratorStatus,
   { label: string; bg: string; color: string }
 > = {
-  active: { label: 'Active', bg: COLORS.activeBg, color: COLORS.primary },
-  offDuty: { label: 'Off Duty', bg: COLORS.offDutyBg, color: COLORS.offDuty },
+  active: { label: 'Active', bg: ENUMERATOR_THEME.colors.activeBg, color: ENUMERATOR_THEME.colors.primary },
+  offDuty: { label: 'Off Duty', bg: ENUMERATOR_THEME.colors.offDutyBg, color: ENUMERATOR_THEME.colors.offDuty },
   issueReported: {
     label: 'Issue\nReported',
-    bg: COLORS.issueReportedBg,
-    color: COLORS.issueReported,
+    bg: ENUMERATOR_THEME.colors.issueReportedBg,
+    color: ENUMERATOR_THEME.colors.issueReported,
   },
 };
 

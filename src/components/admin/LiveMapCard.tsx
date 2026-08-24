@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, Platform } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 let MapView: any = null;
 let Marker: any = null;
@@ -61,7 +61,7 @@ export default function LiveMapCard() {
           </MapView>
         ) : (
           <View style={[styles.map, { backgroundColor: '#EBF4F6', alignItems: 'center', justifyContent: 'center' }]}>
-            <Text style={{ color: COLORS.primary, fontWeight: '700', fontSize: 13 }}>
+            <Text style={{ color: ENUMERATOR_THEME.colors.primary, fontWeight: '700', fontSize: 13 }}>
               Live Field Map Canvas (Lucknow Zone 4)
             </Text>
             <Text style={{ color: '#64748B', fontSize: 11, marginTop: 4 }}>
@@ -84,23 +84,23 @@ const MARKER_SIZE = 16;
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 14,
     padding: 16,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     marginBottom: 14,
     overflow: 'hidden',
   },
   title: {
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginBottom: 2,
   },
   subtitle: {
     fontSize: 12,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginBottom: 12,
   },
   mapContainer: {
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     width: MARKER_SIZE,
     height: MARKER_SIZE,
     borderRadius: MARKER_SIZE / 2,
-    backgroundColor: COLORS.mapMarker,
+    backgroundColor: ENUMERATOR_THEME.colors.mapMarker,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
@@ -150,12 +150,12 @@ const styles = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: COLORS.success,
+    backgroundColor: ENUMERATOR_THEME.colors.success,
   },
   liveText: {
     fontSize: 10,
     fontWeight: '700',
-    color: COLORS.success,
+    color: ENUMERATOR_THEME.colors.success,
     letterSpacing: 0.5,
   },
 });

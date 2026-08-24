@@ -12,7 +12,7 @@ import SectionHeader from '@/src/components/admin/SectionHeader';
 import AddEnumeratorButton from '@/src/components/admin/AddEnumeratorButton';
 import EnumeratorRoster from '@/src/components/admin/EnumeratorRoster';
 import CommandCenter from '@/src/components/admin/CommandCenter';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { EnumeratorRosterItem } from '@/src/types/admin';
 
 /* ------------------------------------------------------------------ */
@@ -127,7 +127,7 @@ export default function EnumeratorCommandCenterScreen() {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
   },
   body: {
     paddingHorizontal: 18,

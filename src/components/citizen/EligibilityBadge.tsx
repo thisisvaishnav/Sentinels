@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -24,19 +24,19 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   eligible: {
-    backgroundColor: AppColors.successBg,
+    backgroundColor: ENUMERATOR_THEME.colors.successBg,
   },
   checkEligibility: {
-    backgroundColor: AppColors.warningBg,
+    backgroundColor: ENUMERATOR_THEME.colors.warningBg,
   },
   text: {
     fontSize: 11,
     fontWeight: "700",
   },
   textEligible: {
-    color: AppColors.successText,
+    color: ENUMERATOR_THEME.colors.successText,
   },
   textCheck: {
-    color: AppColors.warningText,
+    color: ENUMERATOR_THEME.colors.warningText,
   },
 });

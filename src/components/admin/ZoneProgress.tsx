@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface ZoneProgressProps {
   name: string;
@@ -27,11 +27,11 @@ export default function ZoneProgress({ name, percentage, householdCount }: ZoneP
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 12,
     padding: 14,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
   },
   topRow: {
     flexDirection: 'row',
@@ -41,27 +41,27 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   percentage: {
     fontSize: 14,
     fontWeight: '700',
-    color: COLORS.accent,
+    color: ENUMERATOR_THEME.colors.accent,
   },
   track: {
     height: 8,
     borderRadius: 4,
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     overflow: 'hidden',
   },
   fill: {
     height: '100%',
     borderRadius: 4,
-    backgroundColor: COLORS.accent,
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
   },
   count: {
     fontSize: 12,
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     marginTop: 6,
   },
 });

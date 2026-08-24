@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -17,7 +17,7 @@ export default function QuickActionCard({
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.iconBox}>
-        <Ionicons name={icon} size={22} color={AppColors.textPrimary} />
+        <Ionicons name={icon} size={22} color={ENUMERATOR_THEME.colors.accent} />
       </View>
       <Text style={styles.label}>{label}</Text>
     </TouchableOpacity>
@@ -27,27 +27,27 @@ export default function QuickActionCard({
 const styles = StyleSheet.create({
   card: {
     width: "48%",
-    minHeight: 146,
-    backgroundColor: AppColors.bgCard,
+    minHeight: 120,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.border,
-    borderRadius: 0,
+    borderColor: ENUMERATOR_THEME.colors.border,
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
     padding: 14,
     alignItems: "center",
     justifyContent: "center",
-    gap: 12,
+    gap: 10,
   },
   iconBox: {
-    width: 46,
-    height: 46,
-    borderRadius: 0,
-    backgroundColor: AppColors.bgSubtle,
+    width: 44,
+    height: 44,
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
     alignItems: "center",
     justifyContent: "center",
   },
   label: {
-    color: AppColors.textPrimary,
-    fontSize: 14,
+    color: ENUMERATOR_THEME.colors.textPrimary,
+    fontSize: 13,
     fontWeight: "600",
     textAlign: "center",
   },

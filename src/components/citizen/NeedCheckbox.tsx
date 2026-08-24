@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -24,14 +24,14 @@ export default function NeedCheckbox({
     >
       <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
         {checked && (
-          <Ionicons name="checkmark" size={14} color={AppColors.textWhite} />
+          <Ionicons name="checkmark" size={14} color={ENUMERATOR_THEME.colors.textWhite} />
         )}
       </View>
       <View style={[styles.iconWrap, checked && styles.iconWrapChecked]}>
         <Ionicons
           name={icon}
           size={18}
-          color={checked ? AppColors.textWhite : AppColors.textPrimary}
+          color={checked ? ENUMERATOR_THEME.colors.textWhite : ENUMERATOR_THEME.colors.textPrimary}
         />
       </View>
       <Text style={[styles.label, checked && styles.labelChecked]}>{label}</Text>
@@ -44,47 +44,47 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     borderRadius: 0,
     padding: 12,
   },
   checkedContainer: {
-    backgroundColor: AppColors.bgHighlight,
-    borderColor: AppColors.blue,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
+    borderColor: ENUMERATOR_THEME.colors.accent,
   },
   checkbox: {
     width: 20,
     height: 20,
     borderRadius: 0,
     borderWidth: 2,
-    borderColor: AppColors.borderInput,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
     alignItems: "center",
     justifyContent: "center",
   },
   checkboxChecked: {
-    backgroundColor: AppColors.blue,
-    borderColor: AppColors.blue,
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
+    borderColor: ENUMERATOR_THEME.colors.accent,
   },
   iconWrap: {
     width: 32,
     height: 32,
     borderRadius: 0,
-    backgroundColor: AppColors.bgSubtle,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     alignItems: "center",
     justifyContent: "center",
   },
   iconWrapChecked: {
-    backgroundColor: AppColors.blue,
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
   },
   label: {
     flex: 1,
     fontSize: 14,
     fontWeight: "600",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   labelChecked: {
-    color: AppColors.blue,
+    color: ENUMERATOR_THEME.colors.accent,
   },
 });

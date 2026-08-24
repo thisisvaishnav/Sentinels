@@ -14,7 +14,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { AppColors, AppRadius } from "../../constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 export type Role = "citizen" | "enumerator";
 
@@ -49,7 +49,7 @@ export default function Login() {
       try {
         await loginWithRole('citizen', { mobile: identifier, password: secret });
         await AsyncStorage.setItem('hasOnboarded', 'true');
-        router.replace("/(citizen)/(tabs)/dashboard");
+        router.replace("/(citizen)/dashboard");
       } catch (error: any) {
         console.error("Citizen login error:", error);
         alert(error?.message || "Unable to sign in. Please try again.");
@@ -117,7 +117,7 @@ export default function Login() {
                 <Ionicons
                   name="arrow-back"
                   size={22}
-                  color={AppColors.primary}
+                  color={ENUMERATOR_THEME.colors.primary}
                 />
                 <Text style={styles.backText}>Back</Text>
               </TouchableOpacity>
@@ -130,7 +130,7 @@ export default function Login() {
                   <Ionicons
                     name="person"
                     size={32}
-                    color={AppColors.textMuted}
+                    color={ENUMERATOR_THEME.colors.textMuted}
                   />
                 )}
 
@@ -138,7 +138,7 @@ export default function Login() {
                   <MaterialCommunityIcons
                     name="satellite-variant"
                     size={34}
-                    color={AppColors.textWhite}
+                    color={ENUMERATOR_THEME.colors.textWhite}
                   />
                 )}
               </View>
@@ -163,7 +163,7 @@ export default function Login() {
                     <Ionicons
                       name="phone-portrait-outline"
                       size={23}
-                      color={AppColors.textMuted}
+                      color={ENUMERATOR_THEME.colors.textMuted}
                     />
                   }
                 />
@@ -191,7 +191,7 @@ export default function Login() {
                     <MaterialCommunityIcons
                       name="card-account-details-outline"
                       size={23}
-                      color={AppColors.textMuted}
+                      color={ENUMERATOR_THEME.colors.textMuted}
                     />
                   }
                 />
@@ -222,7 +222,7 @@ export default function Login() {
               <Ionicons
                 name="arrow-forward"
                 size={24}
-                color={AppColors.textWhite}
+                color={ENUMERATOR_THEME.colors.textWhite}
               />
             </TouchableOpacity>
 
@@ -256,7 +256,7 @@ export default function Login() {
                 <Ionicons
                   name="shield-checkmark-outline"
                   size={20}
-                  color={AppColors.textSecondary}
+                  color={ENUMERATOR_THEME.colors.textSecondary}
                 />
 
                 <Text style={styles.securityTitle}>
@@ -297,7 +297,7 @@ function Field({
         <TextInput
           style={styles.input}
           placeholder={placeholder}
-          placeholderTextColor={AppColors.textMuted}
+          placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
           value={value}
           onChangeText={onChangeText}
           keyboardType={keyboardType}
@@ -325,13 +325,13 @@ function PasswordField({
         <Ionicons
           name="lock-closed-outline"
           size={23}
-          color={AppColors.textMuted}
+          color={ENUMERATOR_THEME.colors.textMuted}
         />
 
         <TextInput
           style={styles.input}
           placeholder={placeholder}
-          placeholderTextColor={AppColors.textMuted}
+          placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={!visible}
@@ -342,7 +342,7 @@ function PasswordField({
           <Ionicons
             name={visible ? "eye-outline" : "eye-off-outline"}
             size={24}
-            color={AppColors.textMuted}
+            color={ENUMERATOR_THEME.colors.textMuted}
           />
         </TouchableOpacity>
       </View>
@@ -361,7 +361,7 @@ function PasswordField({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: AppColors.bgMain,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
     marginTop: -30,
   },
 
@@ -378,10 +378,10 @@ const styles = StyleSheet.create({
     width: "92%",
     maxWidth: 540,
     alignSelf: "center",
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.borderInput,
-    borderRadius: AppRadius.lg,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
     paddingHorizontal: 28,
     paddingVertical: 28,
   },
@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
 
   backText: {
     fontSize: 16,
-    color: AppColors.primary,
+    color: ENUMERATOR_THEME.colors.primary,
     fontWeight: "500",
   },
 
@@ -407,8 +407,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 72,
     height: 72,
-    borderRadius: AppRadius.xl,
-    backgroundColor: AppColors.primary,
+    borderRadius: ENUMERATOR_THEME.borderRadius.xl,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 18,
@@ -417,13 +417,13 @@ const styles = StyleSheet.create({
   brand: {
     fontSize: 34,
     fontWeight: "700",
-    color: AppColors.primary,
+    color: ENUMERATOR_THEME.colors.primary,
     letterSpacing: -0.8,
   },
 
   subtitle: {
     fontSize: 19,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginTop: 8,
     textAlign: "center",
   },
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     letterSpacing: 1.5,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     fontWeight: "600",
     marginBottom: 9,
   },
@@ -443,8 +443,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     height: 56,
     borderWidth: 1.5,
-    borderColor: AppColors.borderInput,
-    backgroundColor: AppColors.bgInput,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
+    backgroundColor: ENUMERATOR_THEME.colors.inputBackground,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 14,
@@ -453,13 +453,13 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 18,
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginLeft: 10,
   },
 
   primaryButton: {
     height: 58,
-    backgroundColor: AppColors.primary,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -472,7 +472,7 @@ const styles = StyleSheet.create({
   },
 
   primaryButtonText: {
-    color: AppColors.textWhite,
+    color: ENUMERATOR_THEME.colors.textWhite,
     fontSize: 19,
     fontWeight: "600",
   },
@@ -486,12 +486,12 @@ const styles = StyleSheet.create({
 
   registerText: {
     fontSize: 16,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
 
   registerLink: {
     fontSize: 16,
-    color: AppColors.blue,
+    color: ENUMERATOR_THEME.colors.accent,
     fontWeight: "600",
   },
 
@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
   },
 
   requestAccessText: {
-    color: AppColors.blue,
+    color: ENUMERATOR_THEME.colors.accent,
     fontSize: 17,
     fontWeight: "600",
     letterSpacing: 1,
@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
 
   securityContainer: {
     borderTopWidth: 1,
-    borderTopColor: AppColors.border,
+    borderTopColor: ENUMERATOR_THEME.colors.border,
     marginTop: 30,
     paddingTop: 22,
     alignItems: "center",
@@ -523,7 +523,7 @@ const styles = StyleSheet.create({
 
   securityTitle: {
     fontSize: 16,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     fontWeight: "600",
     letterSpacing: 1,
   },
@@ -531,13 +531,13 @@ const styles = StyleSheet.create({
   securityText: {
     textAlign: "center",
     marginTop: 8,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontSize: 14,
     lineHeight: 21,
   },
 
   securityHint: {
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     fontSize: 13,
     marginTop: 7,
   },

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { AppColors } from '@/constants/colors';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   CitizenNotification,
@@ -143,7 +143,7 @@ export default function CitizenNotificationsScreen() {
           onPress={() => router.back()}
           activeOpacity={0.8}
         >
-          <Ionicons name="arrow-back" size={22} color={AppColors.textPrimary} />
+          <Ionicons name="arrow-back" size={22} color={ENUMERATOR_THEME.colors.textPrimary} />
         </TouchableOpacity>
 
         <View style={styles.titleWrap}>
@@ -163,7 +163,7 @@ export default function CitizenNotificationsScreen() {
             onPress={handleMarkAllAsRead}
             activeOpacity={0.8}
           >
-            <Ionicons name="checkmark-done-outline" size={20} color={AppColors.blue} />
+            <Ionicons name="checkmark-done-outline" size={20} color={ENUMERATOR_THEME.colors.accent} />
           </TouchableOpacity>
         )}
       </View>
@@ -220,7 +220,7 @@ export default function CitizenNotificationsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: AppColors.bgMain,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
     marginTop: -30,
   },
   header: {
@@ -228,9 +228,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderBottomWidth: 1,
-    borderBottomColor: AppColors.border,
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
     gap: 12,
   },
   backBtn: {
@@ -247,10 +247,10 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 16,
     fontWeight: '800',
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   unreadBadge: {
-    backgroundColor: AppColors.blue,
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
     paddingHorizontal: 7,
     paddingVertical: 2,
     borderRadius: 10,
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   unreadBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: AppColors.textWhite,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
   headerAction: {
     padding: 6,
@@ -277,28 +277,28 @@ const styles = StyleSheet.create({
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 0,
     borderWidth: 1,
-    borderColor: AppColors.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     gap: 6,
   },
   chipSelected: {
-    backgroundColor: AppColors.blue,
-    borderColor: AppColors.blue,
+    backgroundColor: ENUMERATOR_THEME.colors.accent,
+    borderColor: ENUMERATOR_THEME.colors.accent,
   },
   chipText: {
     fontSize: 12,
     fontWeight: '700',
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
   chipTextSelected: {
-    color: AppColors.textWhite,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
   chipBadge: {
-    backgroundColor: AppColors.bgSubtle,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 10,
@@ -311,10 +311,10 @@ const styles = StyleSheet.create({
   chipBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   chipBadgeTextSelected: {
-    color: AppColors.textWhite,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
   bottomSpacer: {
     height: 24,

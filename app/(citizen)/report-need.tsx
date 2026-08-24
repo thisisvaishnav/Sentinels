@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import CitizenLayout from "@/src/components/citizen/CitizenLayout";
 import NeedCheckbox from "@/src/components/citizen/NeedCheckbox";
 import UrgencySelector from "@/src/components/citizen/UrgencySelector";
@@ -71,7 +71,7 @@ export default function ReportNeedScreen() {
           <TextInput
             style={styles.textArea}
             placeholder="Tell us more about what you need..."
-            placeholderTextColor={AppColors.textMuted}
+            placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
             value={description}
             onChangeText={setDescription}
             multiline
@@ -84,7 +84,7 @@ export default function ReportNeedScreen() {
           <Text style={styles.sectionTitle}>Your Location</Text>
           <View style={styles.locationCard}>
             <View style={styles.locationIcon}>
-              <Ionicons name="location-outline" size={18} color={AppColors.blue} />
+              <Ionicons name="location-outline" size={18} color={ENUMERATOR_THEME.colors.accent} />
             </View>
             <View style={styles.locationCopy}>
               <Text style={styles.locationLabel}>Current Location</Text>
@@ -122,11 +122,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   sectionSubtitle: {
     fontSize: 13,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     marginTop: -4,
   },
   needsGrid: {
@@ -136,22 +136,22 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   textArea: {
-    backgroundColor: AppColors.bgInput,
+    backgroundColor: ENUMERATOR_THEME.colors.inputBackground,
     borderWidth: 1,
-    borderColor: AppColors.borderInput,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
     borderRadius: 0,
     padding: 14,
     fontSize: 14,
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     minHeight: 100,
   },
   locationCard: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     borderRadius: 0,
     padding: 14,
   },
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 0,
-    backgroundColor: AppColors.bgHighlight,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -169,24 +169,24 @@ const styles = StyleSheet.create({
   locationLabel: {
     fontSize: 13,
     fontWeight: "600",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   locationText: {
     fontSize: 12,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     marginTop: 2,
   },
   submitBtn: {
-    backgroundColor: AppColors.primary,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     borderRadius: 0,
     paddingVertical: 14,
     alignItems: "center",
   },
   submitBtnDisabled: {
-    backgroundColor: AppColors.borderInput,
+    backgroundColor: ENUMERATOR_THEME.colors.borderSubtle,
   },
   submitText: {
-    color: AppColors.textWhite,
+    color: ENUMERATOR_THEME.colors.textWhite,
     fontSize: 16,
     fontWeight: "700",
   },

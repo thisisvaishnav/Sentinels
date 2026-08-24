@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { DeploymentOrder } from '@/src/types/admin';
 import OperationalOrder from './OperationalOrder';
 import AcknowledgementBadge from './AcknowledgementBadge';
@@ -68,10 +68,10 @@ export default function DeploymentCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     padding: 14,
   },
   headerRow: {
@@ -82,11 +82,11 @@ const styles = StyleSheet.create({
   wardTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   recipientsBtn: {
     borderWidth: 1,
-    borderColor: COLORS.primary,
+    borderColor: ENUMERATOR_THEME.colors.primary,
     borderRadius: 4,
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -94,17 +94,17 @@ const styles = StyleSheet.create({
   recipientsBtnText: {
     fontSize: 11,
     fontWeight: '600',
-    color: COLORS.primary,
+    color: ENUMERATOR_THEME.colors.primary,
   },
   broadcastText: {
     fontSize: 11,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginTop: 4,
     marginBottom: 2,
   },
   sentBy: {
     fontSize: 9,
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     textAlign: 'right',
     marginTop: 8,
   },

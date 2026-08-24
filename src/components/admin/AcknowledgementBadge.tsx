@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface AcknowledgementBadgeProps {
   acknowledged: number;
@@ -23,7 +23,7 @@ export default function AcknowledgementBadge({
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'center',
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 5,
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 9,
     fontWeight: '700',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     letterSpacing: 0.3,
   },
 });

@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -20,22 +20,22 @@ const URGENCY_OPTIONS: Array<{
     level: "low",
     label: "Low",
     description: "Can wait a few days",
-    color: AppColors.success,
-    bgColor: AppColors.successBg,
+    color: ENUMERATOR_THEME.colors.success,
+    bgColor: ENUMERATOR_THEME.colors.successBg,
   },
   {
     level: "medium",
     label: "Medium",
     description: "Needs attention soon",
-    color: AppColors.warning,
-    bgColor: AppColors.warningBg,
+    color: ENUMERATOR_THEME.colors.warning,
+    bgColor: ENUMERATOR_THEME.colors.warningBg,
   },
   {
     level: "high",
     label: "High",
     description: "Requires immediate help",
-    color: AppColors.danger,
-    bgColor: AppColors.dangerBg,
+    color: ENUMERATOR_THEME.colors.danger,
+    bgColor: ENUMERATOR_THEME.colors.dangerBg,
   },
 ];
 
@@ -52,7 +52,7 @@ export default function UrgencySelector({
             key={option.level}
             style={[
               styles.option,
-              { borderColor: isSelected ? option.color : AppColors.border },
+              { borderColor: isSelected ? option.color : ENUMERATOR_THEME.colors.border },
               isSelected && { backgroundColor: option.bgColor },
             ]}
             onPress={() => onSelect(option.level)}
@@ -102,11 +102,11 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 13,
     fontWeight: "700",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   description: {
     fontSize: 10,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     textAlign: "center",
   },
 });

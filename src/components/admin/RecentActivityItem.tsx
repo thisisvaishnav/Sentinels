@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface RecentActivityItemProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -14,7 +14,7 @@ export default function RecentActivityItem({ icon, title, timestamp, iconColor }
   return (
     <View style={styles.row}>
       <View style={styles.iconWrap}>
-        <Ionicons name={icon} size={18} color={iconColor ?? COLORS.accent} />
+        <Ionicons name={icon} size={18} color={iconColor ?? ENUMERATOR_THEME.colors.accent} />
       </View>
 
       <View style={styles.textBlock}>
@@ -29,18 +29,18 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 12,
     padding: 14,
     gap: 12,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
   },
   iconWrap: {
     width: 36,
     height: 36,
     borderRadius: 8,
-    backgroundColor: COLORS.accentSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -50,11 +50,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 13,
     fontWeight: '500',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   timestamp: {
     fontSize: 11,
-    color: COLORS.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     marginTop: 2,
   },
 });

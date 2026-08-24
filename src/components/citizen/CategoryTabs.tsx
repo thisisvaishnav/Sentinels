@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import React from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 
@@ -46,20 +46,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 0,
-    backgroundColor: AppColors.bgSubtle,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     borderWidth: 1,
-    borderColor: AppColors.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
   },
   activeTab: {
-    backgroundColor: AppColors.primary,
-    borderColor: AppColors.primary,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
+    borderColor: ENUMERATOR_THEME.colors.primary,
   },
   label: {
     fontSize: 13,
     fontWeight: "600",
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
   },
   activeLabel: {
-    color: AppColors.textWhite,
+    color: ENUMERATOR_THEME.colors.textWhite,
   },
 });

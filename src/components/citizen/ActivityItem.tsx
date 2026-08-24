@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -19,7 +19,7 @@ export default function ActivityItem({
   return (
     <View style={styles.item}>
       <View style={styles.iconWrap}>
-        <Ionicons name={icon} size={18} color={AppColors.textPrimary} />
+        <Ionicons name={icon} size={18} color={ENUMERATOR_THEME.colors.accent} />
       </View>
       <View style={styles.copy}>
         <Text style={styles.title}>{title}</Text>
@@ -36,13 +36,13 @@ const styles = StyleSheet.create({
     gap: 10,
     padding: 12,
     borderBottomWidth: 1,
-    borderBottomColor: AppColors.border,
+    borderBottomColor: ENUMERATOR_THEME.colors.border,
   },
   iconWrap: {
-    width: 30,
-    height: 30,
-    borderRadius: 0,
-    backgroundColor: AppColors.bgSubtle,
+    width: 32,
+    height: 32,
+    borderRadius: ENUMERATOR_THEME.borderRadius.sm,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -52,18 +52,18 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 13,
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     fontWeight: "700",
   },
   text: {
     fontSize: 13,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     lineHeight: 18,
   },
   time: {
     marginTop: 2,
     fontSize: 11,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     letterSpacing: 0.3,
   },
 });

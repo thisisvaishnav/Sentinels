@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface SearchFilterProps {
   value: string;
@@ -13,18 +13,18 @@ export default function SearchFilter({ value, onChangeText, onFilterPress }: Sea
   return (
     <View style={styles.container}>
       <View style={styles.inputWrap}>
-        <Ionicons name="search-outline" size={18} color={COLORS.textMuted} />
+        <Ionicons name="search-outline" size={18} color={ENUMERATOR_THEME.colors.textMuted} />
         <TextInput
           style={styles.input}
           placeholder="Search by name or ID…"
-          placeholderTextColor={COLORS.textMuted}
+          placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
           value={value}
           onChangeText={onChangeText}
         />
       </View>
 
       <TouchableOpacity style={styles.filterBtn} activeOpacity={0.6} onPress={onFilterPress}>
-        <Ionicons name="filter-outline" size={18} color={COLORS.textOnPrimary} />
+        <Ionicons name="filter-outline" size={18} color={ENUMERATOR_THEME.colors.textWhite} />
       </TouchableOpacity>
     </View>
   );
@@ -40,10 +40,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     paddingHorizontal: 12,
     height: 42,
     gap: 8,
@@ -51,14 +51,14 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 14,
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     paddingVertical: 0,
   },
   filterBtn: {
     width: 42,
     height: 42,
     borderRadius: 10,
-    backgroundColor: COLORS.primary,
+    backgroundColor: ENUMERATOR_THEME.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

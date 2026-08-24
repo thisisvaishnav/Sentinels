@@ -18,7 +18,7 @@ import ReassignReportModal from '@/src/components/admin/citizen-reports/Reassign
 import UpdateStatusModal from '@/src/components/admin/citizen-reports/UpdateStatusModal';
 import VerificationModal from '@/src/components/admin/citizen-reports/VerificationModal';
 import ImageViewerModal from '@/src/components/admin/citizen-reports/ImageViewerModal';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { CitizenReport, ReportStatus, ReportPriority } from '@/src/types/admin';
 import {
   INITIAL_REPORTS,
@@ -392,7 +392,7 @@ export default function CitizenReportsScreen() {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: ENUMERATOR_THEME.colors.background,
   },
   body: {
     paddingHorizontal: 16,
@@ -401,12 +401,12 @@ const styles = StyleSheet.create({
   pageTitle: {
     fontSize: 20,
     fontWeight: '800',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginBottom: 2,
   },
   pageSubtitle: {
     fontSize: 13,
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     marginBottom: 16,
   },
   reportList: {

@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import CitizenLayout from "@/src/components/citizen/CitizenLayout";
 import FAQAccordion from "@/src/components/citizen/FAQAccordion";
 import SupportSection from "@/src/components/citizen/SupportSection";
@@ -41,18 +41,18 @@ export default function SupportScreen() {
       <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
         <View style={styles.searchSection}>
           <View style={styles.searchInputWrap}>
-            <Ionicons name="search-outline" size={18} color={AppColors.textMuted} />
+            <Ionicons name="search-outline" size={18} color={ENUMERATOR_THEME.colors.textMuted} />
             <TextInput
               style={styles.searchInput}
               placeholder="Search for help topics..."
-              placeholderTextColor={AppColors.textMuted}
+              placeholderTextColor={ENUMERATOR_THEME.colors.textMuted}
             />
           </View>
         </View>
 
         <View style={styles.urgentCard}>
           <View style={styles.urgentIcon}>
-            <Ionicons name="call-outline" size={20} color={AppColors.danger} />
+            <Ionicons name="call-outline" size={20} color={ENUMERATOR_THEME.colors.danger} />
           </View>
           <View style={styles.urgentCopy}>
             <Text style={styles.urgentTitle}>Urgent Assistance</Text>
@@ -99,10 +99,10 @@ const styles = StyleSheet.create({
   searchInputWrap: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: AppColors.bgInput,
+    backgroundColor: ENUMERATOR_THEME.colors.inputBackground,
     borderWidth: 1,
-    borderColor: AppColors.borderInput,
-    borderRadius: 0,
+    borderColor: ENUMERATOR_THEME.colors.borderSubtle,
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
     paddingHorizontal: 12,
     gap: 8,
   },
@@ -110,23 +110,23 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     fontSize: 14,
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   urgentCard: {
     flexDirection: "row",
     alignItems: "center",
     gap: 14,
-    backgroundColor: AppColors.dangerBg,
+    backgroundColor: ENUMERATOR_THEME.colors.dangerBg,
     borderWidth: 1,
-    borderColor: AppColors.danger,
-    borderRadius: 0,
+    borderColor: ENUMERATOR_THEME.colors.danger,
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
     padding: 16,
   },
   urgentIcon: {
     width: 40,
     height: 40,
-    borderRadius: 0,
-    backgroundColor: AppColors.bgCard,
+    borderRadius: ENUMERATOR_THEME.borderRadius.md,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -136,22 +136,22 @@ const styles = StyleSheet.create({
   urgentTitle: {
     fontSize: 15,
     fontWeight: "700",
-    color: AppColors.dangerText,
+    color: ENUMERATOR_THEME.colors.dangerText,
   },
   urgentText: {
     fontSize: 12,
-    color: AppColors.dangerText,
+    color: ENUMERATOR_THEME.colors.dangerText,
     marginTop: 2,
   },
   urgentNumber: {
     fontSize: 16,
     fontWeight: "700",
-    color: AppColors.danger,
+    color: ENUMERATOR_THEME.colors.danger,
     marginTop: 4,
   },
   sectionContent: {
     fontSize: 13,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     lineHeight: 20,
   },
   faqSection: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   faqTitle: {
     fontSize: 18,
     fontWeight: "700",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   bottomSpacer: {
     height: 24,

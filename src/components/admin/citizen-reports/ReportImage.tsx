@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface ReportImageProps {
   imageUri?: string;
@@ -12,7 +12,7 @@ export default function ReportImage({ imageUri, onPress }: ReportImageProps) {
   if (!imageUri) {
     return (
       <View style={styles.placeholder}>
-        <Ionicons name="image-outline" size={20} color={COLORS.textMuted} />
+        <Ionicons name="image-outline" size={20} color={ENUMERATOR_THEME.colors.textMuted} />
       </View>
     );
   }
@@ -24,7 +24,7 @@ export default function ReportImage({ imageUri, onPress }: ReportImageProps) {
       onPress={onPress}
     >
       <View style={styles.thumbnailPlaceholder}>
-        <Ionicons name="camera" size={16} color={COLORS.accent} />
+        <Ionicons name="camera" size={16} color={ENUMERATOR_THEME.colors.accent} />
       </View>
     </TouchableOpacity>
   );
@@ -36,19 +36,19 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
   },
   thumbnailPlaceholder: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.accentSoft,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSoft,
   },
   placeholder: {
     width: 56,
     height: 56,
     borderRadius: 8,
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     alignItems: 'center',
     justifyContent: 'center',
   },

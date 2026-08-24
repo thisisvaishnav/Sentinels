@@ -1,4 +1,4 @@
-import { AppColors } from "@/constants/colors";
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import EligibilityBadge from "./EligibilityBadge";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
@@ -39,7 +39,7 @@ export default function SchemeCard({
 
       {benefitAmount && (
         <View style={styles.benefitRow}>
-          <Ionicons name="cash-outline" size={14} color={AppColors.success} />
+          <Ionicons name="cash-outline" size={14} color={ENUMERATOR_THEME.colors.success} />
           <Text style={styles.benefitText}>{benefitAmount}</Text>
         </View>
       )}
@@ -56,10 +56,10 @@ export default function SchemeCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderWidth: 1,
-    borderColor: AppColors.border,
-    borderRadius: 0,
+    borderColor: ENUMERATOR_THEME.colors.border,
+    borderRadius: ENUMERATOR_THEME.borderRadius.lg,
     padding: 14,
     gap: 10,
   },
@@ -71,34 +71,34 @@ const styles = StyleSheet.create({
   categoryChip: {
     paddingHorizontal: 8,
     paddingVertical: 3,
-    backgroundColor: AppColors.bgHighlight,
-    borderRadius: 0,
+    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
+    borderRadius: ENUMERATOR_THEME.borderRadius.sm,
   },
   categoryText: {
     fontSize: 11,
     fontWeight: "600",
-    color: AppColors.blue,
+    color: ENUMERATOR_THEME.colors.accent,
   },
   statusDot: {
     width: 8,
     height: 8,
-    borderRadius: 0,
-    backgroundColor: AppColors.textMuted,
+    borderRadius: 4,
+    backgroundColor: ENUMERATOR_THEME.colors.textMuted,
   },
   statusActive: {
-    backgroundColor: AppColors.success,
+    backgroundColor: ENUMERATOR_THEME.colors.success,
   },
   statusClosing: {
-    backgroundColor: AppColors.warning,
+    backgroundColor: ENUMERATOR_THEME.colors.warning,
   },
   title: {
     fontSize: 16,
     fontWeight: "700",
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
   },
   description: {
     fontSize: 13,
-    color: AppColors.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
     lineHeight: 18,
   },
   benefitRow: {
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   benefitText: {
     fontSize: 13,
     fontWeight: "600",
-    color: AppColors.success,
+    color: ENUMERATOR_THEME.colors.success,
   },
   footer: {
     flexDirection: "row",
@@ -120,12 +120,12 @@ const styles = StyleSheet.create({
   statusBadge: {
     paddingHorizontal: 8,
     paddingVertical: 3,
-    backgroundColor: AppColors.bgSubtle,
-    borderRadius: 0,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
+    borderRadius: ENUMERATOR_THEME.borderRadius.full,
   },
   statusText: {
     fontSize: 11,
     fontWeight: "600",
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
   },
 });

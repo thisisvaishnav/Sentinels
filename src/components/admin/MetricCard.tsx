@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 interface MetricCardProps {
   label: string;
@@ -8,7 +8,7 @@ interface MetricCardProps {
   accentColor?: string;
 }
 
-export default function MetricCard({ label, value, accentColor = COLORS.accent }: MetricCardProps) {
+export default function MetricCard({ label, value, accentColor = ENUMERATOR_THEME.colors.accent }: MetricCardProps) {
   return (
     <View style={styles.card}>
       <View style={[styles.accentLine, { backgroundColor: accentColor }]} />
@@ -21,11 +21,11 @@ export default function MetricCard({ label, value, accentColor = COLORS.accent }
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    backgroundColor: COLORS.surface,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     minWidth: '45%',
   },
   accentLine: {
@@ -39,12 +39,12 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 22,
     fontWeight: '800',
-    color: COLORS.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     marginBottom: 2,
   },
   label: {
     fontSize: 12,
     fontWeight: '500',
-    color: COLORS.textSecondary,
+    color: ENUMERATOR_THEME.colors.textSecondary,
   },
 });

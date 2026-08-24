@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/adminTheme';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { SurveyStatus } from '@/src/types/admin';
 
 interface ProgressBarProps {
@@ -10,9 +10,9 @@ interface ProgressBarProps {
 }
 
 const STATUS_COLORS: Record<SurveyStatus, string> = {
-  completed: COLORS.success,
-  in_progress: COLORS.accent,
-  pending: COLORS.warning,
+  completed: ENUMERATOR_THEME.colors.success,
+  in_progress: ENUMERATOR_THEME.colors.accent,
+  pending: ENUMERATOR_THEME.colors.warning,
 };
 
 export default function ProgressBar({ progress, status, height = 6 }: ProgressBarProps) {
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   track: {
     width: '100%',
     borderRadius: 3,
-    backgroundColor: COLORS.border,
+    backgroundColor: ENUMERATOR_THEME.colors.border,
     overflow: 'hidden',
   },
   fill: {

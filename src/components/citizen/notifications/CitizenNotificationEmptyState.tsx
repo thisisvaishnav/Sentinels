@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { AppColors } from '@/constants/colors';
+import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 import { CitizenNotificationFilterCategory } from './citizenNotificationTypes';
 
 interface CitizenNotificationEmptyStateProps {
@@ -26,7 +26,7 @@ export const CitizenNotificationEmptyState: React.FC<CitizenNotificationEmptySta
             : 'bell-sleep-outline'
         }
         size={36}
-        color={AppColors.textMuted}
+        color={ENUMERATOR_THEME.colors.textMuted}
       />
 
       <Text style={styles.title}>
@@ -51,7 +51,7 @@ export const CitizenNotificationEmptyState: React.FC<CitizenNotificationEmptySta
 
       {(hasSearchQuery || category !== 'All') && (
         <TouchableOpacity style={styles.resetBtn} onPress={onClearFilters} activeOpacity={0.8}>
-          <Ionicons name="refresh" size={14} color={AppColors.blue} />
+          <Ionicons name="refresh" size={14} color={ENUMERATOR_THEME.colors.accent} />
           <Text style={styles.resetBtnText}>Reset Search & Filters</Text>
         </TouchableOpacity>
       )}
@@ -61,13 +61,13 @@ export const CitizenNotificationEmptyState: React.FC<CitizenNotificationEmptySta
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: AppColors.bgCard,
+    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
     borderRadius: 0,
     padding: 24,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: AppColors.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     gap: 8,
     marginHorizontal: 16,
     marginVertical: 12,
@@ -75,30 +75,30 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '800',
-    color: AppColors.textPrimary,
+    color: ENUMERATOR_THEME.colors.textPrimary,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 11,
-    color: AppColors.textMuted,
+    color: ENUMERATOR_THEME.colors.textMuted,
     textAlign: 'center',
     lineHeight: 16,
   },
   resetBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: AppColors.bgSubtle,
+    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 0,
     borderWidth: 1,
-    borderColor: AppColors.border,
+    borderColor: ENUMERATOR_THEME.colors.border,
     gap: 6,
     marginTop: 4,
   },
   resetBtnText: {
     fontSize: 11,
     fontWeight: '700',
-    color: AppColors.blue,
+    color: ENUMERATOR_THEME.colors.accent,
   },
 });
