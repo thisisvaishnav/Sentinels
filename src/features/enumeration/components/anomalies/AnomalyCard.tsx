@@ -86,6 +86,12 @@ export const AnomalyCard: React.FC<AnomalyCardProps> = ({
           <View style={styles.typeBadge}>
             <Text style={styles.typeBadgeText}>{anomaly.type.replace('-', ' ')}</Text>
           </View>
+          {anomaly.escalation && (
+            <View style={styles.escalatedBadge}>
+              <MaterialCommunityIcons name="shield-alert" size={10} color={ENUMERATOR_THEME.colors.warningText} />
+              <Text style={styles.escalatedBadgeText}>ESCALATED</Text>
+            </View>
+          )}
         </View>
 
         <TouchableOpacity
@@ -204,6 +210,22 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     textTransform: 'uppercase',
+  },
+  escalatedBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: ENUMERATOR_THEME.colors.warningBg,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: ENUMERATOR_THEME.borderRadius.sm,
+    borderWidth: 1,
+    borderColor: ENUMERATOR_THEME.colors.border,
+  },
+  escalatedBadgeText: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: ENUMERATOR_THEME.colors.warningText,
   },
   reviewBtn: {
     flexDirection: 'row',

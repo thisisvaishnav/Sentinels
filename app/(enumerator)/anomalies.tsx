@@ -38,6 +38,8 @@ import {
   AnomalyLoadingState,
 } from '@/src/features/enumeration/components/anomalies/AnomalyEmptyStates';
 
+import { loadAnomalyEscalations } from '@/src/features/enumeration/data/anomalyEscalations';
+
 export default function EnumeratorAnomaliesScreen() {
   const params = useLocalSearchParams<{ category?: string; query?: string }>();
 
@@ -66,14 +68,15 @@ export default function EnumeratorAnomaliesScreen() {
   const loadData = useCallback(async () => {
     setIsError(false);
     try {
-      const [list, reviewed] = await Promise.all([
+      const [list, reviewed, escalations] = await Promise.all([
         loadEnumeratorHouseholds(),
         loadReviewedAnomalyIds(),
+        loadAnomalyEscalations(),
       ]);
       setHouseholds(list);
       setReviewedIds(reviewed);
 
-      const detected = detectHouseholdAnomalies(list, reviewed);
+      const detected = detectHouseholdAnomalies(list, reviewed, escalations);
       setAnomalies(detected);
     } catch (err) {
       console.error('Failed to analyze anomalies:', err);
@@ -124,6 +127,7 @@ export default function EnumeratorAnomaliesScreen() {
     GPS: anomalies.filter((a) => a.type === 'gps-mismatch').length,
     Incomplete: anomalies.filter((a) => a.type === 'incomplete-record').length,
     Verification: anomalies.filter((a) => a.type === 'verification-required').length,
+    Escalated: metrics.escalatedCount,
   };
 
   const filteredAnomalies = filterAndSortAnomalies(
@@ -215,6 +219,7 @@ export default function EnumeratorAnomaliesScreen() {
         anomaly={selectedAnomaly}
         onClose={() => setSelectedAnomaly(null)}
         onToggleReview={handleToggleReview}
+        onEscalateSuccess={loadData}
       />
     </SafeAreaView>
   );

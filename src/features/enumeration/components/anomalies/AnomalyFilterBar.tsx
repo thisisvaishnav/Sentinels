@@ -20,6 +20,7 @@ const CATEGORIES: AnomalyFilterCategory[] = [
   'GPS',
   'Incomplete',
   'Verification',
+  'Escalated',
 ];
 
 export const AnomalyFilterBar: React.FC<AnomalyFilterBarProps> = ({
