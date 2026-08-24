@@ -15,6 +15,7 @@ export default function AdminLayout() {
         <Stack.Screen name="supervisor-escalations" />
         <Stack.Screen name="supervisor-escalation-details" />
         <Stack.Screen name="notifications" />
+        <Stack.Screen name="settings" />
       </Stack>
     </AdminDrawerProvider>
   );

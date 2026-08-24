@@ -27,7 +27,7 @@ const ADMIN_MENU_ITEMS: AdminDrawerMenuItem[] = [
   { id: 'enumerators', label: 'Enumerators', route: '/(admin)/field-enumerators', iconName: 'account-group-outline' },
   { id: 'citizen-reports', label: 'Citizen Reports', route: '/(admin)/citizen-reports', iconName: 'bullhorn-outline' },
   { id: 'notifications', label: 'Notifications', route: '/(admin)/notifications', iconName: 'bell-outline' },
-  { id: 'settings', label: 'Settings', route: '/(admin)/dashboard', iconName: 'cog-outline' },
+  { id: 'settings', label: 'Settings', route: '/(admin)/settings', iconName: 'cog-outline' },
 ];
 
 interface AdminDrawerProps {
