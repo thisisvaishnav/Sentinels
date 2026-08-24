@@ -14,13 +14,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AppColors } from "../../constants/colors";
+
+import { AuthCard } from "@/src/features/auth/components/AuthCard";
+import { AuthHeader } from "@/src/features/auth/components/AuthHeader";
+import { AuthFooter } from "@/src/features/auth/components/AuthFooter";
+import { RoleBadge } from "@/src/features/auth/components/RoleBadge";
+import { ADMIN_AUTH_THEME } from "@/src/features/auth/theme";
 
 export default function AdminLoginScreen() {
   const router = useRouter();
+  const t = ADMIN_AUTH_THEME;
+
   const [employeeId, setEmployeeId] = useState("");
   const [password, setPassword] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -51,128 +57,170 @@ export default function AdminLoginScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: t.colors.background }]}>
       <KeyboardAvoidingView
-        style={styles.keyboardView}
+        style={styles.keyboard}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <ScrollView
-          contentContainerStyle={styles.scrollContainer}
+          contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Login Card */}
-          <View style={styles.card}>
-            {/* Logo */}
-            <View style={styles.logoContainer}>
-              <Ionicons name="eye" size={34} color={AppColors.textWhite} />
-            </View>
+          <View style={styles.container}>
+            <AuthCard theme={t}>
+              {/* Role Badge */}
+              <RoleBadge theme={t} role="admin" />
 
-            {/* Title */}
-            <Text style={styles.title}>DRISHTI</Text>
-            <Text style={styles.subtitle}>Official Administrator Login</Text>
-
-            {/* Divider */}
-            <View style={styles.divider} />
-
-            {/* Security Notice */}
-            <View style={styles.noticeBox}>
-              <Ionicons
-                name="information-circle"
-                size={17}
-                color={AppColors.textSecondary}
-                style={styles.noticeIcon}
+              {/* Header */}
+              <AuthHeader
+                theme={t}
+                role="admin"
+                subtitle="Official Administrator Access"
               />
-              <Text style={styles.noticeText}>
-                Access is restricted to authorized district personnel. All
-                activities are logged and monitored.
-              </Text>
-            </View>
 
-            {/* Employee ID */}
-            <View style={styles.inputSection}>
-              <Text style={styles.label}>Official Email / Employee ID</Text>
-              <View style={styles.inputContainer}>
+              {/* Security Notice */}
+              <View
+                style={[
+                  styles.noticeBox,
+                  {
+                    backgroundColor: t.colors.subtleBackground,
+                    borderColor: t.colors.border,
+                    borderRadius: t.borderRadius.md,
+                  },
+                ]}
+              >
                 <Ionicons
-                  name="briefcase"
-                  size={17}
-                  color={AppColors.textMuted}
-                  style={styles.inputIcon}
+                  name="information-circle"
+                  size={16}
+                  color={t.colors.textSecondary}
+                  style={styles.noticeIcon}
                 />
-                <TextInput
-                  value={employeeId}
-                  onChangeText={setEmployeeId}
-                  placeholder="e.g. EMP-2023-458"
-                  placeholderTextColor={AppColors.textMuted}
-                  style={styles.input}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
+                <Text style={[styles.noticeText, { color: t.colors.textSecondary }]}>
+                  Access is restricted to authorized district personnel. All activities are
+                  logged and monitored.
+                </Text>
               </View>
-            </View>
 
-            {/* Password */}
-            <View style={styles.inputSection}>
-              <Text style={styles.label}>Password</Text>
-              <View style={styles.inputContainer}>
-                <Ionicons
-                  name="lock-closed"
-                  size={17}
-                  color={AppColors.textMuted}
-                  style={styles.inputIcon}
-                />
-                <TextInput
-                  value={password}
-                  onChangeText={setPassword}
-                  placeholder="••••••••"
-                  placeholderTextColor={AppColors.textMuted}
-                  style={styles.input}
-                  secureTextEntry={!showPassword}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
-                <TouchableOpacity
-                  onPress={() => setShowPassword(!showPassword)}
-                  style={styles.eyeButton}
+              {/* Employee ID */}
+              <View style={styles.field}>
+                <Text style={[styles.label, { color: t.colors.textSecondary }]}>
+                  EMPLOYEE ID
+                </Text>
+                <View
+                  style={[
+                    styles.inputContainer,
+                    {
+                      backgroundColor: t.colors.inputBackground,
+                      borderColor: t.colors.borderInput,
+                      borderRadius: t.borderRadius.md,
+                    },
+                  ]}
                 >
-                  <Ionicons
-                    name={showPassword ? "eye-outline" : "eye-off"}
-                    size={19}
-                    color={AppColors.textMuted}
+                  <View style={styles.iconWrap}>
+                    <Ionicons
+                      name="briefcase-outline"
+                      size={20}
+                      color={t.colors.textMuted}
+                    />
+                  </View>
+                  <TextInput
+                    style={[styles.input, { color: t.colors.textPrimary }]}
+                    value={employeeId}
+                    onChangeText={setEmployeeId}
+                    placeholder="e.g. EMP-2023-458"
+                    placeholderTextColor={t.colors.textMuted}
+                    autoCapitalize="none"
+                    autoCorrect={false}
                   />
-                </TouchableOpacity>
+                </View>
               </View>
-            </View>
 
+              {/* Password */}
+              <View style={styles.field}>
+                <Text style={[styles.label, { color: t.colors.textSecondary }]}>
+                  PASSWORD
+                </Text>
+                <View
+                  style={[
+                    styles.inputContainer,
+                    {
+                      backgroundColor: t.colors.inputBackground,
+                      borderColor: t.colors.borderInput,
+                      borderRadius: t.borderRadius.md,
+                    },
+                  ]}
+                >
+                  <View style={styles.iconWrap}>
+                    <Ionicons
+                      name="lock-closed-outline"
+                      size={20}
+                      color={t.colors.textMuted}
+                    />
+                  </View>
+                  <TextInput
+                    style={[styles.input, { color: t.colors.textPrimary }]}
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholder="••••••••"
+                    placeholderTextColor={t.colors.textMuted}
+                    secureTextEntry={!showPassword}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={styles.eyeBtn}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons
+                      name={showPassword ? "eye-outline" : "eye-off-outline"}
+                      size={20}
+                      color={t.colors.textMuted}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
 
+              {/* Login Button */}
+              <TouchableOpacity
+                style={[
+                  styles.loginButton,
+                  {
+                    backgroundColor: t.colors.accent,
+                    borderRadius: t.borderRadius.md,
+                  },
+                  isSubmitting && styles.loginButtonDisabled,
+                ]}
+                onPress={handleLogin}
+                activeOpacity={0.8}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <ActivityIndicator size="small" color={t.colors.textWhite} />
+                ) : (
+                  <Ionicons name="log-in-outline" size={20} color={t.colors.textWhite} />
+                )}
+                <Text style={[styles.loginButtonText, { color: t.colors.textWhite }]}>
+                  {isSubmitting ? "Signing In..." : "Secure Login"}
+                </Text>
+              </TouchableOpacity>
 
-            {/* Login Button */}
-            <TouchableOpacity
-              style={[styles.loginButton, isSubmitting && { opacity: 0.65 }]}
-              onPress={handleLogin}
-              activeOpacity={0.8}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <ActivityIndicator size="small" color={AppColors.textWhite} />
-              ) : (
-                <Ionicons name="log-in-outline" size={20} color={AppColors.textWhite} />
-              )}
-              <Text style={styles.loginButtonText}>
-                {isSubmitting ? "Signing In..." : "Secure Login"}
+              {/* Footer */}
+              <AuthFooter
+                theme={t}
+                title="Government Secured"
+                text="Department of Statistics & Programme Implementation"
+              />
+            </AuthCard>
+
+            {/* Bottom branding */}
+            <View style={styles.bottomBranding}>
+              <Ionicons name="business-outline" size={18} color={t.colors.textMuted} />
+              <Text style={[styles.bottomText, { color: t.colors.textMuted }]}>
+                Government of India · DRISHTI Platform
               </Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Footer */}
-          <View style={styles.footer}>
-            <Ionicons name="business" size={22} color={AppColors.textMuted} />
-            <Text style={styles.governmentText}>
-              Government of India - Department of Statistics
-            </Text>
-            <Text style={styles.copyright}>
-              © 2024 DRISHTI Admin Platform. All rights reserved.
-            </Text>
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -183,82 +231,32 @@ export default function AdminLoginScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: AppColors.bgMain,
     marginTop: -30,
   },
 
-  keyboardView: {
+  keyboard: {
     flex: 1,
   },
 
-  scrollContainer: {
+  scrollContent: {
     flexGrow: 1,
-    paddingHorizontal: 9,
-    paddingTop: 14,
+    paddingVertical: 16,
   },
 
-  /* =========================
-     LOGIN CARD
-  ========================= */
-
-  card: {
-    backgroundColor: AppColors.bgCard,
-    borderWidth: 1,
-    borderColor: AppColors.border,
-    borderRadius: 0,
-    overflow: "hidden",
-    paddingBottom: 18,
-  },
-
-  logoContainer: {
-    width: 59,
-    height: 59,
-    borderRadius: 0,
-    backgroundColor: AppColors.primary,
+  container: {
+    width: "92%",
+    maxWidth: 480,
     alignSelf: "center",
-    marginTop: 30,
-    alignItems: "center",
-    justifyContent: "center",
   },
 
-  title: {
-    textAlign: "center",
-    marginTop: 15,
-    fontSize: 21,
-    fontWeight: "800",
-    color: AppColors.primary,
-    letterSpacing: 0.2,
-  },
-
-  subtitle: {
-    textAlign: "center",
-    marginTop: 3,
-    fontSize: 13,
-    color: AppColors.textMuted,
-  },
-
-  divider: {
-    height: 1,
-    backgroundColor: AppColors.border,
-    marginTop: 24,
-    marginBottom: 18,
-  },
-
-  /* =========================
-     NOTICE
-  ========================= */
+  /* Notice */
 
   noticeBox: {
-    marginHorizontal: 19,
-    backgroundColor: AppColors.bgSubtle,
-    borderWidth: 1,
-    borderColor: AppColors.border,
-    borderRadius: 0,
-    minHeight: 74,
-    paddingHorizontal: 12,
-    paddingVertical: 11,
     flexDirection: "row",
     alignItems: "flex-start",
+    padding: 14,
+    borderWidth: 1,
+    marginBottom: 24,
   },
 
   noticeIcon: {
@@ -268,101 +266,81 @@ const styles = StyleSheet.create({
 
   noticeText: {
     flex: 1,
-    fontSize: 11.5,
+    fontSize: 12,
     lineHeight: 18,
-    color: AppColors.textSecondary,
   },
 
-  /* =========================
-     INPUTS
-  ========================= */
+  /* Fields */
 
-  inputSection: {
-    marginHorizontal: 19,
-    marginTop: 17,
+  field: {
+    marginBottom: 20,
   },
 
   label: {
-    fontSize: 12.5,
-    fontWeight: "600",
-    color: AppColors.textPrimary,
-    marginBottom: 7,
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 1.2,
+    marginBottom: 8,
+    textTransform: "uppercase",
   },
 
   inputContainer: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: AppColors.borderInput,
-    borderRadius: 0,
-    backgroundColor: AppColors.bgInput,
+    height: 52,
+    borderWidth: 1.5,
     flexDirection: "row",
     alignItems: "center",
+    paddingHorizontal: 14,
   },
 
-  inputIcon: {
-    marginLeft: 12,
-    marginRight: 9,
+  iconWrap: {
+    marginRight: 12,
+    width: 24,
+    alignItems: "center",
   },
 
   input: {
     flex: 1,
-    height: "100%",
-    fontSize: 13,
-    color: AppColors.textPrimary,
+    fontSize: 16,
     paddingVertical: 0,
   },
 
-  eyeButton: {
-    paddingHorizontal: 11,
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
+  eyeBtn: {
+    padding: 4,
   },
 
-  /* =========================
-     LOGIN BUTTON
-  ========================= */
+  /* Button */
 
   loginButton: {
-    height: 41,
-    marginHorizontal: 19,
-    marginTop: 26,
-    backgroundColor: AppColors.primary,
-    borderRadius: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    height: 52,
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    marginTop: 8,
+  },
+
+  loginButtonDisabled: {
+    opacity: 0.6,
   },
 
   loginButtonText: {
-    color: AppColors.textWhite,
-    fontSize: 12,
+    fontSize: 16,
     fontWeight: "700",
-    marginLeft: 9,
-    letterSpacing: 0.2,
   },
 
-  /* =========================
-     FOOTER
-  ========================= */
+  /* Bottom branding */
 
-  footer: {
+  bottomBranding: {
+    flexDirection: "row",
     alignItems: "center",
-    paddingTop: 42,
-    paddingBottom: 12,
+    justifyContent: "center",
+    gap: 6,
+    marginTop: 28,
+    marginBottom: 12,
   },
 
-  governmentText: {
-    marginTop: 11,
-    fontSize: 10.5,
-    color: AppColors.textMuted,
-    textAlign: "center",
-  },
-
-  copyright: {
-    marginTop: 8,
-    fontSize: 9.5,
-    color: AppColors.textMuted,
-    textAlign: "center",
+  bottomText: {
+    fontSize: 12,
+    fontWeight: "500",
   },
 });

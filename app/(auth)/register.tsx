@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
@@ -14,7 +13,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { registerWithRole } from "@/src/features/auth/authService";
-import { AppColors, AppRadius } from "../../constants/colors";
+
+import { AuthCard } from "@/src/features/auth/components/AuthCard";
+import { AuthHeader } from "@/src/features/auth/components/AuthHeader";
+import { AuthInputField } from "@/src/features/auth/components/AuthInputField";
+import { AuthPasswordField } from "@/src/features/auth/components/AuthPasswordField";
+import { AuthFooter } from "@/src/features/auth/components/AuthFooter";
+import { RoleBadge } from "@/src/features/auth/components/RoleBadge";
+import { CITIZEN_AUTH_THEME } from "@/src/features/auth/theme";
 
 const STATES = [
   "Uttar Pradesh",
@@ -28,16 +34,14 @@ const STATES = [
 
 export default function Register() {
   const router = useRouter();
+  const t = CITIZEN_AUTH_THEME;
 
   const [fullName, setFullName] = useState("");
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [state, setState] = useState("");
   const [pinCode, setPinCode] = useState("");
-
-  const [showPassword, setShowPassword] = useState(false);
   const [showStates, setShowStates] = useState(false);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRegister = async () => {
@@ -72,7 +76,7 @@ export default function Register() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: t.colors.background }]}>
       <KeyboardAvoidingView
         style={styles.keyboard}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -84,199 +88,190 @@ export default function Register() {
           <View style={styles.container}>
             {/* Back */}
             <TouchableOpacity
-              style={styles.backButton}
+              style={[styles.backButton, { borderRadius: t.borderRadius.md }]}
               onPress={() => router.back()}
+              activeOpacity={0.7}
             >
-              <Ionicons name="arrow-back" size={22} color={AppColors.primary} />
-              <Text style={styles.backText}>Back</Text>
+              <Ionicons name="arrow-back" size={20} color={t.colors.accent} />
+              <Text style={[styles.backText, { color: t.colors.accent }]}>Back</Text>
             </TouchableOpacity>
 
-            {/* Header */}
-            <View style={styles.header}>
-              <View style={styles.logo}>
-                <Ionicons name="person-outline" size={34} color={AppColors.textMuted} />
-              </View>
+            <AuthCard theme={t}>
+              {/* Role Badge */}
+              <RoleBadge theme={t} role="citizen" />
 
-              <Text style={styles.brand}>Lokvision</Text>
+              {/* Header */}
+              <AuthHeader
+                theme={t}
+                role="citizen"
+                subtitle="Create your citizen account"
+              />
 
-              <Text style={styles.title}>Create Account</Text>
-
-              <Text style={styles.subtitle}>
-                Create your citizen account
-              </Text>
-            </View>
-
-            {/* Full Name */}
-            <InputField
-              label="FULL NAME"
-              placeholder="Enter your full name"
-              value={fullName}
-              onChangeText={setFullName}
-              icon={
-                <Ionicons name="person-outline" size={22} color={AppColors.textMuted} />
-              }
-            />
-
-            {/* Mobile Number */}
-            <InputField
-              label="MOBILE NUMBER"
-              placeholder="10-digit mobile number"
-              value={mobile}
-              onChangeText={setMobile}
-              keyboardType="phone-pad"
-              icon={
-                <Ionicons
-                  name="phone-portrait-outline"
-                  size={22}
-                  color={AppColors.textMuted}
-                />
-              }
-            />
-
-            {/* Password */}
-            <View style={styles.field}>
-              <Text style={styles.label}>PASSWORD</Text>
-              <View style={styles.inputContainer}>
-                <Ionicons
-                  name="lock-closed-outline"
-                  size={22}
-                  color={AppColors.textMuted}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Create a secure password"
-                  placeholderTextColor={AppColors.textMuted}
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={!showPassword}
-                  autoCapitalize="none"
-                />
-                <TouchableOpacity
-                  onPress={() => setShowPassword(!showPassword)}
-                >
+              {/* Full Name */}
+              <AuthInputField
+                theme={t}
+                label="Full Name"
+                placeholder="Enter your full name"
+                value={fullName}
+                onChangeText={setFullName}
+                icon={
                   <Ionicons
-                    name={showPassword ? "eye-outline" : "eye-off-outline"}
-                    size={23}
-                    color={AppColors.textMuted}
+                    name="person-outline"
+                    size={20}
+                    color={t.colors.textMuted}
+                  />
+                }
+              />
+
+              {/* Mobile */}
+              <AuthInputField
+                theme={t}
+                label="Mobile Number"
+                placeholder="10-digit mobile number"
+                value={mobile}
+                onChangeText={setMobile}
+                keyboardType="phone-pad"
+                icon={
+                  <Ionicons
+                    name="phone-portrait-outline"
+                    size={20}
+                    color={t.colors.textMuted}
+                  />
+                }
+              />
+
+              {/* Password */}
+              <AuthPasswordField
+                theme={t}
+                label="Password"
+                placeholder="Create a secure password"
+                value={password}
+                onChangeText={setPassword}
+              />
+
+              {/* State Dropdown */}
+              <View style={styles.field}>
+                <Text style={[styles.label, { color: t.colors.textSecondary }]}>STATE</Text>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={[
+                    styles.inputContainer,
+                    {
+                      backgroundColor: t.colors.inputBackground,
+                      borderColor: t.colors.borderInput,
+                      borderRadius: t.borderRadius.md,
+                    },
+                  ]}
+                  onPress={() => setShowStates(!showStates)}
+                >
+                  <View style={styles.iconWrap}>
+                    <Ionicons
+                      name="map-outline"
+                      size={20}
+                      color={t.colors.textMuted}
+                    />
+                  </View>
+                  <Text
+                    style={[
+                      styles.dropdownValue,
+                      { color: state ? t.colors.textPrimary : t.colors.textMuted },
+                    ]}
+                  >
+                    {state || "Select State"}
+                  </Text>
+                  <Ionicons
+                    name={showStates ? "chevron-up" : "chevron-down"}
+                    size={18}
+                    color={t.colors.textMuted}
                   />
                 </TouchableOpacity>
+                {showStates && (
+                  <View
+                    style={[
+                      styles.dropdown,
+                      {
+                        backgroundColor: t.colors.cardBackground,
+                        borderColor: t.colors.borderInput,
+                        borderRadius: t.borderRadius.md,
+                      },
+                    ]}
+                  >
+                    {STATES.map((item) => (
+                      <TouchableOpacity
+                        key={item}
+                        style={[styles.dropdownItem, { borderBottomColor: t.colors.border }]}
+                        onPress={() => {
+                          setState(item);
+                          setShowStates(false);
+                        }}
+                      >
+                        <Text style={[styles.dropdownText, { color: t.colors.textPrimary }]}>
+                          {item}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
               </View>
-            </View>
 
-            {/* State */}
-            <View style={styles.field}>
-              <Text style={styles.label}>STATE</Text>
+              {/* PIN Code */}
+              <AuthInputField
+                theme={t}
+                label="Pin Code"
+                placeholder="6-digit postal code"
+                value={pinCode}
+                onChangeText={setPinCode}
+                keyboardType="number-pad"
+                icon={
+                  <Ionicons
+                    name="location-outline"
+                    size={20}
+                    color={t.colors.textMuted}
+                  />
+                }
+              />
+
+              {/* Create Account Button */}
               <TouchableOpacity
                 activeOpacity={0.8}
-                style={styles.inputContainer}
-                onPress={() => setShowStates(!showStates)}
+                style={[
+                  styles.primaryButton,
+                  {
+                    backgroundColor: t.colors.accent,
+                    borderRadius: t.borderRadius.md,
+                  },
+                  isSubmitting && styles.primaryButtonDisabled,
+                ]}
+                onPress={handleRegister}
+                disabled={isSubmitting}
               >
-                <Text
-                  style={[
-                    styles.dropdownValue,
-                    !state ? styles.placeholder : null,
-                  ]}
-                >
-                  {state || "Select State"}
+                <Text style={[styles.primaryButtonText, { color: t.colors.textWhite }]}>
+                  {isSubmitting ? "Please wait..." : "Create Account"}
                 </Text>
-                <Ionicons
-                  name={showStates ? "chevron-up" : "chevron-down"}
-                  size={21}
-                  color={AppColors.textMuted}
-                />
+                <Ionicons name="arrow-forward" size={20} color={t.colors.textWhite} />
               </TouchableOpacity>
-              {showStates && (
-                <View style={styles.dropdown}>
-                  {STATES.map((item) => (
-                    <TouchableOpacity
-                      key={item}
-                      style={styles.dropdownItem}
-                      onPress={() => {
-                        setState(item);
-                        setShowStates(false);
-                      }}
-                    >
-                      <Text style={styles.dropdownText}>{item}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              )}
-            </View>
 
-            {/* PIN Code */}
-            <InputField
-              label="PIN CODE"
-              placeholder="6-digit postal code"
-              value={pinCode}
-              onChangeText={setPinCode}
-              keyboardType="number-pad"
-              icon={
-                <Ionicons name="location-outline" size={22} color={AppColors.textMuted} />
-              }
-            />
+              {/* Login Link */}
+              <View style={styles.loginContainer}>
+                <Text style={[styles.loginText, { color: t.colors.textSecondary }]}>
+                  Already have an account?{" "}
+                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push({ pathname: "/(auth)/login", params: { role: "citizen" } })
+                  }
+                >
+                  <Text style={[styles.loginLink, { color: t.colors.accent }]}>Log in</Text>
+                </TouchableOpacity>
+              </View>
 
-            {/* Create Account */}
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={[
-                styles.primaryButton,
-                isSubmitting && { opacity: 0.65 },
-              ]}
-              onPress={handleRegister}
-              disabled={isSubmitting}
-            >
-              <Text style={styles.primaryButtonText}>
-                {isSubmitting ? "Please wait..." : "CREATE ACCOUNT"}
-              </Text>
-              <Ionicons name="arrow-forward" size={24} color={AppColors.textWhite} />
-            </TouchableOpacity>
-
-            {/* Login */}
-            <View style={styles.loginContainer}>
-              <Text style={styles.loginText}>
-                Already have an account?{" "}
-              </Text>
-              <TouchableOpacity
-                onPress={() =>
-                  router.push({ pathname: "/(auth)/login", params: { role: "citizen" } })
-                }
-              >
-                <Text style={styles.loginLink}>Log in</Text>
-              </TouchableOpacity>
-            </View>
+              {/* Footer */}
+              <AuthFooter theme={t} />
+            </AuthCard>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
-  );
-}
-
-/* ---------------- Components ---------------- */
-
-function InputField({
-  label,
-  placeholder,
-  value,
-  onChangeText,
-  keyboardType,
-  icon,
-}: any) {
-  return (
-    <View style={styles.field}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.inputContainer}>
-        {icon}
-        <TextInput
-          style={styles.input}
-          placeholder={placeholder}
-          placeholderTextColor={AppColors.textMuted}
-          value={value}
-          onChangeText={onChangeText}
-          keyboardType={keyboardType}
-          autoCapitalize="none"
-        />
-      </View>
-    </View>
   );
 }
 
@@ -285,7 +280,6 @@ function InputField({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: AppColors.bgMain,
     marginTop: -30,
   },
 
@@ -295,160 +289,110 @@ const styles = StyleSheet.create({
 
   scrollContent: {
     flexGrow: 1,
-    paddingVertical: 20,
+    paddingVertical: 16,
   },
 
   container: {
     width: "92%",
-    maxWidth: 540,
+    maxWidth: 480,
     alignSelf: "center",
-    backgroundColor: AppColors.bgCard,
-    borderWidth: 1,
-    borderColor: AppColors.borderInput,
-    borderRadius: AppRadius.lg,
-    paddingHorizontal: 28,
-    paddingVertical: 28,
   },
 
   backButton: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 7,
-    marginBottom: 10,
+    gap: 6,
+    marginBottom: 12,
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+    alignSelf: "flex-start",
   },
 
   backText: {
-    fontSize: 16,
-    color: AppColors.primary,
+    fontSize: 15,
+    fontWeight: "600",
   },
 
-  header: {
-    alignItems: "center",
-    marginBottom: 32,
-  },
-
-  logo: {
-    width: 72,
-    height: 72,
-    borderRadius: AppRadius.xl,
-    backgroundColor: AppColors.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 14,
-  },
-
-  brand: {
-    fontSize: 25,
-    fontWeight: "700",
-    color: AppColors.primary,
-    marginBottom: 16,
-  },
-
-  title: {
-    fontSize: 36,
-    fontWeight: "700",
-    color: AppColors.textPrimary,
-    alignSelf: "flex-start",
-  },
-
-  subtitle: {
-    fontSize: 18,
-    lineHeight: 27,
-    color: AppColors.textSecondary,
-    marginTop: 5,
-    alignSelf: "flex-start",
-  },
+  /* Dropdown */
 
   field: {
     marginBottom: 20,
   },
 
   label: {
-    fontSize: 15,
-    letterSpacing: 1.5,
-    color: AppColors.textSecondary,
-    fontWeight: "600",
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 1.2,
     marginBottom: 8,
+    textTransform: "uppercase",
   },
 
   inputContainer: {
-    minHeight: 56,
+    height: 52,
     borderWidth: 1.5,
-    borderColor: AppColors.borderInput,
-    backgroundColor: AppColors.bgInput,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 14,
   },
 
-  input: {
-    flex: 1,
-    fontSize: 18,
-    color: AppColors.textPrimary,
-    marginLeft: 10,
+  iconWrap: {
+    marginRight: 12,
+    width: 24,
+    alignItems: "center",
   },
 
   dropdownValue: {
     flex: 1,
-    fontSize: 18,
-    color: AppColors.textPrimary,
-  },
-
-  placeholder: {
-    color: AppColors.textMuted,
-    fontWeight: "500",
+    fontSize: 16,
   },
 
   dropdown: {
     borderWidth: 1,
-    borderColor: AppColors.borderInput,
-    backgroundColor: AppColors.bgCard,
-    marginTop: -12,
-    marginBottom: 20,
+    marginTop: 4,
   },
 
   dropdownItem: {
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 13,
     borderBottomWidth: 1,
-    borderBottomColor: AppColors.border,
   },
 
   dropdownText: {
-    fontSize: 16,
-    color: AppColors.textPrimary,
+    fontSize: 15,
   },
 
+  /* Button */
+
   primaryButton: {
-    height: 58,
-    backgroundColor: AppColors.primary,
+    height: 52,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 14,
-    marginTop: 5,
+    gap: 10,
+    marginTop: 8,
+  },
+
+  primaryButtonDisabled: {
+    opacity: 0.6,
   },
 
   primaryButtonText: {
-    color: AppColors.textWhite,
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 16,
+    fontWeight: "700",
   },
 
   loginContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 24,
+    marginTop: 20,
   },
 
   loginText: {
-    fontSize: 16,
-    color: AppColors.textSecondary,
+    fontSize: 14,
   },
 
   loginLink: {
-    fontSize: 16,
-    color: AppColors.blue,
-    fontWeight: "600",
+    fontSize: 14,
+    fontWeight: "700",
   },
 });

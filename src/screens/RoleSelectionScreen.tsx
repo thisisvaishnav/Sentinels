@@ -8,47 +8,103 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { AppColors, AppRadius } from "../../constants/colors";
+import {
+  ENUMERATOR_AUTH_THEME,
+  CITIZEN_AUTH_THEME,
+  ADMIN_AUTH_THEME,
+  AuthTheme,
+} from "@/src/features/auth/theme";
 
 export type Role = "citizen" | "enumerator" | "admin";
+
+/* ───────────────────── Role Config ───────────────────── */
+
+interface RoleConfig {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  theme: AuthTheme;
+}
+
+const ROLE_CONFIG: Record<Role, RoleConfig> = {
+  citizen: {
+    title: "Citizen",
+    description: "Report your household and find government schemes",
+    icon: <Ionicons name="person" size={28} color={CITIZEN_AUTH_THEME.colors.textWhite} />,
+    theme: CITIZEN_AUTH_THEME,
+  },
+  enumerator: {
+    title: "Enumerator",
+    description: "Field data collection and zone verification",
+    icon: (
+      <MaterialCommunityIcons
+        name="file-document-edit"
+        size={28}
+        color={ENUMERATOR_AUTH_THEME.colors.textWhite}
+      />
+    ),
+    theme: ENUMERATOR_AUTH_THEME,
+  },
+  admin: {
+    title: "Admin",
+    description: "System oversight and command center",
+    icon: (
+      <MaterialCommunityIcons
+        name="shield-account"
+        size={28}
+        color={ADMIN_AUTH_THEME.colors.textWhite}
+      />
+    ),
+    theme: ADMIN_AUTH_THEME,
+  },
+};
 
 /* ───────────────────── Primary Role Card ───────────────────── */
 
 interface RoleCardProps {
   role: Role;
-  title: string;
-  description: string;
+  config: RoleConfig;
   onPress: () => void;
 }
 
-const RoleCard = ({ role, title, description, onPress }: RoleCardProps) => {
-  const getIcon = () => {
-    if (role === "citizen") {
-      return <Ionicons name="person" size={36} color={AppColors.textWhite} />;
-    }
-    return (
-      <MaterialCommunityIcons
-        name="file-document-edit"
-        size={36}
-        color={AppColors.textWhite}
-      />
-    );
-  };
+const RoleCard = ({ role, config, onPress }: RoleCardProps) => {
+  const t = config.theme;
 
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      style={styles.roleCard}
+      style={[
+        styles.roleCard,
+        {
+          backgroundColor: t.colors.cardBackground,
+          borderColor: t.colors.accent,
+          borderRadius: t.borderRadius.xl,
+        },
+      ]}
       onPress={onPress}
     >
-      <View style={styles.iconContainer}>{getIcon()}</View>
-
-      <View style={styles.cardContent}>
-        <Text style={styles.roleTitle}>{title}</Text>
-        <Text style={styles.roleDescription}>{description}</Text>
+      <View
+        style={[
+          styles.iconContainer,
+          {
+            backgroundColor: t.colors.accent,
+            borderRadius: t.borderRadius.xl,
+          },
+        ]}
+      >
+        {config.icon}
       </View>
 
-      <Ionicons name="chevron-forward" size={22} color={AppColors.textMuted} />
+      <View style={styles.cardContent}>
+        <Text style={[styles.roleTitle, { color: t.colors.textPrimary }]}>
+          {config.title}
+        </Text>
+        <Text style={[styles.roleDescription, { color: t.colors.textSecondary }]}>
+          {config.description}
+        </Text>
+      </View>
+
+      <Ionicons name="chevron-forward" size={20} color={t.colors.textMuted} />
     </TouchableOpacity>
   );
 };
@@ -56,33 +112,49 @@ const RoleCard = ({ role, title, description, onPress }: RoleCardProps) => {
 /* ───────────────────── Compact Admin Card ───────────────────── */
 
 interface CompactRoleCardProps {
-  title: string;
-  description: string;
+  config: RoleConfig;
   onPress: () => void;
 }
 
-const CompactRoleCard = ({
-  title,
-  description,
-  onPress,
-}: CompactRoleCardProps) => {
+const CompactRoleCard = ({ config, onPress }: CompactRoleCardProps) => {
+  const t = config.theme;
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      style={styles.compactCard}
+      style={[
+        styles.compactCard,
+        {
+          backgroundColor: t.colors.cardBackground,
+          borderColor: t.colors.border,
+          borderRadius: t.borderRadius.lg,
+        },
+      ]}
       onPress={onPress}
     >
-      <View style={styles.compactIconContainer}>
+      <View
+        style={[
+          styles.compactIconContainer,
+          {
+            backgroundColor: t.colors.subtleBackground,
+            borderRadius: t.borderRadius.lg,
+          },
+        ]}
+      >
         <MaterialCommunityIcons
           name="shield-account"
           size={22}
-          color={AppColors.textMuted}
+          color={t.colors.textMuted}
         />
       </View>
 
       <View style={styles.compactCardContent}>
-        <Text style={styles.compactTitle}>{title}</Text>
-        <Text style={styles.compactDescription}>{description}</Text>
+        <Text style={[styles.compactTitle, { color: t.colors.textSecondary }]}>
+          {config.title}
+        </Text>
+        <Text style={[styles.compactDescription, { color: t.colors.textMuted }]}>
+          {config.description}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -99,6 +171,8 @@ export default function RoleSelectionScreen({
   onSelectRole,
   onHelpPress,
 }: RoleSelectionScreenProps) {
+  const t = ENUMERATOR_AUTH_THEME;
+
   const handleRoleSelect = (role: Role) => {
     console.log("Selected role:", role);
     if (onSelectRole) {
@@ -107,7 +181,7 @@ export default function RoleSelectionScreen({
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: t.colors.background }]}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -115,38 +189,37 @@ export default function RoleSelectionScreen({
         <View style={styles.container}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.title}>Welcome to Lokvision</Text>
-            <Text style={styles.subtitle}>Select your role to continue</Text>
+            <View style={[styles.brandIcon, { backgroundColor: t.colors.accent, borderRadius: t.borderRadius.xl }]}>
+              <MaterialCommunityIcons name="satellite-variant" size={32} color={t.colors.textWhite} />
+            </View>
+            <Text style={[styles.title, { color: t.colors.textPrimary }]}>Welcome to Lokvision</Text>
+            <Text style={[styles.subtitle, { color: t.colors.textMuted }]}>Select your role to continue</Text>
           </View>
 
           {/* Primary Roles */}
           <View style={styles.primaryRoles}>
             <RoleCard
               role="citizen"
-              title="Citizen"
-              description="Report your household and find government schemes"
+              config={ROLE_CONFIG.citizen}
               onPress={() => handleRoleSelect("citizen")}
             />
-
             <RoleCard
               role="enumerator"
-              title="Enumerator"
-              description="Field data collection and zone verification"
+              config={ROLE_CONFIG.enumerator}
               onPress={() => handleRoleSelect("enumerator")}
             />
           </View>
 
           {/* Divider */}
           <View style={styles.dividerRow}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>or</Text>
-            <View style={styles.dividerLine} />
+            <View style={[styles.dividerLine, { backgroundColor: t.colors.border }]} />
+            <Text style={[styles.dividerText, { color: t.colors.textMuted }]}>or</Text>
+            <View style={[styles.dividerLine, { backgroundColor: t.colors.border }]} />
           </View>
 
           {/* Secondary Role */}
           <CompactRoleCard
-            title="Admin"
-            description="System oversight and command center"
+            config={ROLE_CONFIG.admin}
             onPress={() => handleRoleSelect("admin")}
           />
 
@@ -162,7 +235,7 @@ export default function RoleSelectionScreen({
               }
             }}
           >
-            <Text style={styles.helpText}>Need help?</Text>
+            <Text style={[styles.helpText, { color: t.colors.accent }]}>Need help?</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -175,7 +248,6 @@ export default function RoleSelectionScreen({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: AppColors.bgMain,
     marginTop: -30,
   },
 
@@ -191,59 +263,60 @@ const styles = StyleSheet.create({
 
   header: {
     alignItems: "center",
-    paddingTop: 38,
-    paddingBottom: 44,
+    paddingTop: 32,
+    paddingBottom: 40,
+  },
+
+  brandIcon: {
+    width: 64,
+    height: 64,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
   },
 
   title: {
-    fontSize: 38,
-    lineHeight: 44,
+    fontSize: 34,
+    lineHeight: 40,
     fontWeight: "800",
-    color: AppColors.textPrimary,
     textAlign: "center",
-    letterSpacing: -1.2,
+    letterSpacing: -1,
   },
 
   subtitle: {
-    marginTop: 28,
-    fontSize: 20,
-    lineHeight: 28,
+    marginTop: 10,
+    fontSize: 17,
+    lineHeight: 24,
     fontWeight: "500",
-    color: AppColors.textMuted,
     textAlign: "center",
   },
 
   /* ── Primary cards ── */
 
   primaryRoles: {
-    gap: 16,
+    gap: 14,
   },
 
   roleCard: {
-    minHeight: 110,
-    backgroundColor: AppColors.bgCard,
+    minHeight: 100,
     borderWidth: 2,
-    borderColor: AppColors.primary,
-    borderRadius: AppRadius.xl,
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 18,
-    shadowColor: AppColors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
     shadowRadius: 8,
-    elevation: 4,
+    elevation: 3,
   },
 
   iconContainer: {
-    width: 72,
-    height: 72,
-    borderRadius: AppRadius.xl,
-    backgroundColor: AppColors.primary,
+    width: 60,
+    height: 60,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 18,
+    marginRight: 16,
   },
 
   cardContent: {
@@ -251,18 +324,16 @@ const styles = StyleSheet.create({
   },
 
   roleTitle: {
-    fontSize: 24,
-    lineHeight: 30,
+    fontSize: 22,
+    lineHeight: 28,
     fontWeight: "700",
-    color: AppColors.textPrimary,
-    marginBottom: 6,
+    marginBottom: 4,
   },
 
   roleDescription: {
-    fontSize: 15,
-    lineHeight: 22,
+    fontSize: 14,
+    lineHeight: 20,
     fontWeight: "400",
-    color: AppColors.textSecondary,
   },
 
   /* ── Divider ── */
@@ -270,31 +341,26 @@ const styles = StyleSheet.create({
   dividerRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 28,
-    paddingHorizontal: 24,
+    marginVertical: 24,
+    paddingHorizontal: 20,
   },
 
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: AppColors.border,
   },
 
   dividerText: {
-    marginHorizontal: 14,
-    fontSize: 14,
+    marginHorizontal: 12,
+    fontSize: 13,
     fontWeight: "500",
-    color: AppColors.textMuted,
     textTransform: "lowercase",
   },
 
   /* ── Compact admin card ── */
 
   compactCard: {
-    backgroundColor: AppColors.bgCard,
     borderWidth: 1,
-    borderColor: AppColors.border,
-    borderRadius: AppRadius.lg,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
@@ -305,8 +371,6 @@ const styles = StyleSheet.create({
   compactIconContainer: {
     width: 42,
     height: 42,
-    borderRadius: AppRadius.lg,
-    backgroundColor: AppColors.bgSubtle,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 14,
@@ -317,10 +381,9 @@ const styles = StyleSheet.create({
   },
 
   compactTitle: {
-    fontSize: 18,
-    lineHeight: 24,
+    fontSize: 17,
+    lineHeight: 22,
     fontWeight: "600",
-    color: AppColors.textSecondary,
     marginBottom: 2,
   },
 
@@ -328,20 +391,18 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 18,
     fontWeight: "400",
-    color: AppColors.textMuted,
   },
 
   /* ── Help ── */
 
   helpButton: {
     alignItems: "center",
-    marginTop: 36,
+    marginTop: 32,
     marginBottom: 20,
   },
 
   helpText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
-    color: AppColors.primary,
   },
 });
