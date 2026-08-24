@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { COLORS } from '@/constants/adminTheme';
 import { useAdminDrawer } from '@/src/contexts/AdminDrawerContext';
 
@@ -18,6 +19,7 @@ export default function AdminHeader({
   onLogout,
 }: AdminHeaderProps) {
   const { toggle } = useAdminDrawer();
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -44,7 +46,11 @@ export default function AdminHeader({
           <Text style={styles.onlineText}>Online</Text>
         </View>
 
-        <TouchableOpacity style={styles.iconBtn} activeOpacity={0.6}>
+        <TouchableOpacity
+          style={styles.iconBtn}
+          activeOpacity={0.6}
+          onPress={() => router.push('/(admin)/notifications')}
+        >
           <Ionicons name="notifications-outline" size={22} color={COLORS.textPrimary} />
           {notificationCount > 0 && (
             <View style={styles.badge}>
