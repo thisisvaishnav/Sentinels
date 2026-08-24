@@ -97,7 +97,7 @@ export default function CitizenDashboard() {
 
         const status = await getCitizenHouseholdStatus();
         if (!status.completed) {
-          router.replace("/(citizen)/household");
+          router.replace("/(citizen)/household" as any);
           return;
         }
 

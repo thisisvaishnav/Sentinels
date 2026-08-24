@@ -1,19 +1,44 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { TodayProgress } from '../types';
 import { ENUMERATOR_THEME, Theme } from '../theme';
 
 interface ProgressSectionProps {
   progress: TodayProgress;
   theme?: Theme;
+  onPressDetails?: () => void;
 }
 
-export const ProgressSection: React.FC<ProgressSectionProps> = ({ progress, theme = ENUMERATOR_THEME }) => {
+export const ProgressSection: React.FC<ProgressSectionProps> = ({
+  progress,
+  theme = ENUMERATOR_THEME,
+  onPressDetails,
+}) => {
+  const router = useRouter();
+
+  const handlePress = () => {
+    if (onPressDetails) {
+      onPressDetails();
+    } else {
+      router.push('/(enumerator)/daily-progress');
+    }
+  };
+
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.cardBackground, borderColor: theme.colors.border }]}>
+    <TouchableOpacity
+      style={[styles.container, { backgroundColor: theme.colors.cardBackground, borderColor: theme.colors.border }]}
+      onPress={handlePress}
+      activeOpacity={0.8}
+      accessibilityLabel="View Daily Progress Details"
+    >
       <View style={styles.headerRow}>
         <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Today{"'"}s Progress</Text>
-        <Text style={[styles.percentBadge, { color: theme.colors.accent }]}>{progress.coveragePercentage}% Covered</Text>
+        <View style={styles.badgeRow}>
+          <Text style={[styles.percentBadge, { color: theme.colors.accent }]}>{progress.coveragePercentage}% Covered</Text>
+          <Ionicons name="chevron-forward" size={16} color={theme.colors.accent} />
+        </View>
       </View>
 
       {/* Progress Bar */}
@@ -42,7 +67,7 @@ export const ProgressSection: React.FC<ProgressSectionProps> = ({ progress, them
           <Text style={[styles.metricValue, { color: theme.colors.danger }]}>{progress.remaining}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -57,6 +82,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  badgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   sectionTitle: {
     fontSize: 16,

@@ -49,7 +49,7 @@ export default function Login() {
       try {
         await loginWithRole('citizen', { mobile: identifier, password: secret });
         await AsyncStorage.setItem('hasOnboarded', 'true');
-        router.replace("/(citizen)/dashboard");
+        router.replace("/(citizen)/(tabs)/dashboard");
       } catch (error: any) {
         console.error("Citizen login error:", error);
         alert(error?.message || "Unable to sign in. Please try again.");

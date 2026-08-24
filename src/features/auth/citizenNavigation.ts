@@ -5,8 +5,8 @@ export async function routeCitizenAfterAuth() {
   const household = await getCitizenHouseholdStatus();
 
   if (household.completed) {
-    router.replace('/(citizen)/dashboard');
+    router.replace('/(citizen)/(tabs)/dashboard');
   } else {
-    router.replace('/(citizen)/household');
+    router.replace('/(citizen)/(tabs)/household');
   }
 }

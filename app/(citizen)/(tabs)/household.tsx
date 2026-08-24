@@ -338,9 +338,10 @@ export default function HouseholdScreen() {
       if (!res.ok) throw new Error(result.error || "Failed to register household");
 
       Alert.alert("Household Registered", "Your household details have been saved successfully.", [
-        { text: "Continue", onPress: () => router.replace("/(citizen)/dashboard") },
+        { text: "Continue", onPress: () => router.replace("/(citizen)/(tabs)/dashboard") },
       ]);
     } catch (err) {
+      console.error("Household submission error:", err);
       Alert.alert("Submission Failed", err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
       setLoading(false);

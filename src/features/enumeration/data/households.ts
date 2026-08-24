@@ -8,6 +8,7 @@ import {
   ZoneAreaItem,
   ZoneHouseholdItem,
 } from '../types';
+import { addEnumeratorActivity } from './activity';
 
 export const HOUSEHOLDS_STORAGE_KEY = '@lokvision_enumerator_households';
 
@@ -456,6 +457,44 @@ export async function updateHouseholdStatusInStore(
     return h;
   });
   await saveEnumeratorHouseholds(updated);
+  return updated;
+}
+
+export async function updateHouseholdVerificationStatusInStore(
+  householdId: string,
+  verificationStatus: ZoneHouseholdItem['verificationStatus'],
+  reason?: string
+): Promise<ZoneHouseholdItem[]> {
+  const current = await loadEnumeratorHouseholds();
+  const updated = current.map((h) => {
+    if (h.householdId === householdId || h.id === householdId) {
+      const isVerified = verificationStatus === 'Verified';
+      const isNeeds = verificationStatus === 'Needs Verification';
+      return {
+        ...h,
+        verificationStatus: verificationStatus,
+        status: isVerified ? 'Completed' : isNeeds ? 'Needs Verification' : h.status,
+        verifiedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        verifiedBy: 'ENUM001',
+        verificationReason: reason ?? h.verificationReason,
+      };
+    }
+    return h;
+  });
+  await saveEnumeratorHouseholds(updated);
+  if (verificationStatus === 'Verified') {
+    try {
+      const targetHH = updated.find((h) => h.householdId === householdId || h.id === householdId);
+      await addEnumeratorActivity(
+        'verification_completed',
+        'Verification Completed',
+        `Verified head of household Aadhaar & address details for ${targetHH?.headName || householdId}.`,
+        householdId
+      );
+    } catch {
+      // Ignore activity log error
+    }
+  }
   return updated;
 }
 
