@@ -14,7 +14,7 @@ export const HOUSEHOLDS_STORAGE_KEY = '@lokvision_enumerator_households';
 
 export const mockEnumeratorProfile: EnumeratorProfile = {
   id: 'EN-4029',
-  name: 'Sarah Jenkins',
+  name: 'Priya Sharma',
   role: 'Lead Field Enumerator',
   assignedZone: 'Zone A-12 · Ward 12 (Shiv Nagar)',
   isOnline: true,

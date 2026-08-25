@@ -44,55 +44,131 @@ export interface EnumeratorLoginData {
 export type LoginData = CitizenLoginData | AdminLoginData | EnumeratorLoginData;
 
 export interface EnumeratorProfile {
+  id: string;
+  employeeCode: string;
+  name: string;
+  role: string;
+  status: string;
   user_id: string;
   enumerator_id: string;
   [key: string]: unknown;
 }
 
 /**
- * JWT-based enumerator login:
- * 1. signInWithPassword  → Supabase issues a JWT (stored in SecureStore)
- * 2. Fetch enumerator_profiles row keyed on the user_id inside that JWT
- *
- * Throws on network / auth errors so the caller can show the right message.
- * Returns null profile only if the auth.users row exists but has no matching
- * enumerator_profiles row (misconfigured account).
+ * Real Supabase Auth enumerator login:
+ * 1. signInWithPassword → Supabase issues a JWT (stored securely via SecureStoreAdapter)
+ * 2. Fetches profile and enumerator_profiles rows keyed on the authenticated user_id
+ * 3. Returns normalized Enumerator profile compatible with existing frontend
  */
 export async function loginEnumerator({
   enumeratorId,
   securityKey,
 }: EnumeratorLoginData): Promise<{ profile: EnumeratorProfile | null }> {
-  // DEVELOPMENT ONLY: Temporary dev authentication for testing while backend and database authentication are not implemented.
-  if (enumeratorId.trim() === 'ENUM001' && securityKey.trim() === '123456') {
+  const cleanId = enumeratorId.trim();
+  const cleanKey = securityKey.trim();
+
+  // DEVELOPMENT ONLY: Temporary dev fallback until real database authentication is fully deployed
+  if (cleanId === 'ENUM001' && cleanKey === '123456') {
     return {
       profile: {
+        id: 'dev-enumerator-001',
+        employeeCode: 'ENUM001',
+        name: 'Priya Sharma (Dev Fallback)',
+        role: 'enumerator',
+        status: 'active',
         user_id: 'dev-enumerator-001',
         enumerator_id: 'ENUM001',
-        name: 'Test Enumerator',
       },
     };
   }
 
-  // Step 1 — authenticate and receive JWT
+  // Step 1 — Authenticate with Supabase Auth
+  const syntheticEmail = `${cleanId}@enumerator.sentinels.app`;
   const { data: authData, error: authError } =
     await supabase.auth.signInWithPassword({
-      email: `${enumeratorId.trim()}@enumerator.sentinels.app`,
-      password: securityKey,
+      email: syntheticEmail,
+      password: cleanKey,
     });
 
   if (authError) throw authError;
+  if (!authData?.user) throw new Error('Authentication failed. User session not found.');
 
-  // Step 2 — fetch profile row from enumerator_profiles using the JWT user_id
-  const { data: profile, error: profileError } = await supabase
-    .from('enumerator_profiles')
+  const userId = authData.user.id;
+
+  // Step 2 — Fetch matching profiles and enumerator_profiles records
+  const { data: baseProfile, error: profileErr } = await supabase
+    .from('profiles')
     .select('*')
-    .eq('user_id', authData.user.id)
+    .eq('id', userId)
     .maybeSingle();
 
-  if (profileError) throw profileError;
+  if (profileErr) {
+    console.warn('[Auth] Base profile query warning:', profileErr.message);
+  }
 
-  return { profile: profile as EnumeratorProfile | null };
+  const { data: enumProfile, error: enumErr } = await supabase
+    .from('enumerator_profiles')
+    .select('*')
+    .eq('id', userId)
+    .maybeSingle();
+
+  if (enumErr) {
+    console.warn('[Auth] Enumerator profile query warning:', enumErr.message);
+  }
+
+  // Step 3 — Return normalized EnumeratorProfile (using DB row or Auth Metadata fallback)
+  const userMeta = authData.user.user_metadata || {};
+  const normalizedProfile: EnumeratorProfile = {
+    id: enumProfile?.id || userId,
+    employeeCode: enumProfile?.employee_code || userMeta.employee_code || cleanId,
+    name: baseProfile?.full_name || userMeta.full_name || 'Field Enumerator',
+    role: baseProfile?.role || userMeta.role || 'enumerator',
+    status: enumProfile?.status || 'active',
+    user_id: userId,
+    enumerator_id: enumProfile?.employee_code || userMeta.employee_code || cleanId,
+  };
+
+  return { profile: normalizedProfile };
 }
+
+/**
+ * Active session recovery for Enumerators on app launch
+ */
+export async function getEnumeratorSession(): Promise<EnumeratorProfile | null> {
+  try {
+    const { data: sessionData, error: sessionErr } = await supabase.auth.getSession();
+    if (sessionErr || !sessionData?.session?.user) return null;
+
+    const userId = sessionData.session.user.id;
+
+    const { data: baseProfile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .maybeSingle();
+
+    const { data: enumProfile } = await supabase
+      .from('enumerator_profiles')
+      .select('*')
+      .eq('id', userId)
+      .maybeSingle();
+
+    const userMeta = sessionData.session.user.user_metadata || {};
+    return {
+      id: enumProfile?.id || userId,
+      employeeCode: enumProfile?.employee_code || userMeta.employee_code || 'ENUMERATOR',
+      name: baseProfile?.full_name || userMeta.full_name || 'Field Enumerator',
+      role: baseProfile?.role || userMeta.role || 'enumerator',
+      status: enumProfile?.status || 'active',
+      user_id: userId,
+      enumerator_id: enumProfile?.employee_code || userMeta.employee_code || 'ENUMERATOR',
+    };
+  } catch (err) {
+    console.error('[Auth] Error recovering session:', err);
+    return null;
+  }
+}
+
 
 export async function loginWithRole(role: Role, data: LoginData) {
   if (role === 'citizen') {

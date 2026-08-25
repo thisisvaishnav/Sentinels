@@ -8,7 +8,8 @@
     "android": "expo start --localhost --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "server": "sucrase-node src/server/index.ts",
+    "server": "python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 5001 --reload",
+    "server:node": "sucrase-node src/server/index.ts",
     "lint": "expo lint"
   },
   "dependencies": {

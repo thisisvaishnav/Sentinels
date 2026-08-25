@@ -13,7 +13,7 @@ interface AdminHeaderProps {
 }
 
 export default function AdminHeader({
-  userName = 'Admin User',
+  userName = 'Priya Sharma',
   adminId = 'ADM-001',
   notificationCount = 3,
   onLogout,

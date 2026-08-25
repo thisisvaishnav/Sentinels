@@ -25,7 +25,7 @@ type BaseEnumeratorInfo = Omit<
 const BASE_ENUMERATORS: BaseEnumeratorInfo[] = [
   {
     enumeratorId: 'ENUM001',
-    name: 'Sarah Jenkins',
+    name: 'Priya Sharma',
     role: 'Lead Field Enumerator',
     zone: 'Zone A-12',
     ward: 'Ward 12',
@@ -108,7 +108,7 @@ export async function loadEnumeratorCommandCenterRecords(): Promise<EnumeratorCo
       let enumEscalations = Math.round(escalationCount / BASE_ENUMERATORS.length);
 
       if (idx === 0) {
-        // ENUM001 Sarah Jenkins gets primary local dataset stats
+        // ENUM001 Priya Sharma gets primary local dataset stats
         enumAssigned = totalHouseholds;
         enumCompleted = completedCount;
         enumInProgress = inProgressCount;
