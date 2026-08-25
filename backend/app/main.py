@@ -20,13 +20,19 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_headers=["*"],
     )
 
+from backend.app.api.v1.endpoints import auth
+
 # Mount API v1 router
 app.include_router(api_router, prefix=settings.API_V1_STR)
+
+# Mount direct auth endpoints under /api/auth for backward compatibility
+app.include_router(auth.router, prefix="/api/auth", tags=["Auth Direct"])
+
 
 
 @app.get("/health")
 async def root_health():
-    """Root health fallback."""
+    """Root health check fallback endpoint."""
     return {"status": "ok", "service": settings.PROJECT_NAME}
 
 
