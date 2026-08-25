@@ -27,7 +27,6 @@ import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
 
 // Modular Components
 import { NotificationsHeader } from '@/src/features/enumeration/components/notifications/NotificationsHeader';
-import { NotificationSummary } from '@/src/features/enumeration/components/notifications/NotificationSummary';
 import { NotificationFilterBar } from '@/src/features/enumeration/components/notifications/NotificationFilterBar';
 import { NotificationList } from '@/src/features/enumeration/components/notifications/NotificationList';
 import { NotificationLoadingState } from '@/src/features/enumeration/components/notifications/NotificationLoadingState';
@@ -137,15 +136,6 @@ export default function EnumeratorNotificationsScreen() {
           />
         }
       >
-        {/* Summary Metric Cards */}
-        <NotificationSummary
-          totalCount={notifications.length}
-          unreadCount={unreadCount}
-          priorityCount={priorityCount}
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
-
         {/* Search Bar */}
         <View style={styles.searchWrap}>
           <Ionicons name="search-outline" size={18} color={ENUMERATOR_THEME.colors.textMuted} />
