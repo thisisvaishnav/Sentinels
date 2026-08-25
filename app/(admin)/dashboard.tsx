@@ -99,7 +99,7 @@ export default function AdminDashboard() {
         <ProgressSection
           progress={metrics.todayProgress}
           theme={ADMIN_THEME}
-          onPressDetails={() => {}}
+          onPressDetails={() => router.push('/(admin)/today-progress')}
         />
 
         <PriorityTasksSection

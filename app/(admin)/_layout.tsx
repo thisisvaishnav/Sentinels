@@ -14,6 +14,7 @@ export default function AdminLayout() {
         <Stack.Screen name="citizen-reports" />
         <Stack.Screen name="supervisor-escalations" />
         <Stack.Screen name="supervisor-escalation-details" />
+        <Stack.Screen name="today-progress" />
         <Stack.Screen name="notifications" />
         <Stack.Screen name="settings" />
       </Stack>

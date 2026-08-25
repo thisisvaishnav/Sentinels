@@ -8,6 +8,9 @@ import {
   TodayProgress,
   AssignedZoneInfo,
 } from '../types';
+import { loadEnumeratorHouseholds, getDerivedZoneMetrics } from '@/src/features/enumeration/data/households';
+import { loadEnumeratorActivity, filterTodayActivities, deriveWorkBreakdownMetrics } from '@/src/features/enumeration/data/activity';
+import { ZoneHouseholdItem, EnumeratorActivityLog, WorkBreakdownMetrics } from '@/src/features/enumeration/types';
 
 export const ADMIN_DASHBOARD_STORAGE_KEY = '@lokvision_admin_dashboard';
 
@@ -189,5 +192,30 @@ export function getAdminDerivedMetrics(): {
       completedHouseholds: completed,
       coveragePercentage,
     },
+  };
+}
+
+export interface AdminTodayProgressSummary {
+  zoneMetrics: ReturnType<typeof getDerivedZoneMetrics>;
+  todayActivities: EnumeratorActivityLog[];
+  earlierActivities: EnumeratorActivityLog[];
+  workBreakdown: WorkBreakdownMetrics;
+  allHouseholds: ZoneHouseholdItem[];
+}
+
+export async function getAdminTodayProgressSummary(): Promise<AdminTodayProgressSummary> {
+  const households = await loadEnumeratorHouseholds();
+  const activities = await loadEnumeratorActivity();
+
+  const zoneMetrics = getDerivedZoneMetrics(households);
+  const { today: todayActivities, earlier: earlierActivities } = filterTodayActivities(activities);
+  const workBreakdown = deriveWorkBreakdownMetrics(activities, true);
+
+  return {
+    zoneMetrics,
+    todayActivities,
+    earlierActivities,
+    workBreakdown,
+    allHouseholds: households,
   };
 }
