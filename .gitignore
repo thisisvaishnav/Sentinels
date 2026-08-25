@@ -63,3 +63,9 @@ app-example
 script/
 opencode.json
 .dmux/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
