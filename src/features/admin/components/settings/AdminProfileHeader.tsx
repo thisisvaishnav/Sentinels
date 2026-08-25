@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { DetailedAdminProfile } from '../../types/adminProfileTypes';
-import { ENUMERATOR_THEME } from '@/src/features/enumeration/theme';
+import { COLORS } from '@/constants/adminTheme';
 
 interface AdminProfileHeaderProps {
   profile: DetailedAdminProfile;
@@ -21,7 +21,7 @@ export const AdminProfileHeader: React.FC<AdminProfileHeaderProps> = ({ profile,
     <View style={styles.container}>
       <View style={styles.topBar}>
         <TouchableOpacity onPress={onBack} style={styles.backBtn} activeOpacity={0.7}>
-          <Ionicons name="arrow-back" size={22} color={ENUMERATOR_THEME.colors.textPrimary} />
+          <Ionicons name="arrow-back" size={22} color={COLORS.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Admin Settings</Text>
         <View style={styles.placeholder} />
@@ -48,12 +48,12 @@ export const AdminProfileHeader: React.FC<AdminProfileHeaderProps> = ({ profile,
 
           <View style={styles.tagsRow}>
             <View style={styles.idTag}>
-              <MaterialCommunityIcons name="badge-account-horizontal-outline" size={13} color={ENUMERATOR_THEME.colors.accent} />
+              <MaterialCommunityIcons name="badge-account-horizontal-outline" size={13} color={COLORS.accent} />
               <Text style={styles.idTagText}>ID: {profile.id}</Text>
             </View>
 
             <View style={styles.zoneTag}>
-              <Ionicons name="location-outline" size={13} color={ENUMERATOR_THEME.colors.textSecondary} />
+              <Ionicons name="location-outline" size={13} color={COLORS.textSecondary} />
               <Text style={styles.zoneTagText}>{profile.district}</Text>
             </View>
           </View>
@@ -65,9 +65,9 @@ export const AdminProfileHeader: React.FC<AdminProfileHeaderProps> = ({ profile,
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: ENUMERATOR_THEME.colors.cardBackground,
+    backgroundColor: COLORS.cardBackground,
     borderBottomWidth: 1,
-    borderBottomColor: ENUMERATOR_THEME.colors.border,
+    borderBottomColor: COLORS.border,
     paddingTop: 12,
     paddingBottom: 16,
     paddingHorizontal: 16,
@@ -81,17 +81,17 @@ const styles = StyleSheet.create({
   backBtn: {
     width: 36,
     height: 36,
-    borderRadius: ENUMERATOR_THEME.borderRadius.md,
-    backgroundColor: ENUMERATOR_THEME.colors.background,
+    borderRadius: 18,
+    backgroundColor: COLORS.background,
     borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.border,
+    borderColor: COLORS.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
   headerTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: ENUMERATOR_THEME.colors.textPrimary,
+    color: COLORS.textPrimary,
   },
   placeholder: {
     width: 36,
@@ -105,9 +105,9 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
+    backgroundColor: COLORS.accentSubtle,
     borderWidth: 2,
-    borderColor: ENUMERATOR_THEME.colors.accent,
+    borderColor: COLORS.accent,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   avatarText: {
     fontSize: 22,
     fontWeight: '800',
-    color: ENUMERATOR_THEME.colors.accent,
+    color: COLORS.accent,
   },
   onlineBadge: {
     position: 'absolute',
@@ -124,11 +124,11 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: ENUMERATOR_THEME.colors.success,
+    backgroundColor: COLORS.success,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: ENUMERATOR_THEME.colors.cardBackground,
+    borderColor: COLORS.cardBackground,
   },
   metaWrap: {
     flex: 1,
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   nameText: {
     fontSize: 18,
     fontWeight: '800',
-    color: ENUMERATOR_THEME.colors.textPrimary,
+    color: COLORS.textPrimary,
     flex: 1,
   },
   statusBadge: {
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ECFDF5',
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: ENUMERATOR_THEME.borderRadius.full,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: '#A7F3D0',
     gap: 4,
@@ -161,16 +161,16 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: ENUMERATOR_THEME.colors.success,
+    backgroundColor: COLORS.success,
   },
   statusText: {
     fontSize: 11,
     fontWeight: '700',
-    color: ENUMERATOR_THEME.colors.success,
+    color: COLORS.success,
   },
   roleText: {
     fontSize: 13,
-    color: ENUMERATOR_THEME.colors.textSecondary,
+    color: COLORS.textSecondary,
     fontWeight: '600',
   },
   tagsRow: {
@@ -183,33 +183,33 @@ const styles = StyleSheet.create({
   idTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: ENUMERATOR_THEME.colors.accentSubtle,
+    backgroundColor: COLORS.accentSubtle,
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: ENUMERATOR_THEME.borderRadius.sm,
+    borderRadius: 6,
     borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.accentLight,
+    borderColor: COLORS.accentLight,
     gap: 4,
   },
   idTagText: {
     fontSize: 11,
     fontWeight: '700',
-    color: ENUMERATOR_THEME.colors.accent,
+    color: COLORS.accent,
   },
   zoneTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: ENUMERATOR_THEME.colors.subtleBackground,
+    backgroundColor: COLORS.subtleBackground,
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: ENUMERATOR_THEME.borderRadius.sm,
+    borderRadius: 6,
     borderWidth: 1,
-    borderColor: ENUMERATOR_THEME.colors.border,
+    borderColor: COLORS.border,
     gap: 4,
   },
   zoneTagText: {
     fontSize: 11,
     fontWeight: '600',
-    color: ENUMERATOR_THEME.colors.textSecondary,
+    color: COLORS.textSecondary,
   },
 });
