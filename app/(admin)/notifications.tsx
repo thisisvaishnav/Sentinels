@@ -109,7 +109,7 @@ export default function AdminNotificationsScreen() {
     if (notifications.length === 0) return;
     Alert.alert(
       'Clear All Notifications',
-      'Are you sure you want to delete all admin notifications? This action cannot be undone.',
+      'Are you sure you want to delete all notifications? This action cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Clear All', style: 'destructive', onPress: handleClearAll },
@@ -162,7 +162,7 @@ export default function AdminNotificationsScreen() {
               </View>
             )}
           </View>
-          <Text style={styles.subtitle}>Admin alerts, reports & system updates</Text>
+          <Text style={styles.subtitle}>System alerts, reports & updates</Text>
         </View>
 
         <View style={styles.actionsRow}>
@@ -206,58 +206,6 @@ export default function AdminNotificationsScreen() {
           />
         }
       >
-        {/* Summary Cards */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.summaryScroll}
-        >
-          {[
-            {
-              id: 'All' as AdminNotificationFilterCategory,
-              label: 'All',
-              count: filterCounts.All,
-              icon: 'bell-ring-outline' as const,
-              color: COLORS.accent,
-              bg: COLORS.accentSoft,
-            },
-            {
-              id: 'Unread' as AdminNotificationFilterCategory,
-              label: 'Unread',
-              count: filterCounts.Unread,
-              icon: 'email-alert-outline' as const,
-              color: '#D97706',
-              bg: '#FEF3C7',
-            },
-            {
-              id: 'Priority' as AdminNotificationFilterCategory,
-              label: 'Priority',
-              count: filterCounts.Priority,
-              icon: 'shield-alert-outline' as const,
-              color: '#EF4444',
-              bg: '#FEE2E2',
-            },
-          ].map((c) => {
-            const isSelected = selectedCategory === c.id;
-            return (
-              <TouchableOpacity
-                key={c.id}
-                style={[styles.summaryCard, isSelected && styles.summaryCardSelected]}
-                onPress={() => setSelectedCategory(c.id)}
-                activeOpacity={0.8}
-              >
-                <View style={styles.summaryTopRow}>
-                  <View style={[styles.summaryIconWrap, { backgroundColor: c.bg }]}>
-                    <MaterialCommunityIcons name={c.icon} size={18} color={c.color} />
-                  </View>
-                  <Text style={[styles.summaryCount, { color: c.color }]}>{c.count}</Text>
-                </View>
-                <Text style={styles.summaryLabel}>{c.label}</Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
-
         {/* Search Bar */}
         <View style={styles.searchWrap}>
           <Ionicons name="search-outline" size={18} color={COLORS.textMuted} />
@@ -265,7 +213,7 @@ export default function AdminNotificationsScreen() {
             style={styles.searchInput}
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder="Search notifications, enumerator ID..."
+            placeholder="Search notifications..."
             placeholderTextColor={COLORS.textMuted}
           />
           {searchQuery.length > 0 && (
@@ -343,7 +291,7 @@ export default function AdminNotificationsScreen() {
             <Text style={styles.emptySubtitle}>
               {searchQuery
                 ? 'Try adjusting your search terms or selecting another category.'
-                : 'New admin alerts, report updates, and system notices will appear here.'}
+                : 'New alerts, report updates, and system notices will appear here.'}
             </Text>
             {(searchQuery || selectedCategory !== 'All') && (
               <TouchableOpacity
@@ -509,44 +457,6 @@ const styles = StyleSheet.create({
   scrollBody: {
     paddingVertical: 12,
     gap: 14,
-  },
-  summaryScroll: {
-    paddingHorizontal: 16,
-    gap: 10,
-  },
-  summaryCard: {
-    width: 140,
-    backgroundColor: COLORS.surface,
-    borderRadius: 12,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    gap: 6,
-  },
-  summaryCardSelected: {
-    borderColor: COLORS.accent,
-    backgroundColor: COLORS.accentSoft,
-  },
-  summaryTopRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  summaryIconWrap: {
-    width: 30,
-    height: 30,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  summaryCount: {
-    fontSize: 18,
-    fontWeight: '900',
-  },
-  summaryLabel: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: COLORS.textPrimary,
   },
   searchWrap: {
     marginHorizontal: 16,
