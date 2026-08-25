@@ -93,12 +93,11 @@ async function seedEnumeratorUser() {
   console.log('[DB] Upserting public.enumerator_profiles record...');
   const { error: enumError } = await supabaseAdmin.from('enumerator_profiles').upsert(
     {
-      id: userId,
-      employee_code: testEmployeeCode,
-      designation: 'Lead Field Enumerator',
-      status: 'active',
+      user_id: userId,
+      enumerator_id: testEmployeeCode,
+      is_active: true,
     },
-    { onConflict: 'id' }
+    { onConflict: 'user_id' }
   );
 
   if (enumError) {
