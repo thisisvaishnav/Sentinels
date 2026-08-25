@@ -109,7 +109,7 @@ export async function loginEnumerator({
   const { data: enumProfile, error: enumErr } = await supabase
     .from('enumerator_profiles')
     .select('*')
-    .eq('id', userId)
+    .or(`id.eq.${userId},user_id.eq.${userId}`)
     .maybeSingle();
 
   if (enumErr) {
@@ -119,13 +119,13 @@ export async function loginEnumerator({
   // Step 3 — Return normalized EnumeratorProfile (using DB row or Auth Metadata fallback)
   const userMeta = authData.user.user_metadata || {};
   const normalizedProfile: EnumeratorProfile = {
-    id: enumProfile?.id || userId,
-    employeeCode: enumProfile?.employee_code || userMeta.employee_code || cleanId,
+    id: enumProfile?.id || enumProfile?.user_id || userId,
+    employeeCode: enumProfile?.employee_code || enumProfile?.enumerator_id || userMeta.employee_code || cleanId,
     name: baseProfile?.full_name || userMeta.full_name || 'Field Enumerator',
     role: baseProfile?.role || userMeta.role || 'enumerator',
     status: enumProfile?.status || 'active',
     user_id: userId,
-    enumerator_id: enumProfile?.employee_code || userMeta.employee_code || cleanId,
+    enumerator_id: enumProfile?.employee_code || enumProfile?.enumerator_id || userMeta.employee_code || cleanId,
   };
 
   return { profile: normalizedProfile };
@@ -150,18 +150,18 @@ export async function getEnumeratorSession(): Promise<EnumeratorProfile | null> 
     const { data: enumProfile } = await supabase
       .from('enumerator_profiles')
       .select('*')
-      .eq('id', userId)
+      .or(`id.eq.${userId},user_id.eq.${userId}`)
       .maybeSingle();
 
     const userMeta = sessionData.session.user.user_metadata || {};
     return {
-      id: enumProfile?.id || userId,
-      employeeCode: enumProfile?.employee_code || userMeta.employee_code || 'ENUMERATOR',
+      id: enumProfile?.id || enumProfile?.user_id || userId,
+      employeeCode: enumProfile?.employee_code || enumProfile?.enumerator_id || userMeta.employee_code || 'ENUMERATOR',
       name: baseProfile?.full_name || userMeta.full_name || 'Field Enumerator',
       role: baseProfile?.role || userMeta.role || 'enumerator',
       status: enumProfile?.status || 'active',
       user_id: userId,
-      enumerator_id: enumProfile?.employee_code || userMeta.employee_code || 'ENUMERATOR',
+      enumerator_id: enumProfile?.employee_code || enumProfile?.enumerator_id || userMeta.employee_code || 'ENUMERATOR',
     };
   } catch (err) {
     console.error('[Auth] Error recovering session:', err);
