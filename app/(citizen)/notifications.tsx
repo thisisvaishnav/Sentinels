@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -105,7 +106,7 @@ export default function CitizenNotificationsScreen() {
   const router = useRouter();
   const [notifications, setNotifications] = useState<CitizenNotification[]>(SEED_CITIZEN_NOTIFICATIONS);
   const [selectedCategory, setSelectedCategory] = useState<CitizenNotificationFilterCategory>('All');
-  const [searchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const unreadCount = useMemo(() => notifications.filter((n) => !n.read).length, [notifications]);
 
@@ -117,8 +118,15 @@ export default function CitizenNotificationsScreen() {
       if (selectedCategory === 'Updates') return n.type === 'update';
       if (selectedCategory === 'Alerts') return n.type === 'alert';
       return true;
+    }).filter((n) => {
+      if (!searchQuery.trim()) return true;
+      const query = searchQuery.toLowerCase();
+      return (
+        n.title.toLowerCase().includes(query) ||
+        n.message.toLowerCase().includes(query)
+      );
     });
-  }, [notifications, selectedCategory]);
+  }, [notifications, selectedCategory, searchQuery]);
 
   const handleMarkAllAsRead = useCallback(() => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
@@ -132,6 +140,7 @@ export default function CitizenNotificationsScreen() {
 
   const handleClearFilters = useCallback(() => {
     setSelectedCategory('All');
+    setSearchQuery('');
   }, []);
 
   return (
@@ -201,6 +210,23 @@ export default function CitizenNotificationsScreen() {
             );
           })}
         </ScrollView>
+
+        {/* Search Bar */}
+        <View style={styles.searchWrap}>
+          <Ionicons name="search-outline" size={18} color={AppColors.textMuted} />
+          <TextInput
+            style={styles.searchInput}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholder="Search notifications..."
+            placeholderTextColor={AppColors.textMuted}
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.clearBtn} activeOpacity={0.8}>
+              <Ionicons name="close-circle" size={16} color={AppColors.textMuted} />
+            </TouchableOpacity>
+          )}
+        </View>
 
         {/* Notification List */}
         <CitizenNotificationList
@@ -315,6 +341,27 @@ const styles = StyleSheet.create({
   },
   chipBadgeTextSelected: {
     color: AppColors.textWhite,
+  },
+  searchWrap: {
+    marginHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: AppColors.bgCard,
+    borderRadius: 0,
+    borderWidth: 1,
+    borderColor: AppColors.border,
+    paddingHorizontal: 12,
+    height: 40,
+    gap: 8,
+    marginBottom: 14,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 12,
+    color: AppColors.textPrimary,
+  },
+  clearBtn: {
+    padding: 2,
   },
   bottomSpacer: {
     height: 24,
