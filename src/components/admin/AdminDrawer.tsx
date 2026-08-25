@@ -81,7 +81,7 @@ export default function AdminDrawer({ profile }: AdminDrawerProps) {
                 size={24}
                 color={COLORS.accent}
               />
-              <Text style={styles.brandTitle}>DRISHTI</Text>
+              <Text style={styles.brandTitle}>LOKEVISION</Text>
             </View>
             <TouchableOpacity onPress={close} style={styles.closeBtn} activeOpacity={0.7}>
               <Ionicons name="close" size={24} color={COLORS.textMuted} />
@@ -160,7 +160,7 @@ export default function AdminDrawer({ profile }: AdminDrawerProps) {
 
           {/* Footer Info */}
           <View style={styles.drawerFooter}>
-            <Text style={styles.footerAppText}>DRISHTI Admin v1.0</Text>
+            <Text style={styles.footerAppText}>LOKEVISION Admin v1.0</Text>
             {userProfile.zone && (
               <Text style={styles.footerZoneText}>{userProfile.zone}</Text>
             )}

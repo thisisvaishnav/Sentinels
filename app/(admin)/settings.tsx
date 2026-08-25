@@ -146,7 +146,7 @@ export default function AdminSettingsScreen() {
       <HelpSupportModal
         visible={isHelpVisible}
         onClose={() => setIsHelpVisible(false)}
-        supervisorName="DRISHTI Technical Support"
+        supervisorName="LOKEVISION Technical Support"
       />
 
       <AboutLokvisionModal

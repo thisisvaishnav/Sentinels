@@ -49,7 +49,7 @@ export const AdminActionList: React.FC<AdminActionListProps> = ({
       onPress: onPressHelp,
     },
     {
-      label: 'About DRISHTI',
+      label: 'About LOKEVISION',
       subtitle: 'App version, build info & credits',
       icon: 'information-outline',
       onPress: onPressAbout,

@@ -363,8 +363,8 @@ export default function CitizenProfileScreen() {
           />
           <ActionItem
             icon="information-outline"
-            label="About DRISHTI"
-            onPress={() => Alert.alert('About DRISHTI', 'DRISHTI Citizen Portal v1.0\n\nA digital governance platform for citizens to access government schemes, report community issues, and track their household data.')}
+            label="About LOKEVISION"
+            onPress={() => Alert.alert('About LOKEVISION', 'LOKEVISION Citizen Portal v1.0\n\nA digital governance platform for citizens to access government schemes, report community issues, and track their household data.')}
           />
         </View>
 

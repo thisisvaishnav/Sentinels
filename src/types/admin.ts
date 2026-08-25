@@ -1,5 +1,5 @@
 /**
- * DRISHTI Admin — shared data types.
+ * LOKEVISION Admin — shared data types.
  */
 
 export type EnumeratorStatus = 'active' | 'offDuty' | 'issueReported';

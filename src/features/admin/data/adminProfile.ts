@@ -8,7 +8,7 @@ export const DEFAULT_ADMIN_PROFILE: DetailedAdminProfile = {
   name: 'Rajesh Kumar',
   role: 'District Administrator',
   status: 'Active',
-  email: 'rajesh.kumar@drishti.gov.in',
+  email: 'rajesh.kumar@lokevision.gov.in',
   phone: '+91 98765 43210',
   district: 'Varanasi',
   zone: 'All Zones',

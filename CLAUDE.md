@@ -23,7 +23,7 @@ There is no test runner in the root project and **zero test files exist anywhere
 
 ## Naming
 
-The same app is called three different things depending on where you look: **Sentinels** (`app.json`, package name), **DRISHTI** (`AGENTS.md`, `constants/adminTheme.ts`), and **Lokvision** (`src/features/enumeration/*`, storage keys). Match whichever name the surrounding module already uses rather than normalizing.
+The same app is called three different things depending on where you look: **Sentinels** (`app.json`, package name), **LOKEVISION** (the app name), and **Lokvision** (`src/features/enumeration/*`, storage keys). Match whichever name the surrounding module already uses rather than normalizing.
 
 ## Architecture
 

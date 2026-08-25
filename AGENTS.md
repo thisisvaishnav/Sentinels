@@ -1,8 +1,8 @@
-# DRISHTI — AI Coding Agent Instructions
+# LOKEVISION — AI Coding Agent Instructions
 
 ## Project Overview
 
-DRISHTI is a React Native application built with Expo Router.
+LOKEVISION is a React Native application built with Expo Router.
 
 The application has:
 - Citizen flows
@@ -64,7 +64,7 @@ Global state shared across multiple admin screens should use React Context.
 
 ### Styling
 
-Follow the existing DRISHTI design system.
+Follow the existing LOKEVISION design system.
 
 Do not introduce a new color palette.
 

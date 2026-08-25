@@ -43,7 +43,7 @@ export default function AdminLoginScreen() {
 
     // Hardcoded admin credentials
     const ADMIN_ID = "ADMIN-001";
-    const ADMIN_PASSWORD = "admin@drishti";
+    const ADMIN_PASSWORD = "admin@lokevision";
 
     if (id === ADMIN_ID && secret === ADMIN_PASSWORD) {
       await AsyncStorage.setItem("hasOnboarded", "true");
@@ -218,7 +218,7 @@ export default function AdminLoginScreen() {
             <View style={styles.bottomBranding}>
               <Ionicons name="business-outline" size={18} color={t.colors.textMuted} />
               <Text style={[styles.bottomText, { color: t.colors.textMuted }]}>
-                Government of India · DRISHTI Platform
+                Government of India · LOKEVISION Platform
               </Text>
             </View>
           </View>

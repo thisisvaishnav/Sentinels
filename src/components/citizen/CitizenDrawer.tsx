@@ -62,7 +62,7 @@ export function CitizenDrawer({ profile }: CitizenDrawerProps) {
       onClose={close}
       menuItems={CITIZEN_MENU_ITEMS}
       profile={userProfile}
-      branding="DRISHTI"
+      branding="LOKEVISION"
       version="Citizen v1.0"
       onLogout={handleLogout}
     />

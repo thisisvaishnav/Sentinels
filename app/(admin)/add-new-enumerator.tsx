@@ -154,7 +154,7 @@ export default function AddNewEnumeratorScreen() {
           />
           <FormInput
             label="Email Address"
-            placeholder="e.g. enumerator@drishti.gov"
+            placeholder="e.g. enumerator@lokevision.gov"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"

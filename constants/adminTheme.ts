@@ -1,5 +1,5 @@
 /**
- * DRISHTI Admin Dashboard — centralised colour palette.
+ * LOKEVISION Admin Dashboard — centralised colour palette.
  * Kept separate from generic theme.ts so other screens stay untouched.
  */
 

@@ -39,7 +39,7 @@ export function SideDrawer({
   onClose,
   menuItems,
   profile,
-  branding = 'DRISHTI',
+  branding = 'LOKEVISION',
   version = 'v1.0',
   onLogout,
 }: SideDrawerProps) {
@@ -136,7 +136,7 @@ export function SideDrawer({
 
           {/* Footer Info */}
           <View style={styles.drawerFooter}>
-            <Text style={styles.footerAppText}>Drishti {version}</Text>
+            <Text style={styles.footerAppText}>LOKEVISION {version}</Text>
             {profile.zone && (
               <Text style={styles.footerZoneText}>{profile.zone}</Text>
             )}

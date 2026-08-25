@@ -164,7 +164,7 @@ export const INITIAL_REPORTS: CitizenReport[] = [
     assignedDate: '2026-08-11',
     dueDate: '2026-08-16',
     verificationNotes:
-      'Investigation found the drain is under PWD jurisdiction, not municipal. Rejected for DRISHTI action.',
+      'Investigation found the drain is under PWD jurisdiction, not municipal. Rejected for LOKEVISION action.',
   },
   {
     id: 'CR-006',

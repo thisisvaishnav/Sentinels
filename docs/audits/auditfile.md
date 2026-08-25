@@ -1604,7 +1604,7 @@ import {
   authStyles,
   states,
 } from '@/src/features/auth/shared';
-src/features/auth/shared does not exist. ls src/features/auth/ returns only .gitkeep, authService.ts, citizenNavigation.ts, and a repo-wide find for *shared* finds nothing. Nothing imports SignupScreen either (the live signup is app/(auth)/register.tsx). So this file cannot compile if ever referenced — it's a broken orphan. Content-wise: 6 TouchableOpacity, 4 TextInput, 2 SelectionModals, brand text "LokVision" (line 64 — a third product name alongside "Sentinels" and "DRISHTI"), handleCreateAccount just does router.replace("/(citizen)/dashboard") with no API call (41-43). Exclude from the M3 pass; flag for deletion.
+src/features/auth/shared does not exist. ls src/features/auth/ returns only .gitkeep, authService.ts, citizenNavigation.ts, and a repo-wide find for *shared* finds nothing. Nothing imports SignupScreen either (the live signup is app/(auth)/register.tsx). So this file cannot compile if ever referenced — it's a broken orphan. Content-wise: 6 TouchableOpacity, 4 TextInput, 2 SelectionModals, brand text "LokVision" (line 64 — a third product name alongside "Sentinels" and "LOKEVISION"), handleCreateAccount just does router.replace("/(citizen)/dashboard") with no API call (41-43). Exclude from the M3 pass; flag for deletion.
 
 ---
 

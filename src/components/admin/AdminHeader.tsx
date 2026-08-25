@@ -33,7 +33,7 @@ export default function AdminHeader({
           <MaterialCommunityIcons name="satellite-variant" size={22} color={COLORS.accent} />
         </View>
         <View>
-          <Text style={styles.brandName}>DRISHTI</Text>
+          <Text style={styles.brandName}>LOKEVISION</Text>
           <Text style={styles.roleSub}>{userName} · {adminId}</Text>
         </View>
       </View>
