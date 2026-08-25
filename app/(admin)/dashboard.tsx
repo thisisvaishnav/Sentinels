@@ -68,7 +68,7 @@ export default function AdminDashboard() {
       >
         {/* ── Welcome Card ──────────────────────────────────────── */}
         <WelcomeCard
-          userName="Sarah Jenkins"
+          userName="Priya Sharma"
           zone="Zone A-12"
           ward="Ward 12"
           area="Shiv Nagar"

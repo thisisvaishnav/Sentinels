@@ -5,7 +5,7 @@ export const PROFILE_STORAGE_KEY = '@lokvision_enumerator_profile';
 
 export const DEFAULT_ENUMERATOR_PROFILE: DetailedEnumeratorProfile = {
   id: 'ENUM001',
-  name: 'Sarah Jenkins',
+  name: 'Priya Sharma',
   role: 'Lead Field Enumerator',
   status: 'Active',
   zoneId: 'Zone A-12',

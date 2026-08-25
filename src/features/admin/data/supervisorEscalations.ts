@@ -49,7 +49,7 @@ export const INITIAL_DEV_SEED_ESCALATIONS: SupervisorEscalationItem[] = [
     membersCount: 5,
 
     enumeratorId: 'ENUM001',
-    enumeratorName: 'Sarah Jenkins',
+    enumeratorName: 'Priya Sharma',
     enumeratorRole: 'Lead Field Enumerator',
     zoneName: 'Zone A-12 - Shastri Nagar',
 
@@ -73,7 +73,7 @@ export const INITIAL_DEV_SEED_ESCALATIONS: SupervisorEscalationItem[] = [
       {
         id: 'H-1',
         action: 'Escalation Submitted',
-        actor: 'Sarah Jenkins (ENUM001)',
+        actor: 'Priya Sharma (ENUM001)',
         role: 'Field Enumerator',
         timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
         notes: 'Submitted for senior inspector reassignment.',

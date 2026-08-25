@@ -10,7 +10,7 @@ import {
 
 export const mockEnumeratorProfile: EnumeratorProfile = {
   id: 'EN-4029',
-  name: 'Sarah Jenkins',
+  name: 'Priya Sharma',
   role: 'Lead Field Enumerator',
   assignedZone: 'Ward 12 - Shastri Nagar North',
   isOnline: true,

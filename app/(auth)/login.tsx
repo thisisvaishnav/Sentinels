@@ -71,18 +71,17 @@ export default function Login() {
           return;
         }
 
-        console.log("Enumerator JWT login success:", profile.enumerator_id);
+        console.log("Enumerator login success:", profile.employeeCode || profile.enumerator_id);
         await AsyncStorage.setItem('hasOnboarded', 'true');
         router.replace("/(enumerator)/dashboard");
       } catch (error: any) {
         console.error("Enumerator login error:", error);
-        const isCredentialError =
-          error?.status === 400 || error?.code === "invalid_credentials";
-        alert(
-          isCredentialError
+        const errorMsg =
+          error?.message ||
+          (error?.status === 400 || error?.code === "invalid_credentials"
             ? "Invalid enumerator ID or security key."
-            : "Unable to authenticate. Please try again.",
-        );
+            : "Unable to authenticate. Please check your credentials and try again.");
+        alert(errorMsg);
       } finally {
         setIsSubmitting(false);
       }

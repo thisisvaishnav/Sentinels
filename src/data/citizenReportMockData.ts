@@ -153,7 +153,7 @@ export const INITIAL_REPORTS: CitizenReport[] = [
     category: 'sanitation',
     status: 'rejected',
     priority: 'critical',
-    citizenName: 'Father Thomas',
+    citizenName: "Fr. Thomas D'Souza",
     citizenPhone: '9876543214',
     area: 'Old Town, near St. Mary School',
     zone: 'Zone 7 — Old Town',
